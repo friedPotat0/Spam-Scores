@@ -1,0 +1,20 @@
+[
+  {
+    "namespace": "SpamScores",
+    "functions": [
+      {
+        "name": "addWindowListener",
+        "type": "function",
+        "description": "",
+        "async": false,
+        "parameters": [
+          {
+            "name": "none",
+            "type": "string",
+            "description": "none"
+          }
+        ]
+      }
+    ]
+  }
+]

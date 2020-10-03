@@ -1,0 +1,59 @@
+body {
+  padding: 20px;
+}
+h5 {
+  margin: 0;
+}
+h4 {
+  margin: 0 4px 10px 4px;
+}
+table.score-details {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+table.score-details tr th {
+  text-align: left;
+  padding: 0 5px;
+}
+table.score-details tr td {
+  vertical-align: top;
+  padding: 5px;
+}
+table.score-details tr td:nth-child(2) {
+  text-align: center;
+}
+table.score-details tr td:nth-child(2) {
+  padding: 5px 20px;
+}
+table.score-details tr th:nth-child(2) {
+  padding: 0 20px;
+}
+table.score-details tr.score td span.info {
+  font-size: 75%;
+  color: #7a7a7a;
+  word-break: break-all;
+}
+table.score-details tr.score td:nth-child(2) span {
+  display: inline-block;
+  padding: 0 4px;
+  border-radius: 4px;
+  color: white;
+  width: 100%;
+}
+table.score-details tr.score.negative td:nth-child(2) span {
+  background-color: #28b62c;
+}
+table.score-details tr.score.positive td:nth-child(2) span {
+  background-color: #fe330a;
+}
+table.score-details tr.score.neutral td:nth-child(2) span {
+  background-color: #b4b4b4;
+}
+table.score-details tbody tr:nth-child(even) {
+  background: #eee;
+}
+table.score-details tbody tr:nth-child(odd) {
+  background: #fff;
+}

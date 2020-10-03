@@ -1,0 +1,37 @@
+{
+  "manifest_version": 2,
+  "name": "Spam Scores",
+  "description": "Displays spam scores according to mail headers",
+  "version": "1.0.1",
+  "author": "Christian Zaenker",
+  "applications": {
+    "gecko": {
+      "id": "spamscores@czaenker",
+      "strict_min_version": "78.0a1"
+    }
+  },
+  "icons": {
+    "64": "images/icon.png",
+    "32": "images/icon-32px.png",
+    "16": "images/icon-16px.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["messagesRead"],
+  "experiment_apis": {
+    "SpamScores": {
+      "schema": "schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["SpamScores"]],
+        "script": "experiments.js",
+        "events": ["startup"]
+      }
+    }
+  },
+  "message_display_action": {
+    "default_popup": "popup.html",
+    "default_title": "Spam Scores"
+  }
+}
