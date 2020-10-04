@@ -15,6 +15,12 @@ The total score of each mail with an existing spam header will be displayed alon
 
 Furthermore, a button is displayed in the action bar of any opened mail with the respective total score of the mail. Clicking on the button opens a popup with detailed information on all individual rules. In addition to the name and the partial score, a description and, if available in the mail header, the value on the basis of which the score was calculated is displayed.
 
+## Installation
+
+You can download the latested version reviewed by moz://a directly on the [Thunderbird Add-on page](https://addons.thunderbird.net/de/thunderbird/addon/spam-scores/) or through your installed Thunderbird client by clicking on the menu button followed by "Add-ons" and typing "Spam Scores" in the search bar.
+
+Additionally the latest version is available on the [Releases page](https://github.com/friedPotat0/Spam-Scores/releases) of this GitHub repository.
+
 ## License
 
 The add-on is released under the CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International) license.
