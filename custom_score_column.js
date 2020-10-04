@@ -1,9 +1,13 @@
 var { AppConstants } = ChromeUtils.import('resource://gre/modules/AppConstants.jsm')
 var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
 
+const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
+const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
+
 class ColumnHandler {
-  init(win) {
+  init(win, params) {
     this.win = win
+    this.params = params
   }
 
   isString() {
@@ -11,12 +15,13 @@ class ColumnHandler {
   }
   getCellProperties(row, col, props) {}
   getRowProperties(row, props) {}
-  async getImageSrc(row, col) {
+  getImageSrc(row, col) {
     let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > 2) return extension.rootURI.resolve('./images/score_positive.png')
-    if (score <= 2 && score >= -2) return extension.rootURI.resolve('./images/score_neutral.png')
-    if (score < -2) return extension.rootURI.resolve('./images/score_negative.png')
+    if (score > this.params.upperScoreBounds) return extension.rootURI.resolve('./images/score_positive.png')
+    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds)
+      return extension.rootURI.resolve('./images/score_neutral.png')
+    if (score < this.params.lowerScoreBounds) return extension.rootURI.resolve('./images/score_negative.png')
   }
   getScore(hdr) {
     let score =
@@ -41,8 +46,9 @@ class ColumnHandler {
 }
 
 class ColumnOverlay {
-  init(win) {
+  init(win, params) {
     this.win = win
+    this.params = params
     this.columnId = 'spamscore'
     this.addColumn(win)
     this.columnHandler = new ColumnHandler()
@@ -54,7 +60,7 @@ class ColumnOverlay {
 
   observe(aMsgFolder, aTopic, aData) {
     try {
-      this.columnHandler.init(this.win)
+      this.columnHandler.init(this.win, this.params)
       this.win.gDBView.addColumnHandler(this.columnId, this.columnHandler)
     } catch (ex) {
       console.error(ex)
@@ -97,10 +103,11 @@ class ColumnOverlay {
 }
 
 class SpamScores_ScoreHdrViewColumn {
-  init(win) {
+  init(win, params) {
     this.win = win
+    this.params = params
     this.columnOverlay = new ColumnOverlay()
-    this.columnOverlay.init(win)
+    this.columnOverlay.init(win, params)
     if (win.gDBView && win.document.documentElement.getAttribute('windowtype') == 'mail:3pane') {
       Services.obs.notifyObservers(null, 'MsgCreateDBView')
     }

@@ -18,7 +18,7 @@
   "background": {
     "scripts": ["background.js"]
   },
-  "permissions": ["messagesRead"],
+  "permissions": ["messagesRead", "storage"],
   "experiment_apis": {
     "SpamScores": {
       "schema": "schema.json",
@@ -33,5 +33,8 @@
   "message_display_action": {
     "default_popup": "popup.html",
     "default_title": "Spam Scores"
+  },
+  "options_ui": {
+    "page": "options.html"
   }
 }

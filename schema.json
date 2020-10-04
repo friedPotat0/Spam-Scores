@@ -14,6 +14,22 @@
             "description": "none"
           }
         ]
+      },
+      {
+        "name": "setScoreBounds",
+        "type": "function",
+        "description": "",
+        "async": false,
+        "parameters": [
+          {
+            "name": "lower",
+            "type": "number"
+          },
+          {
+            "name": "upper",
+            "type": "number"
+          }
+        ]
       }
     ]
   }

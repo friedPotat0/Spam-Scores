@@ -1,4 +1,8 @@
 'use strict'
+
+const DEFAULT_SCORE_LOWER_BOUNDS = -2
+const DEFAULT_SCORE_UPPER_BOUNDS = 2
+
 var init = async () => {
   browser.SpamScores.addWindowListener('none')
   browser.messageDisplay.onMessageDisplayed.addListener(async (tab, message) => {
@@ -9,7 +13,7 @@ var init = async () => {
     } else {
       browser.messageDisplayAction.enable(tab.id)
       browser.messageDisplayAction.setTitle({ tabId: tab.id, title: 'Spam Score: ' + score })
-      browser.messageDisplayAction.setIcon({ path: getImageSrc(score) })
+      browser.messageDisplayAction.setIcon({ path: await getImageSrc(score) })
     }
   })
 }
@@ -31,8 +35,15 @@ function getScore(raw) {
   return null
 }
 
-function getImageSrc(score) {
-  if (score > 2) return './images/score_positive.png'
-  if (score <= 2 && score >= -2) return './images/score_neutral.png'
-  if (score < -2) return './images/score_negative.png'
+async function getImageSrc(score) {
+  let storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  let lowerBounds =
+    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
+  let upperBounds =
+    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
+
+  if (score > upperBounds) return './images/score_positive.png'
+  if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.png'
+  if (score < lowerBounds) return './images/score_negative.png'
+  return './images/score_neutral.png'
 }
