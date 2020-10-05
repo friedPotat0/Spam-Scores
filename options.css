@@ -7,13 +7,3 @@
 .input-line img {
   margin-right: 5px;
 }
-button#settings-save {
-  margin-top: 20px;
-  width: 150px;
-  text-align: center;
-}
-.score-bounds-lower-value,
-.score-bounds-upper-value {
-  margin-left: 2px;
-  margin-right: 2px;
-}

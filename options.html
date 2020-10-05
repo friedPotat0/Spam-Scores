@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
-    <h2 style="margin-bottom: 0">Score icon ranges</h2>
+    <h2 style="margin-bottom: 0" data-i18n="optionsIconRanges"></h2>
     <div class="input-line">
       <img src="images/score_positive.png" />
-      <span>Score geater than</span>
+      <span data-i18n="optionsScoreGreater"></span>
       <input
         id="score-bounds-upper"
         type="number"
@@ -25,15 +25,11 @@
     </div>
     <div class="input-line">
       <img src="images/score_neutral.png" />
-      <span>Score between </span>
-      <span class="score-bounds-lower-value">-2</span>
-      <span> and </span>
-      <span class="score-bounds-upper-value">2</span>
-      <span> (both inclusive)</span>
+      <span id="score-bounds-between" data-i18n="optionsScoreBetween"></span>
     </div>
     <div class="input-line">
       <img src="images/score_negative.png" />
-      <span>Score less than</span>
+      <span data-i18n="optionsScoreLess"></span>
       <input
         id="score-bounds-lower"
         type="number"

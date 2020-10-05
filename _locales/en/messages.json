@@ -1,0 +1,22 @@
+{
+  "extensionName": {
+    "message": "Spam Scores",
+    "description": "Name of the add-on"
+  },
+  "extensionDescription": {
+    "message": "Displays spam scores according to mail headers.",
+    "description": "Description of the add-on"
+  },
+  "optionsIconRanges": {
+    "message": "Score icon ranges"
+  },
+  "optionsScoreGreater": {
+    "message": "Score geater than"
+  },
+  "optionsScoreBetween": {
+    "message": "Score between $1 and $2 (both inclusive)"
+  },
+  "optionsScoreLess": {
+    "message": "Score less than"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "extensionName": {
+    "message": "Spam Scores",
+    "description": "Name der Erweiterung"
+  },
+  "extensionDescription": {
+    "message": "Zeigt Spam-Bewertungen anhand von E-Mail-Headern an.",
+    "description": "Beschreibung der Erweiterung"
+  },
+  "optionsIconRanges": {
+    "message": "Angezeigte Bewertungssymbole"
+  },
+  "optionsScoreGreater": {
+    "message": "Punktzahl größer"
+  },
+  "optionsScoreBetween": {
+    "message": "Punktzahl zwischen $1 und $2 (inklusiv)"
+  },
+  "optionsScoreLess": {
+    "message": "Punktzahl kleiner"
+  }
+}

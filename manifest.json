@@ -1,9 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "Spam Scores",
-  "description": "Displays spam scores according to mail headers",
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
   "version": "1.0.1",
   "author": "Christian Zaenker",
+  "default_locale": "en",
   "applications": {
     "gecko": {
       "id": "spamscores@czaenker",
