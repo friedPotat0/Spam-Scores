@@ -16,6 +16,16 @@ var init = async () => {
       browser.messageDisplayAction.setIcon({ path: await getImageSrc(score) })
     }
   })
+
+  if (!(await browser.SpamScores.getHelloFlag())) {
+    messenger.windows.create({
+      height: 680,
+      width: 488,
+      url: '/hello.html',
+      type: 'popup'
+    })
+    browser.SpamScores.setHelloFlag()
+  }
 }
 init()
 

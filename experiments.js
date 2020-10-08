@@ -22,6 +22,7 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
   }
 
   onStartup() {
+    updatePrefs()
     Services.console.logStringMessage('Spam Scores startup completed')
   }
 
@@ -39,6 +40,16 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
         setScoreBounds(lower, upper) {
           scoreHdrViewParams.lowerScoreBounds = lower
           scoreHdrViewParams.upperScoreBounds = upper
+        },
+        getHelloFlag() {
+          try {
+            return Services.prefs.getBoolPref('spamscores.hello')
+          } catch (err) {
+            return false
+          }
+        },
+        setHelloFlag() {
+          Services.prefs.setBoolPref('spamscores.hello', true)
         }
       }
     }
@@ -61,4 +72,21 @@ function paint(win) {
 function unpaint(win) {
   win.SpamScores.SpamScores_ScoreHdrView.destroy()
   delete win.SpamScores
+}
+
+function updatePrefs() {
+  let customDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
+  let newCustomDBHeaders = customDBHeaders
+  if (customDBHeaders.indexOf('x-spam-status') === -1) newCustomDBHeaders += ' x-spam-status'
+  if (customDBHeaders.indexOf('x-spamd-result') === -1) newCustomDBHeaders += ' x-spamd-result'
+  if (customDBHeaders.indexOf('x-spam-score') === -1) newCustomDBHeaders += ' x-spam-score'
+  if (customDBHeaders.indexOf('x-rspamd-score') === -1) newCustomDBHeaders += ' x-rspamd-score'
+  Services.prefs.getBranch('mailnews').setCharPref('.customDBHeaders', newCustomDBHeaders.trim())
+  let customHeaders = Services.prefs.getCharPref('mailnews.customHeaders')
+  let newCustomHeaders = customHeaders
+  if (customHeaders.indexOf('x-spam-status:') === -1) newCustomHeaders += ' x-spam-status:'
+  if (customHeaders.indexOf('x-spamd-result:') === -1) newCustomHeaders += ' x-spamd-result:'
+  if (customHeaders.indexOf('x-spam-score:') === -1) newCustomHeaders += ' x-spam-score:'
+  if (customHeaders.indexOf('x-rspamd-score:') === -1) newCustomHeaders += ' x-rspamd-score:'
+  Services.prefs.getBranch('mailnews').setCharPref('.customHeaders', newCustomHeaders.trim())
 }

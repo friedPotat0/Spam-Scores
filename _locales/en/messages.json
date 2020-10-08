@@ -18,5 +18,26 @@
   },
   "optionsScoreLess": {
     "message": "Score less than"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - Thank you!"
+  },
+  "helloHeadline": {
+    "message": "Thank you for installing Spam Scores!"
+  },
+  "helloParagraph1": {
+    "message": "In order to display the spam score column, you must first restart Thunderbird. After that right-click on a folder and select \"Properties\". Then click on \"Repair Folder\". This will scan the mail headers of all mails in this folder so that the spam score column can be displayed correctly."
+  },
+  "helloParagraph2": {
+    "message": "Repair all folders like this in which you want to display the spam column."
+  },
+  "helloParagraph3": {
+    "message": "Finally, you can enable the \"Spam score\" column in the list view of the repaired folder."
+  },
+  "helloFooterParagraph1": {
+    "message": "If you have questions or encounter any bugs while using this add-on, please do not hesitate to create an issue for it in on GitHub (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "Please leave a review if you like this add-on. &#x1F60A;"
   }
 }

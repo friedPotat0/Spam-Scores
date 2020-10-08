@@ -30,6 +30,20 @@
             "type": "number"
           }
         ]
+      },
+      {
+        "name": "getHelloFlag",
+        "type": "function",
+        "description": "",
+        "async": true,
+        "parameters": []
+      },
+      {
+        "name": "setHelloFlag",
+        "type": "function",
+        "description": "",
+        "async": false,
+        "parameters": []
       }
     ]
   }
