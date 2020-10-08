@@ -4,7 +4,7 @@ Spam Scores is an add-on for Thunderbird (Version 78.0a1 - *). It can display sp
 
 ![Add-on Screenshot](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot.jpg)
 
-To display the spam score column, right-click on the title bar of the columns in the list view and select "Spam score".
+To display the spam score column, right-click on the title bar of the columns in the list view and select "Spam score". If the column is empty, you must first restart Thunderbird and then right-click on any folder and select "Properties" and "Repair Folder". This will scan the mail headers of all mails in this folder so that the spam score column can be displayed correctly. Repair all folders like this in which you want to display this column.
 
 The total score of each mail with an existing spam header will be displayed along with a red, yellow or green icon depending on the score. The colours are by default calculated as follows:
 
@@ -35,7 +35,6 @@ At the moment the add-on is mostly written in English. Some parts like the setti
 ## License
 
 The add-on is released under the CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International) license.
-
 ## Contributing
 
 If you notice any bugs, do not hesitate to open an issue about it. Please understand that I develop the add-on in my spare time and may not be able to solve problems directly. If you want to contribute to the project by fixing bugs, implementing new features or translating the add-on, please feel free to open a pull request.
