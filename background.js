@@ -26,6 +26,15 @@ var init = async () => {
     })
     browser.SpamScores.setHelloFlag()
   }
+
+  let storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  let lowerBounds = parseFloat(
+    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
+  )
+  let upperBounds = parseFloat(
+    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
+  )
+  browser.SpamScores.setScoreBounds(parseFloat(lowerBounds), parseFloat(upperBounds))
 }
 init()
 
