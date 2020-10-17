@@ -28,6 +28,12 @@ class ColumnHandler {
       hdr.getStringProperty('x-spamd-result').replace(/^default.*\[(.*) \/ .*\];.*$/gi, '$1') ||
       hdr.getStringProperty('x-spam-score') ||
       hdr.getStringProperty('x-spam-status').replace(/.*score=(.*?) .*$/gi, '$1')
+    if (!score && this.params.customMailscannerHeaders) {
+      for (let header of this.params.customMailscannerHeaders) {
+        score = hdr.getStringProperty(header)
+        if (score) break
+      }
+    }
     if (score) return parseFloat(score)
     return null
   }
