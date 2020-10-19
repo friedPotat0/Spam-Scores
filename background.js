@@ -18,7 +18,6 @@ var init = async () => {
     if (rawMessage.toLowerCase().indexOf('mailscanner-spamscore') !== -1) {
       let header = rawMessage.replace(/.*(x-.*?mailscanner-spamcheck):.*/gis, '$1').toLowerCase()
       let storage = await browser.storage.local.get(['customMailscannerHeaders'])
-      console.log(storage)
       if (
         storage &&
         (!storage.customMailscannerHeaders ||
