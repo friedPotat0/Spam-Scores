@@ -30,7 +30,7 @@ class ColumnHandler {
       hdr.getStringProperty('x-spam-status').replace(/.*score=(.*?) .*$/gi, '$1')
     if (!score && this.params.customMailscannerHeaders) {
       for (let header of this.params.customMailscannerHeaders) {
-        score = hdr.getStringProperty(header)
+        score = hdr.getStringProperty(header).replace(/.*?score=(.*?),.*$/gi, '$1')
         if (score) break
       }
     }

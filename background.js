@@ -16,7 +16,7 @@ var init = async () => {
       browser.messageDisplayAction.setIcon({ path: await getImageSrc(score) })
     }
     if (rawMessage.toLowerCase().indexOf('mailscanner-spamscore') !== -1) {
-      let header = rawMessage.replace(/.*(x-.*?mailscanner-spamscore):.*/gis, '$1').toLowerCase()
+      let header = rawMessage.replace(/.*(x-.*?mailscanner-spamcheck):.*/gis, '$1').toLowerCase()
       let storage = await browser.storage.local.get(['customMailscannerHeaders'])
       console.log(storage)
       if (
@@ -74,9 +74,9 @@ function getScore(raw) {
   if (match && match.length > 0) {
     return match[0].replace(/^x-spam-status: .*score=(.*?) .*$/gi, '$1')
   }
-  match = raw.match(/x-.*?mailscanner-spamscore: .*/gi)
+  match = raw.match(/x-.*?mailscanner-spamcheck: .*/gi)
   if (match && match.length > 0) {
-    return match[0].replace(/^x-.*?mailscanner-spamscore: (.*)$/gi, '$1')
+    return match[0].replace(/^x-.*?mailscanner-spamcheck: .*score=(.*),$/gi, '$1')
   }
   return null
 }
