@@ -30,8 +30,11 @@ class ColumnHandler {
       hdr.getStringProperty('x-spam-status').replace(/.*score=(.*?) .*$/gi, '$1')
     if (!score && this.params.customMailscannerHeaders) {
       for (let header of this.params.customMailscannerHeaders) {
-        score = hdr.getStringProperty(header).replace(/.*?score=(.*?),.*$/gi, '$1')
-        if (score) break
+        let headerScore = hdr.getStringProperty(header).replace(/.*?score=(.*?),.*$/gi, '$1')
+        if (!isNaN(parseFloat(headerScore))) {
+          score = headerScore
+          break
+        }
       }
     }
     if (score) return parseFloat(score)
