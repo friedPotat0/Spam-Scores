@@ -50,6 +50,12 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
         },
         setHelloFlag() {
           Services.prefs.setBoolPref('spamscores.hello', true)
+        },
+        addDynamicCustomHeaders(dynamicHeaders) {
+          updatePrefs(dynamicHeaders)
+        },
+        setCustomMailscannerHeaders(customMailscannerHeaders) {
+          scoreHdrViewParams.customMailscannerHeaders = customMailscannerHeaders
         }
       }
     }
@@ -74,19 +80,24 @@ function unpaint(win) {
   delete win.SpamScores
 }
 
-function updatePrefs() {
+function updatePrefs(dynamicHeaders = []) {
+  let staticHeaders = ['x-spam-status', 'x-spamd-result', 'x-spam-score', 'x-rspamd-score']
   let customDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
   let newCustomDBHeaders = customDBHeaders
-  if (customDBHeaders.indexOf('x-spam-status') === -1) newCustomDBHeaders += ' x-spam-status'
-  if (customDBHeaders.indexOf('x-spamd-result') === -1) newCustomDBHeaders += ' x-spamd-result'
-  if (customDBHeaders.indexOf('x-spam-score') === -1) newCustomDBHeaders += ' x-spam-score'
-  if (customDBHeaders.indexOf('x-rspamd-score') === -1) newCustomDBHeaders += ' x-rspamd-score'
+  for (let header of staticHeaders) {
+    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
+  }
+  for (let header of dynamicHeaders) {
+    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
+  }
   Services.prefs.getBranch('mailnews').setCharPref('.customDBHeaders', newCustomDBHeaders.trim())
   let customHeaders = Services.prefs.getCharPref('mailnews.customHeaders')
   let newCustomHeaders = customHeaders
-  if (customHeaders.indexOf('x-spam-status:') === -1) newCustomHeaders += ' x-spam-status:'
-  if (customHeaders.indexOf('x-spamd-result:') === -1) newCustomHeaders += ' x-spamd-result:'
-  if (customHeaders.indexOf('x-spam-score:') === -1) newCustomHeaders += ' x-spam-score:'
-  if (customHeaders.indexOf('x-rspamd-score:') === -1) newCustomHeaders += ' x-rspamd-score:'
+  for (let header of staticHeaders) {
+    if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
+  }
+  for (let header of dynamicHeaders) {
+    if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
+  }
   Services.prefs.getBranch('mailnews').setCharPref('.customHeaders', newCustomHeaders.trim())
 }

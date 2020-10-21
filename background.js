@@ -15,6 +15,20 @@ var init = async () => {
       browser.messageDisplayAction.setTitle({ tabId: tab.id, title: 'Spam Score: ' + score })
       browser.messageDisplayAction.setIcon({ path: await getImageSrc(score) })
     }
+    if (rawMessage.toLowerCase().indexOf('mailscanner-spamscore') !== -1) {
+      let header = rawMessage.replace(/.*(x-.*?mailscanner-spamcheck):.*/gis, '$1').toLowerCase()
+      let storage = await browser.storage.local.get(['customMailscannerHeaders'])
+      if (
+        storage &&
+        (!storage.customMailscannerHeaders ||
+          (storage.customMailscannerHeaders && storage.customMailscannerHeaders.indexOf(header) === -1))
+      ) {
+        await browser.SpamScores.addDynamicCustomHeaders([header])
+        browser.storage.local.set({
+          customMailscannerHeaders: [...(storage.customMailscannerHeaders || []), header]
+        })
+      }
+    }
   })
 
   if (!(await browser.SpamScores.getHelloFlag())) {
@@ -27,7 +41,11 @@ var init = async () => {
     browser.SpamScores.setHelloFlag()
   }
 
-  let storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  let storage = await browser.storage.local.get([
+    'scoreIconLowerBounds',
+    'scoreIconUpperBounds',
+    'customMailscannerHeaders'
+  ])
   let lowerBounds = parseFloat(
     storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
   )
@@ -35,6 +53,10 @@ var init = async () => {
     storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
   )
   browser.SpamScores.setScoreBounds(parseFloat(lowerBounds), parseFloat(upperBounds))
+
+  if (storage && storage.customMailscannerHeaders) {
+    browser.SpamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
+  }
 }
 init()
 
@@ -50,6 +72,10 @@ function getScore(raw) {
   match = raw.match(/x-spam-status: .*/gi)
   if (match && match.length > 0) {
     return match[0].replace(/^x-spam-status: .*score=(.*?) .*$/gi, '$1')
+  }
+  match = raw.match(/x-.*?mailscanner-spamcheck: .*/gi)
+  if (match && match.length > 0) {
+    return match[0].replace(/^x-.*?mailscanner-spamcheck: .*score=(.*),$/gi, '$1')
   }
   return null
 }

@@ -44,6 +44,36 @@
         "description": "",
         "async": false,
         "parameters": []
+      },
+      {
+        "name": "addDynamicCustomHeaders",
+        "type": "function",
+        "description": "",
+        "async": true,
+        "parameters": [
+          {
+            "name": "dynamicHeaders",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      {
+        "name": "setCustomMailscannerHeaders",
+        "type": "function",
+        "description": "",
+        "async": false,
+        "parameters": [
+          {
+            "name": "customMailscannerHeaders",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
       }
     ]
   }

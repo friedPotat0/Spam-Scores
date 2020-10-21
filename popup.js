@@ -62,14 +62,17 @@ function getParsedDetailScores(raw) {
       info: ''
     }))
   }
-  let spamStatusAltRegex = /\* +(-?[\d.]+) ([A-Z0-9_]+)/gs
-  match = raw.match(spamStatusAltRegex)
-  if (match && match.length > 0) {
-    return match.map(el => ({
-      name: el.replace(spamStatusAltRegex, '$2'),
-      score: parseFloat(el.replace(spamStatusAltRegex, '$1')),
-      info: ''
-    }))
+  if (raw.toLowerCase().indexOf('mailscanner-spamcheck') !== -1) {
+    raw = raw.replace(/.*?x-.*?mailscanner-spamcheck: (.*?)\).*/gis, '$1')
+    let spamMailscannerRegex = /,.*?([A-Z0-9_]+) (-?[\d.]+)/gs
+    match = raw.match(spamMailscannerRegex)
+    if (match && match.length > 0) {
+      return match.map(el => ({
+        name: el.replace(spamMailscannerRegex, '$1'),
+        score: parseFloat(el.replace(spamMailscannerRegex, '$2')),
+        info: ''
+      }))
+    }
   }
   return null
 }
