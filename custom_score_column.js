@@ -49,7 +49,7 @@ class ColumnHandler {
         }
       }
     }
-    if (score) return parseFloat(score)
+    if (score && !isNaN(parseFloat(score))) return parseFloat(score)
     return null
   }
   getCellText(row, col) {
