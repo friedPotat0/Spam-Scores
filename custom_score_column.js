@@ -3,6 +3,12 @@ var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
 const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
+const SCORE_REGEX = {
+  spamdResult: /.*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
+  spamScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
+  spamStatus: /.*score=([-+]?[0-9]+\.?[0-9]*) .*/is,
+  mailscannerSpamcheck: /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+}
 
 class ColumnHandler {
   init(win, params) {
@@ -24,13 +30,19 @@ class ColumnHandler {
     if (score < this.params.lowerScoreBounds) return extension.rootURI.resolve('./images/score_negative.png')
   }
   getScore(hdr) {
-    let score =
-      hdr.getStringProperty('x-spamd-result').replace(/^default.*\[(.*) \/ .*\];.*$/gi, '$1') ||
-      hdr.getStringProperty('x-spam-score') ||
-      hdr.getStringProperty('x-spam-status').replace(/.*score=(.*?) .*$/gi, '$1')
+    let score = null
+    if (SCORE_REGEX.spamdResult.test(hdr.getStringProperty('x-spamd-result'))) {
+      score = hdr.getStringProperty('x-spamd-result').replace(SCORE_REGEX.spamdResult, '$1')
+    }
+    if (!score && SCORE_REGEX.spamScore.test(hdr.getStringProperty('x-spam-score'))) {
+      score = hdr.getStringProperty('x-spam-score').replace(SCORE_REGEX.spamScore, '$1')
+    }
+    if (!score && SCORE_REGEX.spamStatus.test(hdr.getStringProperty('x-spam-status'))) {
+      score = hdr.getStringProperty('x-spam-status').replace(SCORE_REGEX.spamStatus, '$1')
+    }
     if (!score && this.params.customMailscannerHeaders) {
       for (let header of this.params.customMailscannerHeaders) {
-        let headerScore = hdr.getStringProperty(header).replace(/.*?score=(.*?),.*$/gi, '$1')
+        let headerScore = hdr.getStringProperty(header).replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
         if (!isNaN(parseFloat(headerScore))) {
           score = headerScore
           break
