@@ -2,12 +2,19 @@
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
+const SCORE_REGEX = {
+  spamdResult: /.*x-spamd-result: .*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
+  spamScore: /.*x-spam-score: ([-+]?[0-9]+\.?[0-9]*).*/is,
+  spamStatus: /.*x-spam-status: .*score=([-+]?[0-9]+\.?[0-9]*) .*/is,
+  mailscannerSpamcheck: /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+}
 
 var init = async () => {
   browser.SpamScores.addWindowListener('none')
   browser.messageDisplay.onMessageDisplayed.addListener(async (tab, message) => {
-    let rawMessage = await browser.messages.getRaw(message.id)
-    let score = getScore(rawMessage)
+    const rawMessage = await browser.messages.getRaw(message.id)
+    const rawHeader = rawMessage.split('\r\n\r\n')[0]
+    let score = getScore(rawHeader)
     if (score === null) {
       browser.messageDisplayAction.disable(tab.id)
     } else {
@@ -15,8 +22,9 @@ var init = async () => {
       browser.messageDisplayAction.setTitle({ tabId: tab.id, title: 'Spam Score: ' + score })
       browser.messageDisplayAction.setIcon({ path: await getImageSrc(score) })
     }
-    if (rawMessage.toLowerCase().indexOf('mailscanner-spamscore') !== -1) {
-      let header = rawMessage.replace(/.*(x-.*?mailscanner-spamcheck):.*/gis, '$1').toLowerCase()
+
+    if (SCORE_REGEX.mailscannerSpamcheck.test(rawHeader)) {
+      let header = rawHeader.replace(/.*(x-.*?mailscanner-spamcheck):.*/is, '$1').toLowerCase()
       let storage = await browser.storage.local.get(['customMailscannerHeaders'])
       if (
         storage &&
@@ -60,22 +68,18 @@ var init = async () => {
 }
 init()
 
-function getScore(raw) {
-  let match = raw.match(/x-spamd-result: .*/gi)
-  if (match && match.length > 0) {
-    return match[0].replace(/^x-spamd-result: .*\[(.*) \/ .*\];.*$/gi, '$1')
+function getScore(rawHeader) {
+  if (SCORE_REGEX.spamdResult.test(rawHeader)) {
+    return rawHeader.replace(SCORE_REGEX.spamdResult, '$1')
   }
-  match = raw.match(/x-spam-score: .*/gi)
-  if (match && match.length > 0) {
-    return match[0].replace(/^x-spam-score: (.*)$/gi, '$1')
+  if (SCORE_REGEX.spamScore.test(rawHeader)) {
+    return rawHeader.replace(SCORE_REGEX.spamScore, '$1')
   }
-  match = raw.match(/x-spam-status: .*/gi)
-  if (match && match.length > 0) {
-    return match[0].replace(/^x-spam-status: .*score=(.*?) .*$/gi, '$1')
+  if (SCORE_REGEX.spamStatus.test(rawHeader)) {
+    return rawHeader.replace(SCORE_REGEX.spamStatus, '$1')
   }
-  match = raw.match(/x-.*?mailscanner-spamcheck: .*/gi)
-  if (match && match.length > 0) {
-    return match[0].replace(/^x-.*?mailscanner-spamcheck: .*score=(.*),$/gi, '$1')
+  if (SCORE_REGEX.mailscannerSpamcheck.test(rawHeader)) {
+    return rawHeader.replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
   }
   return null
 }
