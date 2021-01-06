@@ -22,7 +22,9 @@ Furthermore, a button is displayed in the action bar of any opened mail with the
 
 You can download the latested version reviewed by moz://a directly on the [Thunderbird Add-on page](https://addons.thunderbird.net/de/thunderbird/addon/spam-scores/) or through your installed Thunderbird client by clicking on the menu button followed by "Add-ons" and typing "Spam Scores" in the search bar.
 
-Additionally the latest version is available on the [Releases page](https://github.com/friedPotat0/Spam-Scores/releases) of this GitHub repository.
+Additionally the latest reviewed version is available on the [Releases page](https://github.com/friedPotat0/Spam-Scores/releases) of this GitHub repository.
+
+To test versions that have not yet been published, you can always download the files from any branch and create a new ZIP file containing all files in the "Spam-Scores-[BRANCH_NAME]" folder. Then you can add the file to thunderbird by drag & drop to install the new version. Please keep in mind that you might not receive future updates until you reinstall a reviewed version directly from Thunderbird's add-on page or through the releases page of this repository.
 
 ## Options
 
