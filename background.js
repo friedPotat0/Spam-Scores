@@ -5,7 +5,7 @@ const DEFAULT_SCORE_UPPER_BOUNDS = 2
 const SCORE_REGEX = {
   spamdResult: /.*x-spamd-result: .*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
   spamScore: /.*x-spam-score: ([-+]?[0-9]+\.?[0-9]*).*/is,
-  spamStatus: /.*x-spam-status: .*score=([-+]?[0-9]+\.?[0-9]*) .*/is,
+  spamStatus: /.*x-spam-status: .*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
   mailscannerSpamcheck: /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
 }
 
