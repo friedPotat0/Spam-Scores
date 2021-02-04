@@ -1,0 +1,24 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-MyCompany-MailScanner-SpamScore] Spam Scores test mail
+X-MyCompany-MailScanner-From: receiver@spamscores
+X-MyCompany-MailScanner-SpamScore: ssssssss
+X-MyCompany-MailScanner-SpamCheck: spam, SpamAssassin (not cached, score=-42.42,
+	required 3, R_DKIM_ALLOW -0.2, R_MIXED_CHARSET 0.18,
+	FREEMAIL_FROM 0.00, DKIM_TRACE -0.00, MX_GOOD -0.01,
+	BAYES_HAM -5.5)
+Message-ID: mailscanner-spamscore-1
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-MyCompany-MailScanner-SpamScore] Spam Scores test mail
+X-MyCompany-MailScanner-From: receiver@spamscores
+X-MyCompany-MailScanner-SpamScore: ssssssss
+X-MyCompany-MailScanner-SpamCheck: spam, SpamAssassin (not cached, score=-42.42,
+	required 3, R_DKIM_ALLOW -0.2, R_MIXED_CHARSET 0.18,
+	FREEMAIL_FROM 0.00, DKIM_TRACE -0.00, MX_GOOD -0.01,
+	BAYES_HAM -5.5)
+Message-ID: mailscanner-spamscore-1

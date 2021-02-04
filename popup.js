@@ -1,6 +1,6 @@
 const SYMBOL_HEADER_REGEX = /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status):.*(?:\r?\n(?:\t+ *| +).*)*)/g
-const SYMBOL_PREFIX_REGEX = /\* +(-?[\d.]+)[ \)=]+([A-Z][A-Z0-9_]+)(?:(?:.|\r?\n)+?\[(.*?)\])?/g
-const SYMBOL_SUFFIX_REGEX = /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| )/g
+const SYMBOL_PREFIX_REGEX = /\* +(-?[\d.]+)[ \)=]+(?:([A-Z][A-Z0-9_]+)|--) (.*)/g
+const SYMBOL_SUFFIX_REGEX = /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
 
 browser.tabs
   .query({
@@ -27,10 +27,14 @@ browser.tabs
             .map(el => {
               let symbol = rspamdSymbols.find(sym => sym.name === el.name)
               let element = `<tr class="score ${groupType}">`
-              element += `<td><span>${el.name}</span></td>`
+              element += `<td><span>${el.name || '-'}</span></td>`
               element += `<td><span>${el.score}</span></td>`
               element += `<td><span>${
-                symbol ? `${symbol.description}${el.info ? ` <span class="info">[${el.info}]</span>` : ''}` : ''
+                symbol || el.description
+                  ? `${symbol ? symbol.description : el.description}${
+                      el.info ? ` <span class="info">[${el.info}]</span>` : ''
+                    }`
+                  : ''
               }</span></td>`
               element += '</tr>'
               return element
@@ -52,12 +56,21 @@ function getParsedDetailScores(rawHeader) {
   let spamHeaderMatch = rawHeader.match(SYMBOL_HEADER_REGEX)
   if (spamHeaderMatch && spamHeaderMatch.length > 0) {
     for (let spamHeader of spamHeaderMatch) {
+      if (
+        spamHeaderMatch.length > 1 &&
+        rawHeader.indexOf('X-Spam-Status') !== -1 &&
+        rawHeader.indexOf('X-Spam-Report') !== -1 &&
+        spamHeader.indexOf('X-Spam-Report') === -1
+      ) {
+        continue
+      }
       let symbolMatch = spamHeader.match(SYMBOL_PREFIX_REGEX)
       if (symbolMatch && symbolMatch.length > 0) {
         return symbolMatch.map(el => ({
           name: el.replace(SYMBOL_PREFIX_REGEX, '$2'),
           score: parseFloat(el.replace(SYMBOL_PREFIX_REGEX, '$1') || 0),
-          info: el.replace(SYMBOL_PREFIX_REGEX, '$3') || ''
+          info: '',
+          description: el.replace(SYMBOL_PREFIX_REGEX, '$3') || ''
         }))
       }
       symbolMatch = spamHeader.match(SYMBOL_SUFFIX_REGEX)

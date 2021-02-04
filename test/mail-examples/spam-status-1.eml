@@ -1,0 +1,34 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Status] Spam Scores test mail
+X-Spam-Status: No, score=-42.42
+X-Spam-Score: -42.42
+X-Spam-Bar: +
+X-Spam-Report: Action: no action
+ Symbol: R_DKIM_ALLOW(-0.2)
+ Symbol: R_MIXED_CHARSET(0.18)
+ Symbol: FREEMAIL_FROM(0.00)
+ Symbol: DKIM_TRACE(-0.00)
+ Symbol: MX_GOOD(-0.01)
+ Symbol: BAYES_HAM(-5.5)
+ Message-ID: spam-status-1
+X-Spam-Flag: NO
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: Spam Scores test mail - X-Spam-Status
+X-Spam-Status: No, score=-42.42
+X-Spam-Score: -42.42
+X-Spam-Bar: +
+X-Spam-Report: Action: no action
+ Symbol: R_DKIM_ALLOW(-0.2)
+ Symbol: R_MIXED_CHARSET(0.18)
+ Symbol: FREEMAIL_FROM(0.00)
+ Symbol: DKIM_TRACE(-0.00)
+ Symbol: MX_GOOD(-0.01)
+ Symbol: BAYES_HAM(-5.5)
+ Message-ID: spam-status-1
+X-Spam-Flag: NO
