@@ -7,6 +7,7 @@ const SCORE_REGEX = {
   spamdResult: /.*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
   spamScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
   spamStatus: /.*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
+  spamReport: /.*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
   mailscannerSpamcheck: /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
 }
 
@@ -39,6 +40,9 @@ class ColumnHandler {
     }
     if (!score && SCORE_REGEX.spamStatus.test(hdr.getStringProperty('x-spam-status'))) {
       score = hdr.getStringProperty('x-spam-status').replace(SCORE_REGEX.spamStatus, '$1')
+    }
+    if (!score && SCORE_REGEX.spamReport.test(hdr.getStringProperty('x-spam-report'))) {
+      score = hdr.getStringProperty('x-spam-report').replace(SCORE_REGEX.spamReport, '$1')
     }
     if (!score && this.params.customMailscannerHeaders) {
       for (let header of this.params.customMailscannerHeaders) {

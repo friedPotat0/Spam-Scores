@@ -52,6 +52,14 @@ function getParsedDetailScores(rawHeader) {
   let spamHeaderMatch = rawHeader.match(SYMBOL_HEADER_REGEX)
   if (spamHeaderMatch && spamHeaderMatch.length > 0) {
     for (let spamHeader of spamHeaderMatch) {
+      if (
+        spamHeaderMatch.length > 1 &&
+        rawHeader.indexOf('X-Spam-Status') !== -1 &&
+        rawHeader.indexOf('X-Spam-Report') !== -1 &&
+        spamHeader.indexOf('X-Spam-Report') === -1
+      ) {
+        continue
+      }
       let symbolMatch = spamHeader.match(SYMBOL_PREFIX_REGEX)
       if (symbolMatch && symbolMatch.length > 0) {
         return symbolMatch.map(el => ({
