@@ -8,7 +8,8 @@ const SCORE_REGEX = {
   spamScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
   spamStatus: /.*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
   spamReport: /.*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
-  mailscannerSpamcheck: /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+  mailscannerSpamcheck: /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is,
+  gmxAntispam: /.*?([0-9]+) \(.*\);.*/is
 }
 
 class ColumnHandler {
@@ -25,6 +26,10 @@ class ColumnHandler {
   getImageSrc(row, col) {
     let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
     if (score === null) return null
+    if (typeof score === 'boolean') {
+      if (score) return extension.rootURI.resolve('./images/score_positive.png')
+      else return extension.rootURI.resolve('./images/score_negative.png')
+    }
     if (score > this.params.upperScoreBounds) return extension.rootURI.resolve('./images/score_positive.png')
     if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds)
       return extension.rootURI.resolve('./images/score_neutral.png')
@@ -44,6 +49,12 @@ class ColumnHandler {
     if (!score && SCORE_REGEX.spamReport.test(hdr.getStringProperty('x-spam-report'))) {
       score = hdr.getStringProperty('x-spam-report').replace(SCORE_REGEX.spamReport, '$1')
     }
+    if (!score && SCORE_REGEX.gmxAntispam.test(hdr.getStringProperty('x-gmx-antispam'))) {
+      try {
+        let spamReason = parseInt(hdr.getStringProperty('x-gmx-antispam').replace(SCORE_REGEX.gmxAntispam, '$1'))
+        return spamReason === 0 ? false : true
+      } catch {}
+    }
     if (!score && this.params.customMailscannerHeaders) {
       for (let header of this.params.customMailscannerHeaders) {
         let headerScore = hdr.getStringProperty(header).replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
@@ -58,6 +69,10 @@ class ColumnHandler {
   }
   getCellText(row, col) {
     let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
+    if (typeof score === 'boolean') {
+      if (score) return ' Spam'
+      else return ' Ham'
+    }
     return score !== null ? ' ' + score : null
   }
   getSortStringForRow(hdr) {

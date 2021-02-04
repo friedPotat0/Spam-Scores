@@ -81,7 +81,14 @@ function unpaint(win) {
 }
 
 function updatePrefs(dynamicHeaders = []) {
-  let staticHeaders = ['x-spam-status', 'x-spamd-result', 'x-spam-score', 'x-rspamd-score', 'x-spam-report']
+  let staticHeaders = [
+    'x-spam-status',
+    'x-spamd-result',
+    'x-spam-score',
+    'x-rspamd-score',
+    'x-spam-report',
+    'x-gmx-antispam'
+  ]
   let customDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
   let newCustomDBHeaders = customDBHeaders
   for (let header of staticHeaders) {

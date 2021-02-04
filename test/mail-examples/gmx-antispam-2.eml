@@ -1,0 +1,16 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Status] Spam Scores test mail
+X-GMX-Antispam: 0 (mail was not recognized as spam); Detail=V3;
+X-Spam-Flag: YES
+Message-ID: gmx-antispam-2
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Status] Spam Scores test mail
+X-GMX-Antispam: 0 (mail was not recognized as spam); Detail=V3;
+X-Spam-Flag: YES
+Message-ID: gmx-antispam-2

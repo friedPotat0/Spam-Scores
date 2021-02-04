@@ -7,7 +7,8 @@ const SCORE_REGEX = {
   spamScore: /.*x-spam-score: ([-+]?[0-9]+\.?[0-9]*).*/is,
   spamStatus: /.*x-spam-status: .*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
   spamReport: /.*x-spam-report: .*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
-  mailscannerSpamcheck: /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+  mailscannerSpamcheck: /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is,
+  gmxAntispam: /.*x-gmx-antispam: .*?([0-9]+) \(.*\);.*/is
 }
 
 var init = async () => {
@@ -20,7 +21,11 @@ var init = async () => {
       browser.messageDisplayAction.disable(tab.id)
     } else {
       browser.messageDisplayAction.enable(tab.id)
-      browser.messageDisplayAction.setTitle({ tabId: tab.id, title: 'Spam Score: ' + score })
+      if (typeof score === 'boolean') {
+        browser.messageDisplayAction.setTitle({ tabId: tab.id, title: 'Spam Score: ' + (score ? 'Spam' : 'Ham') })
+      } else {
+        browser.messageDisplayAction.setTitle({ tabId: tab.id, title: 'Spam Score: ' + score })
+      }
       browser.messageDisplayAction.setIcon({ path: await getImageSrc(score) })
     }
 
@@ -85,6 +90,12 @@ function getScore(rawHeader) {
   if (SCORE_REGEX.mailscannerSpamcheck.test(rawHeader)) {
     return rawHeader.replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
   }
+  if (SCORE_REGEX.gmxAntispam.test(rawHeader)) {
+    try {
+      let spamReason = parseInt(rawHeader.replace(SCORE_REGEX.gmxAntispam, '$1'))
+      return spamReason === 0 ? false : true
+    } catch {}
+  }
   return null
 }
 
@@ -95,6 +106,10 @@ async function getImageSrc(score) {
   let upperBounds =
     storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
 
+  if (typeof score === 'boolean') {
+    if (score) return './images/score_positive.png'
+    else return './images/score_negative.png'
+  }
   if (score > upperBounds) return './images/score_positive.png'
   if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.png'
   if (score < lowerBounds) return './images/score_negative.png'

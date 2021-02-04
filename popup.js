@@ -1,6 +1,7 @@
-const SYMBOL_HEADER_REGEX = /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status):.*(?:\r?\n(?:\t+ *| +).*)*)/g
+const SYMBOL_HEADER_REGEX = /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status|GMX-Antispam):.*(?:\r?\n(?:\t+ *| +).*)*)/g
 const SYMBOL_PREFIX_REGEX = /\* +(-?[\d.]+)[ \)=]+(?:([A-Z][A-Z0-9_]+)|--) (.*)/g
 const SYMBOL_SUFFIX_REGEX = /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
+const SYMBOL_GMX_REGEX = /.*?([0-9]+) \((.*)\);.*/g
 
 browser.tabs
   .query({
@@ -15,9 +16,21 @@ browser.tabs
       let parsedDetailScores = getParsedDetailScores(rawHeader)
       if (parsedDetailScores) {
         let groupedDetailScores = {
-          positive: parsedDetailScores.filter(el => el.score > 0).sort((a, b) => b.score - a.score),
-          negative: parsedDetailScores.filter(el => el.score < 0).sort((a, b) => a.score - b.score),
-          neutral: parsedDetailScores.filter(el => el.score === 0).sort((a, b) => a.name.localeCompare(b.name))
+          positive: [
+            ...parsedDetailScores
+              .filter(el => typeof el.score !== 'boolean' && el.score > 0)
+              .sort((a, b) => b.score - a.score),
+            ...parsedDetailScores.filter(el => typeof el.score === 'boolean' && el.score)
+          ],
+          negative: [
+            ...parsedDetailScores
+              .filter(el => typeof el.score !== 'boolean' && el.score < 0)
+              .sort((a, b) => a.score - b.score),
+            ...parsedDetailScores.filter(el => typeof el.score === 'boolean' && !el.score)
+          ],
+          neutral: parsedDetailScores
+            .filter(el => typeof el.score !== 'boolean' && el.score === 0)
+            .sort((a, b) => a.name.localeCompare(b.name))
         }
         let scoreDetailElements =
           '<table class="score-details"><tr><th>Name</th><th>Score</th><th>Description</th></tr>'
@@ -28,7 +41,9 @@ browser.tabs
               let symbol = rspamdSymbols.find(sym => sym.name === el.name)
               let element = `<tr class="score ${groupType}">`
               element += `<td><span>${el.name || '-'}</span></td>`
-              element += `<td><span>${el.score}</span></td>`
+              element += `<td><span>${
+                typeof el.score === 'boolean' ? (el.score ? 'Spam' : 'Ham') : el.score
+              }</span></td>`
               element += `<td><span>${
                 symbol || el.description
                   ? `${symbol ? symbol.description : el.description}${
@@ -79,6 +94,15 @@ function getParsedDetailScores(rawHeader) {
           name: el.replace(SYMBOL_SUFFIX_REGEX, '$1'),
           score: parseFloat(el.replace(SYMBOL_SUFFIX_REGEX, '$2') || 0),
           info: el.replace(SYMBOL_SUFFIX_REGEX, '$3') || ''
+        }))
+      }
+      symbolMatch = spamHeader.match(SYMBOL_GMX_REGEX)
+      if (symbolMatch && symbolMatch.length > 0) {
+        return symbolMatch.map(el => ({
+          name: 'Reason ' + el.replace(SYMBOL_GMX_REGEX, '$1'),
+          score: parseInt(el.replace(SYMBOL_GMX_REGEX, '$1')) === 0 ? false : true,
+          info: '',
+          description: el.replace(SYMBOL_GMX_REGEX, '$2')
         }))
       }
     }
