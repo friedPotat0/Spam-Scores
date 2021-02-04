@@ -1,0 +1,28 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Status] Spam Scores test mail
+X-Spam-Flag: NO
+X-Spam-Score: -42.42
+X-Spam-Level:
+X-Spam-Status: No, score=-42.42 tagged_above=-9999 required=3
+	tests=[R_DKIM_ALLOW=-0.2, R_MIXED_CHARSET=0.18,
+	FREEMAIL_FROM=0.00, DKIM_TRACE=-0.00, MX_GOOD=-0.01,
+  BAYES_HAM=-5.5] autolearn=ham autolearn_force=no
+Message-ID: spam-status-2
+X-Spam-Flag: NO
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: Spam Scores test mail - X-Spam-Status
+X-Spam-Flag: NO
+X-Spam-Score: -42.42
+X-Spam-Level:
+X-Spam-Status: No, score=-42.42 tagged_above=-9999 required=3
+	tests=[R_DKIM_ALLOW=-0.2, R_MIXED_CHARSET=0.18,
+	FREEMAIL_FROM=0.00, DKIM_TRACE=-0.00, MX_GOOD=-0.01,
+  BAYES_HAM=-5.5] autolearn=ham autolearn_force=no
+Message-ID: spam-status-2
+X-Spam-Flag: NO

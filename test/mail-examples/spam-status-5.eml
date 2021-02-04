@@ -1,0 +1,20 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Status] Spam Scores test mail
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on srv01.spamscores
+X-Spam-Level:
+X-Spam-Status: No, score=-42.42 required=5.0 tests=R_DKIM_ALLOW,
+  R_MIXED_CHARSET,FREEMAIL_FROM,DKIM_TRACE,MX_GOOD,BAYES_HAM
+Message-ID: spam-status-5
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Status] Spam Scores test mail
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on srv01.spamscores
+X-Spam-Level:
+X-Spam-Status: No, score=-42.42 required=5.0 tests=R_DKIM_ALLOW,
+  R_MIXED_CHARSET,FREEMAIL_FROM,DKIM_TRACE,MX_GOOD,BAYES_HAM
+Message-ID: spam-status-5
