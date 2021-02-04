@@ -1,6 +1,6 @@
 const SYMBOL_HEADER_REGEX = /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status):.*(?:\r?\n(?:\t+ *| +).*)*)/g
 const SYMBOL_PREFIX_REGEX = /\* +(-?[\d.]+)[ \)=]+([A-Z][A-Z0-9_]+)(?:(?:.|\r?\n)+?\[(.*?)\])?/g
-const SYMBOL_SUFFIX_REGEX = /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| )/g
+const SYMBOL_SUFFIX_REGEX = /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
 
 browser.tabs
   .query({
