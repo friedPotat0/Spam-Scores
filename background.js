@@ -95,8 +95,8 @@ async function getImageSrc(score) {
   let upperBounds =
     storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
 
-  if (score > upperBounds) return './images/score_positive.png'
-  if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.png'
-  if (score < lowerBounds) return './images/score_negative.png'
-  return './images/score_neutral.png'
+  if (score > upperBounds) return './images/score_positive.svg'
+  if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.svg'
+  if (score < lowerBounds) return './images/score_negative.svg'
+  return './images/score_neutral.svg'
 }
