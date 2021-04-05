@@ -33,7 +33,20 @@ async function save() {
   try {
     newLowerBounds = parseFloat(document.querySelector('#score-bounds-lower').value)
     newUpperBounds = parseFloat(document.querySelector('#score-bounds-upper').value)
-    if (!(newLowerBounds <= 0 && newUpperBounds >= -10000)) {
+    if (newLowerBounds > newUpperBounds) {
+      newLowerBounds = parseFloat(
+        storage && storage.scoreIconLowerBounds !== undefined
+          ? storage.scoreIconLowerBounds
+          : DEFAULT_SCORE_LOWER_BOUNDS
+      )
+      newUpperBounds = parseFloat(
+        storage && storage.scoreIconLowerBounds !== undefined
+          ? storage.scoreIconUpperBounds
+          : DEFAULT_SCORE_UPPER_BOUNDS
+      )
+      throw Error('Upper score cannot be lower than lower bounds')
+    }
+    if (newUpperBounds < -10000) {
       newLowerBounds = parseFloat(
         storage && storage.scoreIconLowerBounds !== undefined
           ? storage.scoreIconLowerBounds
@@ -41,7 +54,7 @@ async function save() {
       )
       throw Error('Wrong score lower bounds')
     }
-    if (!(newUpperBounds >= 0 && newUpperBounds <= 10000)) {
+    if (newUpperBounds > 10000) {
       newUpperBounds = parseFloat(
         storage && storage.scoreIconLowerBounds !== undefined
           ? storage.scoreIconUpperBounds
