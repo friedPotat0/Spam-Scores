@@ -7,3 +7,22 @@
 .input-line img {
   margin-right: 5px;
 }
+
+/* COLOR SETTINGS FOR DARK/LIGHT THEME */
+@media (prefers-color-scheme: light) {
+  body {
+    color: black;
+    background: white;
+  }
+  input {
+    background-color: #333;
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: white;
+    background: #202023;
+  }
+}

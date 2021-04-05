@@ -1,6 +1,5 @@
 body {
   padding: 20px;
-  color: black;
 }
 h5 {
   margin: 0;
@@ -33,7 +32,6 @@ table.score-details tr th:nth-child(2) {
 }
 table.score-details tr.score td span.info {
   font-size: 75%;
-  color: #7a7a7a;
   word-break: break-all;
 }
 table.score-details tr.score td:nth-child(2) span {
@@ -52,9 +50,36 @@ table.score-details tr.score.positive td:nth-child(2) span {
 table.score-details tr.score.neutral td:nth-child(2) span {
   background-color: #b4b4b4;
 }
-table.score-details tbody tr:nth-child(even) {
-  background: #eee;
+
+/* COLOR SETTINGS FOR DARK/LIGHT THEME */
+@media (prefers-color-scheme: light) {
+  body {
+    color: black;
+    background: white;
+  }
+  table.score-details tbody tr:nth-child(even) {
+    background: #eee;
+  }
+  table.score-details tbody tr:nth-child(odd) {
+    background: #fff;
+  }
+  table.score-details tr.score td span.info {
+    color: #7a7a7a;
+  }
 }
-table.score-details tbody tr:nth-child(odd) {
-  background: #fff;
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: white;
+    background: #333;
+  }
+  table.score-details tbody tr:nth-child(even) {
+    background: #424242;
+  }
+  table.score-details tbody tr:nth-child(odd) {
+    background: #333;
+  }
+  table.score-details tr.score td span.info {
+    color: #949494;
+  }
 }
