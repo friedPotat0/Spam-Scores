@@ -14,10 +14,6 @@
     color: black;
     background: white;
   }
-  input {
-    background-color: #333;
-    color: white;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
