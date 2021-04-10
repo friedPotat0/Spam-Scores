@@ -1,8 +1,8 @@
 # Spam Scores (Thunderbird Add-on)
 
-Spam Scores is an add-on for Thunderbird (Version 78.0a1 - *). It can display spam scores according to mail headers. The add-on supports spam/ham score headers of Rspamd, SpamAssassin and MailScanner. It adds a column with the overall spam score to the mail list view and shows details of any matched spam/ham rule.
+Spam Scores is an add-on for Thunderbird (Version 78.0a1 - \*). It can display spam scores according to mail headers. The add-on supports spam/ham score headers of Rspamd, SpamAssassin and MailScanner. It adds a column with the overall spam score to the mail list view and shows details of any matched spam/ham rule.
 
-> :warning: The add-on needs mails with headers like "X-Spamd-Result", "X-Spam-Report", "X-SpamCheck" or "X-Spam-Status" to work. If a mail does not have one of these headers, it cannot display any spam score. Please make sure to check your mails for these headers before creating an issue. The add-on does not currently support spam headers from GMX, as these have a different score scale. They may be supported in a future version.
+> :warning: The add-on needs mails with headers like "X-Spamd-Result", "X-Spam-Report", "X-Rspamd-Report/-Score", "X-SpamCheck" or "X-Spam-Status" to work. If a mail does not have one of these headers, it cannot display any spam score. Please make sure to check your mails for these headers before creating an issue. The add-on does not currently support spam headers from GMX, as these have a different score scale. They may be supported in a future version.
 
 ![Add-on Screenshot](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot.jpg)
 
@@ -41,6 +41,7 @@ At the moment the add-on is mostly written in English. Some parts like the setti
 ## License
 
 The add-on is released under the CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International) license.
+
 ## Contributing
 
 If you notice any bugs, do not hesitate to open an issue about it. Please understand that I develop the add-on in my spare time and may not be able to solve problems directly. If you want to contribute to the project by fixing bugs, implementing new features or translating the add-on, please feel free to open a pull request.

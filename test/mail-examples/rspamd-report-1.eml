@@ -1,0 +1,16 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Rspamd-Report] Spam Scores test mail
+X-Rspamd-Bar: /
+X-Rspamd-Report: XM_UA_NO_VERSION(0.01) MIME_GOOD(-0.1) MIME_BASE64_TEXT(0.1) MISSING_TO(2) RCVD_NO_TLS_LAST(0.1) BAYES_HAM(-2.999991)
+X-Rspamd-Score: -42.42
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Rspamd-Report] Spam Scores test mail
+X-Rspamd-Bar: /
+X-Rspamd-Report: XM_UA_NO_VERSION(0.01) MIME_GOOD(-0.1) MIME_BASE64_TEXT(0.1) MISSING_TO(2) RCVD_NO_TLS_LAST(0.1) BAYES_HAM(-2.999991)
+X-Rspamd-Score: -42.42

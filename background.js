@@ -7,6 +7,7 @@ const SCORE_REGEX = {
   spamScore: /.*x-spam-score: ([-+]?[0-9]+\.?[0-9]*).*/is,
   spamStatus: /.*x-spam-status: .*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
   spamReport: /.*x-spam-report: .*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
+  rspamdScore: /.*x-rspamd-score: .*?([-+]?[0-9]+\.?[0-9]*).*/is,
   mailscannerSpamcheck: /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
 }
 
@@ -81,6 +82,9 @@ function getScore(rawHeader) {
   }
   if (SCORE_REGEX.spamReport.test(rawHeader)) {
     return rawHeader.replace(SCORE_REGEX.spamReport, '$1')
+  }
+  if (SCORE_REGEX.rspamdScore.test(rawHeader)) {
+    return rawHeader.replace(SCORE_REGEX.rspamdScore, '$1')
   }
   if (SCORE_REGEX.mailscannerSpamcheck.test(rawHeader)) {
     return rawHeader.replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
