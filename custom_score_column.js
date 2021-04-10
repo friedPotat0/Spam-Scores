@@ -20,16 +20,15 @@ class ColumnHandler {
   isString() {
     return false
   }
-  getCellProperties(row, col, props) {}
-  getRowProperties(row, props) {}
-  getImageSrc(row, col) {
+  getCellProperties(row, col, props) {
     let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > this.params.upperScoreBounds) return extension.rootURI.resolve('./images/score_positive.png')
-    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds)
-      return extension.rootURI.resolve('./images/score_neutral.png')
-    if (score < this.params.lowerScoreBounds) return extension.rootURI.resolve('./images/score_negative.png')
+    if (score > this.params.upperScoreBounds) return 'positive'
+    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds) return 'neutral'
+    if (score < this.params.lowerScoreBounds) return 'negative'
   }
+  getRowProperties(row, props) {}
+  getImageSrc(row, col) {}
   getScore(hdr) {
     let score = null
     if (SCORE_REGEX.spamdResult.test(hdr.getStringProperty('x-spamd-result'))) {
@@ -143,3 +142,9 @@ class SpamScores_ScoreHdrViewColumn {
 }
 
 var SpamScores_ScoreHdrView = new SpamScores_ScoreHdrViewColumn()
+
+let styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
+  Components.interfaces.nsIStyleSheetService
+)
+let uri = Services.io.newURI(extension.getURL('custom_score_column.css'), null, null)
+styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET)
