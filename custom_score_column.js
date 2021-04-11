@@ -24,9 +24,18 @@ class ColumnHandler {
   getCellProperties(row, col, props) {
     let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > this.params.upperScoreBounds) return 'positive'
-    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds) return 'neutral'
-    if (score < this.params.lowerScoreBounds) return 'negative'
+    if (score > this.params.upperScoreBounds) {
+      if (this.params.hideIconScorePositive === true) return null
+      return 'positive'
+    }
+    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds) {
+      if (this.params.hideIconScoreNeutral === true) return null
+      return 'neutral'
+    }
+    if (score < this.params.lowerScoreBounds) {
+      if (this.params.hideIconScoreNegative === true) return null
+      return 'negative'
+    }
   }
   getRowProperties(row, props) {}
   getImageSrc(row, col) {}
@@ -61,7 +70,19 @@ class ColumnHandler {
   }
   getCellText(row, col) {
     let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
-    return score !== null ? ' ' + score : null
+    if (score === null) return null
+    if (score > this.params.upperScoreBounds) {
+      if (this.params.hideIconScorePositive === true) return null
+      return ' ' + score
+    }
+    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds) {
+      if (this.params.hideIconScoreNeutral === true) return null
+      return ' ' + score
+    }
+    if (score < this.params.lowerScoreBounds) {
+      if (this.params.hideIconScoreNegative === true) return null
+      return ' ' + score
+    }
   }
   getSortStringForRow(hdr) {
     return this.getScore(hdr)

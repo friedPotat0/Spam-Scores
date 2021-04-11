@@ -19,6 +19,9 @@
   "optionsScoreLess": {
     "message": "Punktzahl kleiner"
   },
+  "optionsHideIconAndScore": {
+    "message": "Symbol und Punktzahl in der Spalte nicht anzeigen"
+  },
   "helloPopupTitle": {
     "message": "Spam Scores - Danke!"
   },

@@ -41,6 +41,11 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
           scoreHdrViewParams.lowerScoreBounds = lower
           scoreHdrViewParams.upperScoreBounds = upper
         },
+        setHideIconScoreOptions(hidePositive, hideNeutral, hideNegative) {
+          scoreHdrViewParams.hideIconScorePositive = hidePositive
+          scoreHdrViewParams.hideIconScoreNeutral = hideNeutral
+          scoreHdrViewParams.hideIconScoreNegative = hideNegative
+        },
         getHelloFlag() {
           try {
             return Services.prefs.getBoolPref('spamscores.hello')

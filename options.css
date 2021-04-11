@@ -7,6 +7,15 @@
 .input-line img {
   margin-right: 5px;
 }
+.checkbox-wrapper {
+  line-height: 40px;
+  font-size: 14px;
+  margin-left: 30px;
+}
+.checkbox-wrapper * {
+  display: inline-block;
+  vertical-align: middle;
+}
 
 /* COLOR SETTINGS FOR DARK/LIGHT THEME */
 @media (prefers-color-scheme: light) {
