@@ -54,7 +54,10 @@ var init = async () => {
   let storage = await browser.storage.local.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
-    'customMailscannerHeaders'
+    'customMailscannerHeaders',
+    'hideIconScorePositive',
+    'hideIconScoreNeutral',
+    'hideIconScoreNegative'
   ])
   let lowerBounds = parseFloat(
     storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
@@ -64,8 +67,15 @@ var init = async () => {
   )
   browser.SpamScores.setScoreBounds(parseFloat(lowerBounds), parseFloat(upperBounds))
 
-  if (storage && storage.customMailscannerHeaders) {
-    browser.SpamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
+  if (storage) {
+    if (storage.customMailscannerHeaders) {
+      browser.SpamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
+    }
+    browser.SpamScores.setHideIconScoreOptions(
+      storage.hideIconScorePositive || false,
+      storage.hideIconScoreNeutral || false,
+      storage.hideIconScoreNegative || false
+    )
   }
 }
 init()

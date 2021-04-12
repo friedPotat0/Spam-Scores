@@ -4,7 +4,13 @@ const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
 async function init() {
   initTranslations()
 
-  let storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  let storage = await browser.storage.local.get([
+    'scoreIconLowerBounds',
+    'scoreIconUpperBounds',
+    'hideIconScorePositive',
+    'hideIconScoreNeutral',
+    'hideIconScoreNegative'
+  ])
   let lowerBounds = parseFloat(
     storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
   )
@@ -22,13 +28,26 @@ async function init() {
     parseFloat(upperBounds)
   )
 
+  let hideIconScorePositive =
+    storage && storage.hideIconScorePositive !== undefined ? storage.hideIconScorePositive : false
+  let hideIconScoreNeutral =
+    storage && storage.hideIconScoreNeutral !== undefined ? storage.hideIconScoreNeutral : false
+  let hideIconScoreNegative =
+    storage && storage.hideIconScoreNegative !== undefined ? storage.hideIconScoreNegative : false
+  document.querySelector('#hide-icon-score-positive').checked = hideIconScorePositive
+  document.querySelector('#hide-icon-score-neutral').checked = hideIconScoreNeutral
+  document.querySelector('#hide-icon-score-negative').checked = hideIconScoreNegative
+
   document.querySelector('#score-bounds-lower').addEventListener('change', save)
   document.querySelector('#score-bounds-upper').addEventListener('change', save)
+  document.querySelector('#hide-icon-score-positive').addEventListener('change', save)
+  document.querySelector('#hide-icon-score-neutral').addEventListener('change', save)
+  document.querySelector('#hide-icon-score-negative').addEventListener('change', save)
 }
 init()
 
 async function save() {
-  let newLowerBounds, newUpperBounds
+  let newLowerBounds, newUpperBounds, hideIconScorePositive, hideIconScoreNeutral, hideIconScoreNegative
   let storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   try {
     newLowerBounds = parseFloat(document.querySelector('#score-bounds-lower').value)
@@ -62,9 +81,15 @@ async function save() {
       )
       throw Error('Wrong score upper bounds')
     }
+    hideIconScorePositive = document.querySelector('#hide-icon-score-positive').checked
+    hideIconScoreNeutral = document.querySelector('#hide-icon-score-neutral').checked
+    hideIconScoreNegative = document.querySelector('#hide-icon-score-negative').checked
     browser.storage.local.set({
       scoreIconLowerBounds: newLowerBounds,
-      scoreIconUpperBounds: newUpperBounds
+      scoreIconUpperBounds: newUpperBounds,
+      hideIconScorePositive: hideIconScorePositive,
+      hideIconScoreNeutral: hideIconScoreNeutral,
+      hideIconScoreNegative: hideIconScoreNegative
     })
   } catch (err) {
     console.error(err)
@@ -80,6 +105,11 @@ async function save() {
   ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(
     parseFloat(newLowerBounds !== null ? newLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS),
     parseFloat(newUpperBounds !== null ? newUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS)
+  )
+  ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setHideIconScoreOptions(
+    hideIconScorePositive || false,
+    hideIconScoreNeutral || false,
+    hideIconScoreNegative || false
   )
 }
 
@@ -102,4 +132,7 @@ function initTranslations() {
   document
     .querySelectorAll('*[data-i18n="optionsScoreLess"]')
     .forEach(el => (el.textContent = browser.i18n.getMessage('optionsScoreLess')))
+  document
+    .querySelectorAll('*[data-i18n="optionsHideIconAndScore"]')
+    .forEach(el => (el.textContent = browser.i18n.getMessage('optionsHideIconAndScore')))
 }

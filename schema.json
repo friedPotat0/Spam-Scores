@@ -32,6 +32,26 @@
         ]
       },
       {
+        "name": "setHideIconScoreOptions",
+        "type": "function",
+        "description": "",
+        "async": false,
+        "parameters": [
+          {
+            "name": "hidePositive",
+            "type": "boolean"
+          },
+          {
+            "name": "hideNeutral",
+            "type": "boolean"
+          },
+          {
+            "name": "hideNegative",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
         "name": "getHelloFlag",
         "type": "function",
         "description": "",

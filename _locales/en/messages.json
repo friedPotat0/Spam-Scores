@@ -19,6 +19,9 @@
   "optionsScoreLess": {
     "message": "Score less than"
   },
+  "optionsHideIconAndScore": {
+    "message": "Hide icon and score in column"
+  },
   "helloPopupTitle": {
     "message": "Spam Scores - Thank you!"
   },
