@@ -32,7 +32,7 @@ To test versions that have not yet been published, you can always download the f
 
 ![Settings Screenshot](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot_settings.jpg)
 
-The default icon ranges can be changed in the add-on settings in Thunderbird.
+The default icon ranges can be changed in the add-on settings in Thunderbird. Furthermore individual score ranges can be completely hidden. For example, this can be used to show the icon and score only for mails that are spam. The detailed rules of any opened mail can still be accessed regardless of this setting.
 
 ## Translations
 
