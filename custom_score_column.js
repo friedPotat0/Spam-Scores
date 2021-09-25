@@ -9,7 +9,8 @@ const SCORE_REGEX = {
   spamStatus: /.*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
   spamReport: /.*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
   rspamdScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
-  mailscannerSpamcheck: /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+  mailscannerSpamcheck:
+    /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
 }
 
 class ColumnHandler {
@@ -44,11 +45,11 @@ class ColumnHandler {
     if (SCORE_REGEX.spamdResult.test(hdr.getStringProperty('x-spamd-result'))) {
       score = hdr.getStringProperty('x-spamd-result').replace(SCORE_REGEX.spamdResult, '$1')
     }
-    if (!score && SCORE_REGEX.spamScore.test(hdr.getStringProperty('x-spam-score'))) {
-      score = hdr.getStringProperty('x-spam-score').replace(SCORE_REGEX.spamScore, '$1')
-    }
     if (!score && SCORE_REGEX.spamStatus.test(hdr.getStringProperty('x-spam-status'))) {
       score = hdr.getStringProperty('x-spam-status').replace(SCORE_REGEX.spamStatus, '$1')
+    }
+    if (!score && SCORE_REGEX.spamScore.test(hdr.getStringProperty('x-spam-score'))) {
+      score = hdr.getStringProperty('x-spam-score').replace(SCORE_REGEX.spamScore, '$1')
     }
     if (!score && SCORE_REGEX.spamReport.test(hdr.getStringProperty('x-spam-report'))) {
       score = hdr.getStringProperty('x-spam-report').replace(SCORE_REGEX.spamReport, '$1')
