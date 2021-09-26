@@ -8,7 +8,8 @@ const SCORE_REGEX = {
   spamStatus: /.*x-spam-status: .*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
   spamReport: /.*x-spam-report: .*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
   rspamdScore: /.*x-rspamd-score: .*?([-+]?[0-9]+\.?[0-9]*).*/is,
-  mailscannerSpamcheck: /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+  mailscannerSpamcheck:
+    /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
 }
 
 var init = async () => {
@@ -84,11 +85,11 @@ function getScore(rawHeader) {
   if (SCORE_REGEX.spamdResult.test(rawHeader)) {
     return rawHeader.replace(SCORE_REGEX.spamdResult, '$1')
   }
-  if (SCORE_REGEX.spamScore.test(rawHeader)) {
-    return rawHeader.replace(SCORE_REGEX.spamScore, '$1')
-  }
   if (SCORE_REGEX.spamStatus.test(rawHeader)) {
     return rawHeader.replace(SCORE_REGEX.spamStatus, '$1')
+  }
+  if (SCORE_REGEX.spamScore.test(rawHeader)) {
+    return rawHeader.replace(SCORE_REGEX.spamScore, '$1')
   }
   if (SCORE_REGEX.spamReport.test(rawHeader)) {
     return rawHeader.replace(SCORE_REGEX.spamReport, '$1')

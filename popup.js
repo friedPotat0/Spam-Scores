@@ -1,5 +1,8 @@
-const SYMBOL_HEADER_REGEX = /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
-const SYMBOL_PREFIX_REGEX = /\* +(-?[\d.]+)[ \)=]+(?:([A-Z][A-Z0-9_]+)|--) (.*)/g
+const SYMBOL_HEADER_REGEX =
+  /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
+const SYMBOL_PREFIX_REGEX =
+  /\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) .*?(?=\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) |$)/gs
+const SYMBOL_PREFIX_SINGLE_REGEX = /(?:\* +)?(-?[\d.]+)[ \)=]+(?:([A-Z][A-Z0-9_]+)|--) ([\s\S]*?)(?:\[(.*)\])?$/
 const SYMBOL_SUFFIX_REGEX = /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
 
 browser.tabs
@@ -66,22 +69,30 @@ function getParsedDetailScores(rawHeader) {
       }
       let symbolMatch = spamHeader.match(SYMBOL_PREFIX_REGEX)
       if (symbolMatch && symbolMatch.length > 0) {
-        return symbolMatch.map(el => ({
-          name: el.replace(SYMBOL_PREFIX_REGEX, '$2'),
-          score: parseFloat(el.replace(SYMBOL_PREFIX_REGEX, '$1') || 0),
-          info: '',
-          description: el.replace(SYMBOL_PREFIX_REGEX, '$3') || ''
-        }))
+        return symbolMatch
+          .map(el => el.trim().replace(/\r?\n/g, ' '))
+          .map(el => ({
+            name: sanitizeRegexResult(el.replace(SYMBOL_PREFIX_SINGLE_REGEX, '$2')),
+            score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_PREFIX_SINGLE_REGEX, '$1')) || 0),
+            info: sanitizeRegexResult(el.replace(SYMBOL_PREFIX_SINGLE_REGEX, '$4')) || '',
+            description: sanitizeRegexResult(el.replace(SYMBOL_PREFIX_SINGLE_REGEX, '$3')) || ''
+          }))
       }
       symbolMatch = spamHeader.match(SYMBOL_SUFFIX_REGEX)
       if (symbolMatch && symbolMatch.length > 0) {
-        return symbolMatch.map(el => ({
-          name: el.replace(SYMBOL_SUFFIX_REGEX, '$1'),
-          score: parseFloat(el.replace(SYMBOL_SUFFIX_REGEX, '$2') || 0),
-          info: el.replace(SYMBOL_SUFFIX_REGEX, '$3') || ''
-        }))
+        return symbolMatch
+          .map(el => el.trim().replace(/\r?\n/g, ' '))
+          .map(el => ({
+            name: sanitizeRegexResult(el.replace(SYMBOL_SUFFIX_REGEX, '$1')),
+            score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_SUFFIX_REGEX, '$2')) || 0),
+            info: sanitizeRegexResult(el.replace(SYMBOL_SUFFIX_REGEX, '$3')) || ''
+          }))
       }
     }
   }
   return null
+}
+
+function sanitizeRegexResult(result) {
+  return result?.trim()?.replace(/\s\s+/g, ' ')
 }
