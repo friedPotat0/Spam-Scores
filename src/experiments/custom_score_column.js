@@ -172,5 +172,5 @@ var SpamScores_ScoreHdrView = new SpamScores_ScoreHdrViewColumn()
 let styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
   Components.interfaces.nsIStyleSheetService
 )
-let uri = Services.io.newURI(extension.getURL('custom_score_column.css'), null, null)
+let uri = Services.io.newURI(extension.getURL('src/experiments/custom_score_column.css'), null, null)
 styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET)

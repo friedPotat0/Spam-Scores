@@ -33,10 +33,12 @@
     }
   },
   "message_display_action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/browser/popup/popup.html",
     "default_title": "Spam Scores"
   },
   "options_ui": {
-    "page": "options.html"
+    "page": "src/options/options.html",
+    "open_in_tab": false,
+    "browser_style": true
   }
 }

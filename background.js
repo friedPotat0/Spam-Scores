@@ -46,7 +46,7 @@ var init = async () => {
     messenger.windows.create({
       height: 680,
       width: 488,
-      url: '/hello.html',
+      url: '/src/static/hello.html',
       type: 'popup'
     })
     browser.SpamScores.setHelloFlag()

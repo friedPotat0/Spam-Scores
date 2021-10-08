@@ -76,7 +76,7 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
 
 function paint(win) {
   win.SpamScores = {}
-  Services.scriptloader.loadSubScript(extension.getURL('custom_score_column.js'), win.SpamScores)
+  Services.scriptloader.loadSubScript(extension.getURL('src/experiments/custom_score_column.js'), win.SpamScores)
   win.SpamScores.SpamScores_ScoreHdrView.init(win, scoreHdrViewParams)
 }
 
