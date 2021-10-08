@@ -1,3 +1,5 @@
+import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } from './constants.js'
+
 /**
  * Returns Lower & Upper Bound
  * @param {*} storage
