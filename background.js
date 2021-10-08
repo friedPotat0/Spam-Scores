@@ -1,23 +1,77 @@
 'use strict'
 
+/** @constant {number} */
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
+/** @constant {number} */
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
+/** @constant {Object<RegExp>} */
 const SCORE_REGEX = {
-  spamdResult: /.*x-spamd-result: .*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
-  spamScore: /.*x-spam-score: ([-+]?[0-9]+\.?[0-9]*).*/is,
-  spamStatus: /.*x-spam-status: .*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
-  spamReport: /.*x-spam-report: .*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
-  rspamdScore: /.*x-rspamd-score: .*?([-+]?[0-9]+\.?[0-9]*).*/is,
+  spamdResult: /x-spamd-result: .*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/i,
+  spamScore: /x-spam-score: ([-+]?[0-9]+\.?[0-9]*)/i,
+  spamStatus: /x-spam-status: .*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/i,
+  spamReport: /x-spam-report: .*?([-+]?[0-9]+\.?[0-9]*) hits, /i,
+  rspamdScore: /x-rspamd-score: .*?([-+]?[0-9]+\.?[0-9]*)/i,
   mailscannerSpamcheck:
-    /.*mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+    /mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),/i,
+  vrSpamScore: /x-vr-spamscore: ([0-9]+)/i
 }
 
-var init = async () => {
+/**
+ * Functions
+ */
+
+/**
+ * dlh2: I sense that this function is supposed to get scores, but the code says the value of the regex.
+ * @param {string} rawHeader Email Header
+ * @returns {string|null} Regex Capture Value
+ */
+function getScore(rawHeader) {
+  for (const key in SCORE_REGEX) {
+    const data = rawHeader.match(SCORE_REGEX[key])
+    if (!data) continue // If no match iterate
+    return data[1]
+  }
+  return null
+}
+
+/**
+ * Returns the path of the image
+ * @param {string} score
+ * @returns {string} Path of Image
+ */
+async function getImageSrc(score) {
+  const storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  const [lowerBounds,upperBounds] = getBounds(storage) 
+  if (score > upperBounds) return './images/score_positive.svg'
+  if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.svg'
+  if (score < lowerBounds) return './images/score_negative.svg'
+  return './images/score_neutral.svg'
+}
+
+/**
+ * Returns Lower & Upper Bound
+ * @param {*} storage 
+ * @returns {number[]} Lower & Upper Bound
+ */
+function getBounds(storage) {
+  const lowerBounds = parseFloat(
+    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
+  )
+  const upperBounds = parseFloat(
+    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
+  )
+  return [lowerBounds, upperBounds]
+}
+
+/**
+ * Main
+ */
+const init = async () => {
   browser.SpamScores.addWindowListener('none')
   browser.messageDisplay.onMessageDisplayed.addListener(async (tab, message) => {
     const rawMessage = await browser.messages.getRaw(message.id)
     const rawHeader = rawMessage.split('\r\n\r\n')[0]
-    let score = getScore(rawHeader)
+    const score = getScore(rawHeader)
     if (score === null) {
       browser.messageDisplayAction.disable(tab.id)
     } else {
@@ -27,8 +81,8 @@ var init = async () => {
     }
 
     if (SCORE_REGEX.mailscannerSpamcheck.test(rawHeader)) {
-      let header = rawHeader.replace(/.*(x-.*?mailscanner-spamcheck):.*/is, '$1').toLowerCase()
-      let storage = await browser.storage.local.get(['customMailscannerHeaders'])
+      const header = rawHeader.replace(/.*(x-.*?mailscanner-spamcheck):.*/is, '$1').toLowerCase()
+      const storage = await browser.storage.local.get(['customMailscannerHeaders'])
       if (
         storage &&
         (!storage.customMailscannerHeaders ||
@@ -52,7 +106,7 @@ var init = async () => {
     browser.SpamScores.setHelloFlag()
   }
 
-  let storage = await browser.storage.local.get([
+  const storage = await browser.storage.local.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
     'customMailscannerHeaders',
@@ -60,13 +114,8 @@ var init = async () => {
     'hideIconScoreNeutral',
     'hideIconScoreNegative'
   ])
-  let lowerBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
-  )
-  let upperBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
-  )
-  browser.SpamScores.setScoreBounds(parseFloat(lowerBounds), parseFloat(upperBounds))
+  const [lowerBounds,upperBounds] = getBounds(storage) 
+  browser.SpamScores.setScoreBounds(lowerBounds, upperBounds)
 
   if (storage) {
     if (storage.customMailscannerHeaders) {
@@ -80,38 +129,3 @@ var init = async () => {
   }
 }
 init()
-
-function getScore(rawHeader) {
-  if (SCORE_REGEX.spamdResult.test(rawHeader)) {
-    return rawHeader.replace(SCORE_REGEX.spamdResult, '$1')
-  }
-  if (SCORE_REGEX.spamStatus.test(rawHeader)) {
-    return rawHeader.replace(SCORE_REGEX.spamStatus, '$1')
-  }
-  if (SCORE_REGEX.spamScore.test(rawHeader)) {
-    return rawHeader.replace(SCORE_REGEX.spamScore, '$1')
-  }
-  if (SCORE_REGEX.spamReport.test(rawHeader)) {
-    return rawHeader.replace(SCORE_REGEX.spamReport, '$1')
-  }
-  if (SCORE_REGEX.rspamdScore.test(rawHeader)) {
-    return rawHeader.replace(SCORE_REGEX.rspamdScore, '$1')
-  }
-  if (SCORE_REGEX.mailscannerSpamcheck.test(rawHeader)) {
-    return rawHeader.replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
-  }
-  return null
-}
-
-async function getImageSrc(score) {
-  let storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
-  let lowerBounds =
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
-  let upperBounds =
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
-
-  if (score > upperBounds) return './images/score_positive.svg'
-  if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.svg'
-  if (score < lowerBounds) return './images/score_negative.svg'
-  return './images/score_neutral.svg'
-}
