@@ -27,7 +27,7 @@
       "parent": {
         "scopes": ["addon_parent"],
         "paths": [["SpamScores"]],
-        "script": "experiments.js",
+        "script": "src/experiments/experiments.js",
         "events": ["startup"]
       }
     }
