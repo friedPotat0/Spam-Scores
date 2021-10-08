@@ -15,3 +15,14 @@ export const SCORE_REGEX = {
     /mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),/i,
   vrSpamScore: /x-vr-spamscore: ([0-9]+)/i
 }
+
+/** @constant {RegExp} */
+export const SPAM_HEADER_REGEX =
+  /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
+
+/** @constant {Object<RegExp>} */
+export const SYMBOL_REGEX = {
+  prefix: /\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) .*?(?=\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) |$)/gs,
+  prefixSingle: /(?:\* +)?(-?[\d.]+)[ \)=]+(?:([A-Z][A-Z0-9_]+)|--) ([\s\S]*?)(?:\[(.*)\])?$/,
+  suffix: /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
+}
