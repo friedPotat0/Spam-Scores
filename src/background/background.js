@@ -7,9 +7,9 @@ import { getBounds } from '../functions.js'
  */
 
 /**
- * dlh2: I sense that this function is supposed to get scores, but the code says the value of the regex.
+ * Returns the score value from the email header
  * @param {string} rawHeader Email Header
- * @returns {string|null} Regex Capture Value
+ * @returns {string|null} Score value
  */
 function getScore(rawHeader) {
   for (const key in SCORE_REGEX) {
