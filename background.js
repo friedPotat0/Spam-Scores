@@ -1,20 +1,5 @@
 'use strict'
-
-/** @constant {number} */
-const DEFAULT_SCORE_LOWER_BOUNDS = -2
-/** @constant {number} */
-const DEFAULT_SCORE_UPPER_BOUNDS = 2
-/** @constant {Object<RegExp>} */
-const SCORE_REGEX = {
-  spamdResult: /x-spamd-result: .*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/i,
-  spamScore: /x-spam-score: ([-+]?[0-9]+\.?[0-9]*)/i,
-  spamStatus: /x-spam-status: .*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/i,
-  spamReport: /x-spam-report: .*?([-+]?[0-9]+\.?[0-9]*) hits, /i,
-  rspamdScore: /x-rspamd-score: .*?([-+]?[0-9]+\.?[0-9]*)/i,
-  mailscannerSpamcheck:
-    /mailscanner-spamcheck: .*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),/i,
-  vrSpamScore: /x-vr-spamscore: ([0-9]+)/i
-}
+import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS, SCORE_REGEX } from './src/constants.js'
 
 /**
  * Functions
@@ -41,7 +26,7 @@ function getScore(rawHeader) {
  */
 async function getImageSrc(score) {
   const storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
-  const [lowerBounds,upperBounds] = getBounds(storage) 
+  const [lowerBounds, upperBounds] = getBounds(storage)
   if (score > upperBounds) return './images/score_positive.svg'
   if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.svg'
   if (score < lowerBounds) return './images/score_negative.svg'
@@ -50,7 +35,7 @@ async function getImageSrc(score) {
 
 /**
  * Returns Lower & Upper Bound
- * @param {*} storage 
+ * @param {*} storage
  * @returns {number[]} Lower & Upper Bound
  */
 function getBounds(storage) {
@@ -114,7 +99,7 @@ const init = async () => {
     'hideIconScoreNeutral',
     'hideIconScoreNegative'
   ])
-  const [lowerBounds,upperBounds] = getBounds(storage) 
+  const [lowerBounds, upperBounds] = getBounds(storage)
   browser.SpamScores.setScoreBounds(lowerBounds, upperBounds)
 
   if (storage) {
