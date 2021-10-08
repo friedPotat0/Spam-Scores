@@ -18,7 +18,7 @@
     "16": "images/icon-16px.png"
   },
   "background": {
-    "page": "background.html"
+    "page": "src/background/background.html"
   },
   "permissions": ["messagesRead", "storage"],
   "experiment_apis": {

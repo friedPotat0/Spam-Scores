@@ -1,5 +1,5 @@
 'use strict'
-import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS, SCORE_REGEX } from './src/constants.js'
+import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS, SCORE_REGEX } from '../constants.js'
 
 /**
  * Functions
@@ -27,10 +27,10 @@ function getScore(rawHeader) {
 async function getImageSrc(score) {
   const storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   const [lowerBounds, upperBounds] = getBounds(storage)
-  if (score > upperBounds) return './images/score_positive.svg'
-  if (score <= upperBounds && score >= lowerBounds) return './images/score_neutral.svg'
-  if (score < lowerBounds) return './images/score_negative.svg'
-  return './images/score_neutral.svg'
+  if (score > upperBounds) return '/images/score_positive.svg'
+  if (score <= upperBounds && score >= lowerBounds) return '/images/score_neutral.svg'
+  if (score < lowerBounds) return '/images/score_negative.svg'
+  return '/images/score_neutral.svg'
 }
 
 /**
