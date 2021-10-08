@@ -1,15 +1,17 @@
 import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } from '../constants.js'
 import { getBounds } from '../functions.js'
 
+// DOM Variables
+const inputScoreBoundsLower = document.getElementById('score-bounds-lower')
+const inputScoreBoundsUpper = document.getElementById('score-bounds-upper')
+const inputScoreBoundsBetween = document.getElementById('score-bounds-between')
+const checkboxIconScorePositive = document.getElementById('hide-icon-score-positive')
+const checkboxIconScoreNeutral = document.getElementById('hide-icon-score-neutral')
+const checkboxIconScoreNegative = document.getElementById('hide-icon-score-negative')
+
 async function init() {
   // Preparations
   initTranslations()
-  // DOM Variables
-  const inputSBLower = document.getElementById('score-bounds-lower')
-  const inputSBUpper = document.getElementById('score-bounds-upper')
-  const checkboxIconScorePositive = document.getElementById('hide-icon-score-positive')
-  const checkboxIconScoreNeutral = document.getElementById('hide-icon-score-neutral')
-  const checkboxIconScoreNegative = document.getElementById('hide-icon-score-negative')
 
   // DOM Events
 
@@ -17,9 +19,8 @@ async function init() {
    * TODO: [General] For every event from one input, it gets all data from the others,
    * which is not optimized
    */
-  inputSBLower.addEventListener('change', save)
-  // TODO: This might do a bug since the original code adds the event after it changes the value
-  inputSBUpper.addEventListener('change', save)
+  inputScoreBoundsLower.addEventListener('change', save)
+  inputScoreBoundsUpper.addEventListener('change', save)
   checkboxIconScorePositive.addEventListener('change', save)
   checkboxIconScoreNeutral.addEventListener('change', save)
   checkboxIconScoreNegative.addEventListener('change', save)
@@ -43,14 +44,10 @@ async function init() {
     storage && storage.hideIconScoreNegative !== undefined ? storage.hideIconScoreNegative : false
 
   // Set Values
-  inputSBLower.value = lowerBounds
-  inputSBUpper.value = upperBounds
-  document.getElementById('score-bounds-between').textContent = browser.i18n.getMessage('optionsScoreBetween', [
-    lowerBounds,
-    upperBounds
-  ])
+  inputScoreBoundsLower.value = lowerBounds
+  inputScoreBoundsUpper.value = upperBounds
+  inputScoreBoundsBetween.textContent = browser.i18n.getMessage('optionsScoreBetween', [lowerBounds, upperBounds])
   ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(lowerBounds, upperBounds)
-  // TODO: What's that ";"? it's too weird...
 
   checkboxIconScorePositive.checked = hideIconScorePositive
   checkboxIconScoreNeutral.checked = hideIconScoreNeutral
@@ -62,16 +59,12 @@ init()
  *
  */
 async function save() {
-  // DOM Variables
-  const inputSBLower = document.getElementById('score-bounds-lower')
-  const inputSBUpper = document.getElementById('score-bounds-upper')
-
   // Declaration
   let newLowerBounds, newUpperBounds, hideIconScorePositive, hideIconScoreNeutral, hideIconScoreNegative
   const storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   try {
-    newLowerBounds = parseFloat(inputSBLower.value)
-    newUpperBounds = parseFloat(inputSBUpper.value)
+    newLowerBounds = parseFloat(inputScoreBoundsLower.value)
+    newUpperBounds = parseFloat(inputScoreBoundsUpper.value)
     if (newLowerBounds > newUpperBounds) {
       newLowerBounds = parseFloat(
         storage && storage.scoreIconLowerBounds !== undefined
@@ -114,10 +107,9 @@ async function save() {
   } catch (err) {
     console.error(err)
   }
-  // TODO: I think this will create a loop.
-  inputSBLower.value = newLowerBounds !== null ? newLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
-  inputSBUpper.value = newUpperBounds !== null ? newUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
-  document.getElementById('score-bounds-between').textContent = browser.i18n.getMessage('optionsScoreBetween', [
+  inputScoreBoundsLower.value = newLowerBounds !== null ? newLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
+  inputScoreBoundsUpper.value = newUpperBounds !== null ? newUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
+  inputScoreBoundsBetween.textContent = browser.i18n.getMessage('optionsScoreBetween', [
     newLowerBounds !== null ? newLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS,
     newUpperBounds !== null ? newUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
   ])
@@ -130,7 +122,6 @@ async function save() {
     hideIconScoreNeutral || false,
     hideIconScoreNegative || false
   )
-  // TODO: What's that ";"? it's too weird...
 }
 
 function initTranslations() {
