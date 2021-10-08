@@ -1,4 +1,5 @@
-import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS, getBounds } from '../constants.js'
+import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } from '../constants.js'
+import { getBounds } from '../functions.js'
 
 async function init() {
   // Preparations

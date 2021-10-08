@@ -1,5 +1,6 @@
 'use strict'
-import { SCORE_REGEX, getBounds } from '../constants.js'
+import { SCORE_REGEX } from '../constants.js'
+import { getBounds } from '../functions.js'
 
 /**
  * Functions
