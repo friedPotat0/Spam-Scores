@@ -1,5 +1,5 @@
 'use strict'
-import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS, SCORE_REGEX } from '../constants.js'
+import { SCORE_REGEX, getBounds } from '../constants.js'
 
 /**
  * Functions
@@ -31,21 +31,6 @@ async function getImageSrc(score) {
   if (score <= upperBounds && score >= lowerBounds) return '/images/score_neutral.svg'
   if (score < lowerBounds) return '/images/score_negative.svg'
   return '/images/score_neutral.svg'
-}
-
-/**
- * Returns Lower & Upper Bound
- * @param {*} storage
- * @returns {number[]} Lower & Upper Bound
- */
-function getBounds(storage) {
-  const lowerBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
-  )
-  const upperBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
-  )
-  return [lowerBounds, upperBounds]
 }
 
 /**

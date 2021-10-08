@@ -1,57 +1,76 @@
-const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
-const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
+import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS, getBounds } from '../constants.js'
 
 async function init() {
+  // Preparations
   initTranslations()
+  // DOM Variables
+  const inputSBLower = document.getElementById('score-bounds-lower')
+  const inputSBUpper = document.getElementById('score-bounds-upper')
+  const checkboxIconScorePositive = document.getElementById('hide-icon-score-positive')
+  const checkboxIconScoreNeutral = document.getElementById('hide-icon-score-neutral')
+  const checkboxIconScoreNegative = document.getElementById('hide-icon-score-negative')
 
-  let storage = await browser.storage.local.get([
+  // DOM Events
+
+  /**
+   * TODO: [General] For every event from one input, it gets all data from the others,
+   * which is not optimized
+   */
+  inputSBLower.addEventListener('change', save)
+  // TODO: This might do a bug since the original code adds the event after it changes the value
+  inputSBUpper.addEventListener('change', save)
+  checkboxIconScorePositive.addEventListener('change', save)
+  checkboxIconScoreNeutral.addEventListener('change', save)
+  checkboxIconScoreNegative.addEventListener('change', save)
+
+  // Load Values from Storage
+  const storage = await browser.storage.local.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
     'hideIconScorePositive',
     'hideIconScoreNeutral',
     'hideIconScoreNegative'
   ])
-  let lowerBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
-  )
-  let upperBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
-  )
-  document.querySelector('#score-bounds-lower').value = lowerBounds
-  document.querySelector('#score-bounds-upper').value = upperBounds
-  document.querySelector('#score-bounds-between').textContent = browser.i18n.getMessage('optionsScoreBetween', [
+
+  const [lowerBounds, upperBounds] = getBounds(storage)
+
+  const hideIconScorePositive =
+    storage && storage.hideIconScorePositive !== undefined ? storage.hideIconScorePositive : false
+  const hideIconScoreNeutral =
+    storage && storage.hideIconScoreNeutral !== undefined ? storage.hideIconScoreNeutral : false
+  const hideIconScoreNegative =
+    storage && storage.hideIconScoreNegative !== undefined ? storage.hideIconScoreNegative : false
+
+  // Set Values
+  inputSBLower.value = lowerBounds
+  inputSBUpper.value = upperBounds
+  document.getElementById('score-bounds-between').textContent = browser.i18n.getMessage('optionsScoreBetween', [
     lowerBounds,
     upperBounds
   ])
-  ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(
-    parseFloat(lowerBounds),
-    parseFloat(upperBounds)
-  )
+  ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(lowerBounds, upperBounds)
+  // TODO: What's that ";"? it's too weird...
 
-  let hideIconScorePositive =
-    storage && storage.hideIconScorePositive !== undefined ? storage.hideIconScorePositive : false
-  let hideIconScoreNeutral =
-    storage && storage.hideIconScoreNeutral !== undefined ? storage.hideIconScoreNeutral : false
-  let hideIconScoreNegative =
-    storage && storage.hideIconScoreNegative !== undefined ? storage.hideIconScoreNegative : false
-  document.querySelector('#hide-icon-score-positive').checked = hideIconScorePositive
-  document.querySelector('#hide-icon-score-neutral').checked = hideIconScoreNeutral
-  document.querySelector('#hide-icon-score-negative').checked = hideIconScoreNegative
-
-  document.querySelector('#score-bounds-lower').addEventListener('change', save)
-  document.querySelector('#score-bounds-upper').addEventListener('change', save)
-  document.querySelector('#hide-icon-score-positive').addEventListener('change', save)
-  document.querySelector('#hide-icon-score-neutral').addEventListener('change', save)
-  document.querySelector('#hide-icon-score-negative').addEventListener('change', save)
+  checkboxIconScorePositive.checked = hideIconScorePositive
+  checkboxIconScoreNeutral.checked = hideIconScoreNeutral
+  checkboxIconScoreNegative.checked = hideIconScoreNegative
 }
 init()
 
+/**
+ *
+ */
 async function save() {
+  // DOM Variables
+  const inputSBLower = document.getElementById('score-bounds-lower')
+  const inputSBUpper = document.getElementById('score-bounds-upper')
+
+  // Declaration
   let newLowerBounds, newUpperBounds, hideIconScorePositive, hideIconScoreNeutral, hideIconScoreNegative
-  let storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  const storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   try {
-    newLowerBounds = parseFloat(document.querySelector('#score-bounds-lower').value)
-    newUpperBounds = parseFloat(document.querySelector('#score-bounds-upper').value)
+    newLowerBounds = parseFloat(inputSBLower.value)
+    newUpperBounds = parseFloat(inputSBUpper.value)
     if (newLowerBounds > newUpperBounds) {
       newLowerBounds = parseFloat(
         storage && storage.scoreIconLowerBounds !== undefined
@@ -81,9 +100,9 @@ async function save() {
       )
       throw Error('Wrong score upper bounds')
     }
-    hideIconScorePositive = document.querySelector('#hide-icon-score-positive').checked
-    hideIconScoreNeutral = document.querySelector('#hide-icon-score-neutral').checked
-    hideIconScoreNegative = document.querySelector('#hide-icon-score-negative').checked
+    hideIconScorePositive = checkboxIconScorePositive.checked
+    hideIconScoreNeutral = checkboxIconScoreNeutral.checked
+    hideIconScoreNegative = checkboxIconScoreNegative.checked
     browser.storage.local.set({
       scoreIconLowerBounds: newLowerBounds,
       scoreIconUpperBounds: newUpperBounds,
@@ -94,11 +113,10 @@ async function save() {
   } catch (err) {
     console.error(err)
   }
-  document.querySelector('#score-bounds-lower').value =
-    newLowerBounds !== null ? newLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
-  document.querySelector('#score-bounds-upper').value =
-    newUpperBounds !== null ? newUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
-  document.querySelector('#score-bounds-between').textContent = browser.i18n.getMessage('optionsScoreBetween', [
+  // TODO: I think this will create a loop.
+  inputSBLower.value = newLowerBounds !== null ? newLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
+  inputSBUpper.value = newUpperBounds !== null ? newUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
+  document.getElementById('score-bounds-between').textContent = browser.i18n.getMessage('optionsScoreBetween', [
     newLowerBounds !== null ? newLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS,
     newUpperBounds !== null ? newUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
   ])
@@ -111,6 +129,7 @@ async function save() {
     hideIconScoreNeutral || false,
     hideIconScoreNegative || false
   )
+  // TODO: What's that ";"? it's too weird...
 }
 
 function initTranslations() {
