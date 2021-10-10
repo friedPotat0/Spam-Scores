@@ -4,7 +4,7 @@ async function init() {
 init()
 
 function initTranslations() {
-  for (let i18nKey of [
+  for (const i18nKey of [
     'helloHeadline',
     'helloParagraph1',
     'helloParagraph2',
