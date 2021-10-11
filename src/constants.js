@@ -37,6 +37,19 @@ export const CUSTOM_SCORE_REGEX = {
 export const SPAM_HEADER_REGEX =
   /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
 
+  
+/** 
+ * Headers that contains the details of the scores
+ * @constant {String[]} 
+ */
+export const SCORE_DETAILS_ARRAY = [
+  'x-spamd-result',
+  'x-spam-report',
+  'x-spamcheck',
+  'x-spam-status',
+  'x-rspamd-report'
+]
+
 /** @constant {Object<RegExp>} */
 export const SYMBOL_REGEX = {
   prefix: /\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) .*?(?=\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) |$)/gs,

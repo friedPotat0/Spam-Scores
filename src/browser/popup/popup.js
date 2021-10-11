@@ -1,5 +1,5 @@
 import { SCORE_SYMBOLS } from './score_symbols.js'
-import { SPAM_HEADER_REGEX, SYMBOL_REGEX } from '../../constants.js'
+import { SCORE_DETAILS_ARRAY, SPAM_HEADER_REGEX, SYMBOL_REGEX } from '../../constants.js'
 
 browser.tabs
   .query({
@@ -7,11 +7,11 @@ browser.tabs
     currentWindow: true
   })
   .then(async tabs => {
+    // Declaration / Values
     const tabId = tabs[0].id
     browser.messageDisplay.getDisplayedMessage(tabId).then(async message => {
-      const rawMessage = await browser.messages.getRaw(message.id)
-      const rawHeader = rawMessage.split('\r\n\r\n')[0]
-      const parsedDetailScores = getParsedDetailScores(rawHeader)
+      const fullMessage = await browser.messages.getFull(message.id)
+      const parsedDetailScores = getParsedDetailScores(fullMessage.headers)
       if (parsedDetailScores) {
         const groupedDetailScores = {
           positive: parsedDetailScores.filter(el => el.score > 0).sort((a, b) => b.score - a.score),
@@ -51,38 +51,50 @@ browser.tabs
     })
   })
 
-function getParsedDetailScores(rawHeader) {
-  const spamHeaderMatch = rawHeader.match(SPAM_HEADER_REGEX)
-  if (spamHeaderMatch && spamHeaderMatch.length > 0) {
-    for (const spamHeader of spamHeaderMatch) {
-      if (
-        spamHeaderMatch.length > 1 &&
-        rawHeader.indexOf('X-Spam-Status') !== -1 &&
-        rawHeader.indexOf('X-Spam-Report') !== -1 &&
-        spamHeader.indexOf('X-Spam-Report') === -1
-      ) {
-        continue
-      }
-      let symbolMatch = spamHeader.match(SYMBOL_REGEX.prefix)
-      if (symbolMatch && symbolMatch.length > 0) {
-        return symbolMatch
-          .map(el => el.trim().replace(/\r?\n/g, ' '))
-          .map(el => ({
-            name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$2')),
-            score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$1')) || 0),
-            info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$4')) || '',
-            description: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$3')) || ''
-          }))
-      }
-      symbolMatch = spamHeader.match(SYMBOL_REGEX.suffix)
-      if (symbolMatch && symbolMatch.length > 0) {
-        return symbolMatch
-          .map(el => el.trim().replace(/\r?\n/g, ' '))
-          .map(el => ({
-            name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$1')),
-            score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$2')) || 0),
-            info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$3')) || ''
-          }))
+/**
+ * Parse the headers
+ * @param {object} headers
+ * @returns
+ */
+function getParsedDetailScores(headers) {
+  for (const headerName in headers) {
+    if (SCORE_DETAILS_ARRAY.includes(headerName)) {
+      const headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
+      // We might use directly switch case instead of checking if the header is there
+      switch (headerName) {
+        case 'x-spam-report':
+          /**
+           * dlh2 TODO: Okay #34 problem is here, we have a lot of ways to deal with it,
+           * but you know, we can't split with \n as somehow the email is translated to
+           * some whitespaces therefore this gotta be interesting.
+           */
+          console.log(headerValue)
+          console.log(headerValue.split(/\n/g))
+        case 'x-spam-status':
+          let symbolMatch = headerValue.match(SYMBOL_REGEX.prefix)
+          if (symbolMatch && symbolMatch.length > 0) {
+            return symbolMatch
+              .map(el => el.trim().replace(/\r?\n/g, ' '))
+              .map(el => ({
+                name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$2')),
+                score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$1')) || 0),
+                info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$4')) || '',
+                description: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$3')) || ''
+              }))
+          }
+          symbolMatch = headerValue.match(SYMBOL_REGEX.suffix)
+          if (symbolMatch && symbolMatch.length > 0) {
+            return symbolMatch
+              .map(el => el.trim().replace(/\r?\n/g, ' '))
+              .map(el => ({
+                name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$1')),
+                score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$2')) || 0),
+                info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$3')) || ''
+              }))
+          }
+          break
+        default:
+          return null
       }
     }
   }
