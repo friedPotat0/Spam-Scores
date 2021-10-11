@@ -59,7 +59,7 @@ browser.tabs
 function getParsedDetailScores(headers) {
   for (const headerName in headers) {
     if (SCORE_DETAILS_ARRAY.includes(headerName)) {
-      const headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
+      let headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
       // We might use directly switch case instead of checking if the header is there
       switch (headerName) {
         case 'x-spam-report':
@@ -68,8 +68,10 @@ function getParsedDetailScores(headers) {
            * but you know, we can't split with \n as somehow the email is translated to
            * some whitespaces therefore this gotta be interesting.
            */
-          console.log(headerValue)
-          console.log(headerValue.split(/\n/g))
+          const reportSplitted = headerValue.split('Content analysis details:')
+          if (reportSplitted.length > 1) {
+            headerValue = reportSplitted[1]
+          }
         case 'x-spam-status':
           let symbolMatch = headerValue.match(SYMBOL_REGEX.prefix)
           if (symbolMatch && symbolMatch.length > 0) {
