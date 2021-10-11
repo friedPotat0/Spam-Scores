@@ -2,7 +2,7 @@ import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } from './consta
 
 /**
  * Returns Lower & Upper Bound
- * @param {*} storage
+ * @param {*} storage Local storage with Lower & Upper bounds
  * @returns {number[]} Lower & Upper Bound
  */
 export function getBounds(storage) {
