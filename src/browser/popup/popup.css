@@ -1,5 +1,5 @@
 body {
-  padding: 20px;
+  padding: 0px;
 }
 h5 {
   margin: 0;
@@ -12,43 +12,52 @@ table.score-details {
   margin: 0;
   padding: 0;
   width: 100%;
+  font-size: 14px;
 }
 table.score-details tr th {
   text-align: left;
-  padding: 0 5px;
+  padding: 5px;
 }
 table.score-details tr td {
   vertical-align: top;
   padding: 5px;
 }
-table.score-details tr td:nth-child(2) {
-  text-align: center;
+table.score-details tr:last-child td {
+  border-bottom: none;
 }
-table.score-details tr td:nth-child(2) {
+table.score-details tr td:nth-child(1) {
+  text-align: center;
   padding: 5px 20px;
 }
-table.score-details tr th:nth-child(2) {
+table.score-details tr td:nth-child(2),
+table.score-details tr td:nth-child(3) {
+  padding: 7px 5px;
+}
+table.score-details tr td:nth-child(3) {
+  max-width: 400px;
+}
+table.score-details tr th:nth-child(1) {
   padding: 0 20px;
 }
-table.score-details tr.score td span.info {
-  font-size: 75%;
+table.score-details tr.score td div.info {
+  font-size: 80%;
   word-break: break-all;
 }
-table.score-details tr.score td:nth-child(2) span {
+table.score-details tr.score td:nth-child(1) span {
   display: inline-block;
-  padding: 0 4px;
-  border-radius: 4px;
+  padding: 2px 4px;
+  border-radius: 3px;
   color: white;
   width: 100%;
 }
-table.score-details tr.score.negative td:nth-child(2) span {
+table.score-details tr.score.negative td:nth-child(1) span {
   background-color: #28b62c;
 }
-table.score-details tr.score.positive td:nth-child(2) span {
+table.score-details tr.score.positive td:nth-child(1) span {
   background-color: #fe330a;
 }
-table.score-details tr.score.neutral td:nth-child(2) span {
-  background-color: #b4b4b4;
+table.score-details tr.score.neutral td:nth-child(1) span {
+  background-color: #a1a1a1;
 }
 
 /* COLOR SETTINGS FOR DARK/LIGHT THEME */
@@ -57,14 +66,11 @@ table.score-details tr.score.neutral td:nth-child(2) span {
     color: black;
     background: white;
   }
-  table.score-details tbody tr:nth-child(even) {
-    background: #eee;
-  }
-  table.score-details tbody tr:nth-child(odd) {
-    background: #fff;
-  }
-  table.score-details tr.score td span.info {
+  table.score-details tr.score td div.info {
     color: #7a7a7a;
+  }
+  table.score-details tr td {
+    border-bottom: 1px solid #eee;
   }
 }
 
@@ -73,13 +79,13 @@ table.score-details tr.score.neutral td:nth-child(2) span {
     color: white;
     background: #333;
   }
-  table.score-details tbody tr:nth-child(even) {
-    background: #424242;
+  table.score-details tr.score td div.info {
+    color: #a0a0a0;
   }
-  table.score-details tbody tr:nth-child(odd) {
-    background: #333;
+  table.score-details tr td {
+    border-bottom: 1px solid #464646;
   }
-  table.score-details tr.score td span.info {
-    color: #949494;
+  table.score-details tr.score.neutral td:nth-child(1) span {
+    background-color: #6d6d6d;
   }
 }
