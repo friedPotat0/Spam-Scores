@@ -11,7 +11,7 @@ export const SCORE_REGEX = {
   'x-vr-spamscore': /([0-9]+)/,
   'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
   'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
-  'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits, ([-+]?[0-9]+\.?[0-9]*) hits, /
+  'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/
 }
 
 /** @constant {String[]} */

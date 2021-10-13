@@ -24,8 +24,9 @@ function getScores(headers) {
   for (const headerName in customHeaders) {
     if (SCORE_ARRAY.includes(headerName)) {
       // dlh2: There's gotta be simpler code for this ~_~
-      const score = customHeaders[headerName][0].match(SCORE_REGEX[headerName])[1]
-      scores.push(score)
+      const score = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
+      if(!score) continue // If no match iterate 
+      scores.push(score[1])
     } else {
       for (const regExName in CUSTOM_SCORE_REGEX) {
         if (headerName.endsWith(regExName)) {
