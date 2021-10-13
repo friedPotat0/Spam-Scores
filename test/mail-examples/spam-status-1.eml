@@ -2,7 +2,7 @@ To: receiver@spamscores
 From: sender@spamscores
 Subject: [X-Spam-Status] Spam Scores test mail
 X-Spam-Status: No, score=-42.42
-X-Spam-Score: -42.42
+X-Spam-Score: -40.42
 X-Spam-Bar: +
 X-Spam-Report: Action: no action
  Symbol: R_DKIM_ALLOW(-0.2)
@@ -21,7 +21,7 @@ To: receiver@spamscores
 From: sender@spamscores
 Subject: Spam Scores test mail - X-Spam-Status
 X-Spam-Status: No, score=-42.42
-X-Spam-Score: -42.42
+X-Spam-Score: -40.42
 X-Spam-Bar: +
 X-Spam-Report: Action: no action
  Symbol: R_DKIM_ALLOW(-0.2)

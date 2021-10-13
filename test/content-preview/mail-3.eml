@@ -39,3 +39,45 @@ X-Spam-Report: Spam detection software, running on the system "xxxxx",
   5.0 KAM_VERY_BLACK_DBL     Email that hits both URIBL Black and Spamhaus
                               DBL
 X-Spam-Flag: YES
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+X-Spam-Subject: ***SPAM***  =?UTF-8?Q?Limit_w_rachunku_do_500_000_PLN_z_por=C4=99czeniem_UE_bez_ZUS,_?=
+ =?UTF-8?Q?US.?=
+X-Spam-Status: Yes, score=14.1
+X-Spam-Score: 141
+X-Spam-Bar: ++++++++++++++
+X-Spam-Report: Spam detection software, running on the system "xxxxx",
+ has identified this incoming email as possible spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ root\@localhost for details.
+ Content preview:  Witam serdecznie, zwracam siÄ� z zapytaniem o moĹźliwoĹ�Ä�
+    zaprezentowania informacji nt kredytĂłw bankowych dla firm â�� obrotowych,
+    inwestycyjnych do 500 000 PLN bez zabezpieczeĹ�. JeĹ�li temat finansowania
+    jest dla PaĹ�stwa interesujÄ�cy prosimy o odpowiedĹş "TAK" â�� przeĹ�lemy
+    materiaĹ�y. MoĹźecie PaĹ�stwo rĂłwnieĹź podaÄ� swĂłj numer telefonu - oddzwoniÄ�.
+    
+ Content analysis details:   (14.1 points, 4.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -1.9 BAYES_00               BODY: Bayes spam probability is 0 to 1%
+                             [score: 0.0000]
+  4.5 URIBL_DBL_SPAM         Contains a spam URL listed in the Spamhaus DBL
+                             blocklist
+                             [URIs: inwestycyjne-finansowanie.com.pl]
+  5.0 URIBL_BLACK            Contains an URL listed in the URIBL blacklist
+                             [URIs: inwestycyjne-finansowanie.com.pl]
+ -0.0 SPF_PASS               SPF: sender matches SPF record
+  1.7 FUZZY_CREDIT           BODY: Attempt to obfuscate words in spam
+ -0.1 DKIM_VALID             Message has at least one valid DKIM or DK signature
+ -0.1 DKIM_VALID_AU          Message has a valid DKIM or DK signature from
+                             author's domain
+  0.1 DKIM_SIGNED            Message has a DKIM or DK signature, not necessarily
+                             valid
+ -0.1 DKIM_VALID_EF          Message has a valid DKIM or DK signature from
+                             envelope-from domain
+  5.0 KAM_VERY_BLACK_DBL     Email that hits both URIBL Black and Spamhaus
+                              DBL
+X-Spam-Flag: YES
