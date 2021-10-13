@@ -1,6 +1,6 @@
 To: receiver@spamscores
 From: sender@spamscores
-Subject: [X-Spam-Status] Spam Scores test mail
+Subject: [X-Spam-Status] Spam Scores test mail 6
 X-Spam-Status: Yes, score=-42.42 required=5.0 tests=R_DKIM_ALLOW,R_MIXED_CHARSET,
 FREEMAIL_FROM,DKIM_TRACE,MX_GOOD,BAYES_HAM autolearn=no version=3.3.2
 X-Spam-Report:

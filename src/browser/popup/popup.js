@@ -12,7 +12,7 @@ browser.tabs
     browser.messageDisplay.getDisplayedMessage(tabId).then(async message => {
       const fullMessage = await browser.messages.getFull(message.id)
       const parsedDetailScores = await getParsedDetailScores(fullMessage.headers)
-      if (parsedDetailScores) {
+      if (parsedDetailScores.length !== 0) {
         const groupedDetailScores = {
           positive: parsedDetailScores.filter(el => el.score > 0).sort((a, b) => b.score - a.score),
           negative: parsedDetailScores.filter(el => el.score < 0).sort((a, b) => a.score - b.score),
@@ -58,7 +58,8 @@ browser.tabs
  */
 async function getParsedDetailScores(headers) {
   const storage = await browser.storage.local.get(['customMailscannerHeaders'])
-  const customHeaders = Object.values(storage).map(value=> value[0])
+  const customHeaders = Object.values(storage).map(value => value[0])
+  let parsedDetailScores = []
   for (const headerName in headers) {
     if (SCORE_DETAILS_ARRAY.includes(headerName) || customHeaders.includes(headerName)) {
       let headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
@@ -74,31 +75,32 @@ async function getParsedDetailScores(headers) {
           headerValue = reportSplitted[1]
         }
       }
+      headerValue = headerValue.trim().replace(/\r?\n/g, ' ')
       let symbolMatch = headerValue.match(SYMBOL_REGEX.prefix)
       if (symbolMatch && symbolMatch.length > 0) {
-        return symbolMatch
-          .map(el => el.trim().replace(/\r?\n/g, ' '))
-          .map(el => ({
-            name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$2')),
-            score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$1')) || 0),
-            info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$4')) || '',
-            description: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$3')) || ''
-          }))
+        const detailScore = symbolMatch.map(el => ({
+          name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$2')),
+          score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$1')) || 0),
+          info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$4')) || '',
+          description: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$3')) || ''
+        }))
+        parsedDetailScores = [...parsedDetailScores, ...detailScore]
+        continue
       }
+
       symbolMatch = headerValue.match(SYMBOL_REGEX.suffix)
       if (symbolMatch && symbolMatch.length > 0) {
-        return symbolMatch
-          .map(el => el.trim().replace(/\r?\n/g, ' '))
-          .map(el => ({
-            name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$1')),
-            score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$2')) || 0),
-            info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$3')) || ''
-          }))
+        const detailScore = symbolMatch.map(el => ({
+          name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$1')),
+          score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$2')) || 0),
+          info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$3')) || ''
+        }))
+        parsedDetailScores = [...parsedDetailScores, ...detailScore]
+        continue
       }
-      return null
     }
   }
-  return null
+  return parsedDetailScores
 }
 
 function sanitizeRegexResult(result) {
