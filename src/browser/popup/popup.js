@@ -19,19 +19,19 @@ browser.tabs
           neutral: parsedDetailScores.filter(el => el.score === 0).sort((a, b) => a.name.localeCompare(b.name))
         }
         let scoreDetailElements =
-          '<table class="score-details"><tr><th>Name</th><th>Score</th><th>Description</th></tr>'
+          '<table class="score-details"><tr><th>Score</th><th>Name</th><th>Description</th></tr>'
         for (let groupType of ['positive', 'negative', 'neutral']) {
           scoreDetailElements += `
           ${groupedDetailScores[groupType]
             .map(el => {
               const symbol = SCORE_SYMBOLS.find(sym => sym.name === el.name)
               let element = `<tr class="score ${groupType}">`
-              element += `<td><span>${el.name || '-'}</span></td>`
               element += `<td><span>${el.score}</span></td>`
+              element += `<td><span>${el.name || '-'}</span></td>`
               element += `<td><span>${
                 symbol || el.description
                   ? `${symbol ? symbol.description : el.description}${
-                      el.info ? ` <span class="info">[${el.info}]</span>` : ''
+                      el.info ? ` <div class="info">[${el.info}]</div>` : ''
                     }`
                   : ''
               }</span></td>`
