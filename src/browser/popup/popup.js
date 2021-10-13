@@ -74,8 +74,6 @@ async function getParsedDetailScores(headers) {
           headerValue = reportSplitted[1]
         }
       }
-      
-    console.log(headerName)
       let symbolMatch = headerValue.match(SYMBOL_REGEX.prefix)
       if (symbolMatch && symbolMatch.length > 0) {
         return symbolMatch
