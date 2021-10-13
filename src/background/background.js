@@ -1,6 +1,6 @@
 'use strict'
 import { SCORE_ARRAY, SCORE_REGEX, CUSTOM_SCORE_REGEX } from '../constants.js'
-import { getBounds } from '../functions.js'
+import { getBounds, scoreInterpolation } from '../functions.js'
 
 const localStorage = browser.storage.local
 
@@ -24,15 +24,17 @@ function getScores(headers) {
   for (const headerName in customHeaders) {
     if (SCORE_ARRAY.includes(headerName)) {
       // dlh2: There's gotta be simpler code for this ~_~
-      const score = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
-      if(!score) continue // If no match iterate 
-      scores.push(score[1])
+      const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
+      if (!scoreField) continue // If no match iterate
+      const score = scoreInterpolation(headerName, scoreField[1])
+      scores.push(score)
     } else {
       for (const regExName in CUSTOM_SCORE_REGEX) {
         if (headerName.endsWith(regExName)) {
-          const score = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
-          if (!score) continue // If no match iterate
-          scores.push(score[1])
+          const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
+          if (!scoreField) continue // If no match iterate
+          const score = scoreInterpolation(headerName, scoreField[1])
+          scores.push(score)
         }
       }
     }

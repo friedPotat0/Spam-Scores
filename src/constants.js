@@ -4,6 +4,13 @@ export const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
 /** @constant {number} */
 export const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
 
+export const MIN_SCORE_SEEN = -40
+export const MAX_SCORE_SEEN = 40
+
+export const SCORE_INTERPOLATION = {
+  'x-vr-spamscore': { MIN_VALUE: 0, MAX_VALUE: 900, LOWER_BOUNDS: 100, UPPER_BOUNDS: 300 }
+}
+
 /** @constant {Object<RegExp>} */
 export const SCORE_REGEX = {
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
@@ -37,10 +44,9 @@ export const CUSTOM_SCORE_REGEX = {
 export const SPAM_HEADER_REGEX =
   /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
 
-  
-/** 
+/**
  * Headers that contains the details of the scores
- * @constant {String[]} 
+ * @constant {String[]}
  */
 export const SCORE_DETAILS_ARRAY = [
   'x-spamd-result',
