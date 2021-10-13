@@ -9,6 +9,10 @@ function initTranslations() {
     'helloParagraph1',
     'helloParagraph2',
     'helloParagraph3',
+    'helloParagraph4',
+    'helloInstruction_1',
+    'helloInstruction_2',
+    'helloInstruction_3',
     'helloFooterParagraph1',
     'helloFooterParagraph2'
   ]) {

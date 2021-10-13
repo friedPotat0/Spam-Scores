@@ -1,0 +1,58 @@
+{
+  "extensionName": {
+    "message": "Spam Scores",
+    "description": "Nombre de la extensión"
+  },
+  "extensionDescription": {
+    "message": "Muestra los puntos de Spam según las cabeceras.",
+    "description": "Descripción de la extensión"
+  },
+  "optionsIconRanges": {
+    "message": "Rangos de los iconos"
+  },
+  "optionsScoreGreater": {
+    "message": "Puntuación mayor que"
+  },
+  "optionsScoreBetween": {
+    "message": "Puntuación entre $1 y $2 (ambos incluidos)"
+  },
+  "optionsScoreLess": {
+    "message": "Puntuación menor que"
+  },
+  "optionsHideIconAndScore": {
+    "message": "Esconder el icono y la puntuación en la columna"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - ¡Gracias!"
+  },
+  "helloHeadline": {
+    "message": "¡Gracias por instalar <br/>Spam Scores!"
+  },
+  "helloParagraph1": {
+    "message": "Para mostrar la columna de Spam:"
+  },
+  "helloInstruction_1": {
+    "message": "Reinicia Thunderbird."
+  },
+  "helloInstruction_2": {
+    "message": "Botón derecho en una carpeta > \"Propiedades\"."
+  },
+  "helloInstruction_3": {
+    "message": "Click en \"Reparar Carpeta\"."
+  },
+  "helloParagraph2": {
+    "message": "Ahora escaneará todas las cabeceras de los emails para que se muestre el \"Spam Score\"."
+  },
+  "helloParagraph3": {
+    "message": "Repara las carpetas en los que te interese tener el \"Spam Score\"."
+  },
+  "helloParagraph4": {
+    "message": "Finalmente, habilita la columna \"Spam score\" en la vista de la carpeta reparada."
+  },
+  "helloFooterParagraph1": {
+    "message": "Si tienes dudas o encuentras algun fallo, por favor crea un issue en GitHub (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "Por favor deja una reseña si te gusta esta extensión. &#x1F60A;"
+  }
+}
