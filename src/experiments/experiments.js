@@ -1,20 +1,28 @@
 'use strict'
-var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
-var { ExtensionSupport } = ChromeUtils.import('resource:///modules/ExtensionSupport.jsm')
-var { ExtensionParent } = ChromeUtils.import('resource://gre/modules/ExtensionParent.jsm')
-var { MailServices } = ChromeUtils.import('resource:///modules/MailServices.jsm')
+// Libs
+const { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
+const { ExtensionSupport } = ChromeUtils.import('resource:///modules/ExtensionSupport.jsm')
+const { ExtensionParent } = ChromeUtils.import('resource://gre/modules/ExtensionParent.jsm')
+const { MailServices } = ChromeUtils.import('resource:///modules/MailServices.jsm')
 
 const EXTENSION_NAME = 'spamscores@czaenker'
-var extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
+const extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
 
+// Doesn't work with ES6
+// const { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } = ChromeUtils.import(extension.getURL("src/constants.jsm"));
+
+const custom_score_column = extension.getURL('src/experiments/custom_score_column.js')
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
-
-var scoreHdrViewParams = {
+let scoreHdrViewParams = {
   lowerScoreBounds: DEFAULT_SCORE_LOWER_BOUNDS,
   upperScoreBounds: DEFAULT_SCORE_UPPER_BOUNDS
 }
 
+/**
+ * Do not change var
+ * https://webextension-api.thunderbird.net/en/91/how-to/experiments.html#implementing-functions
+ */
 var SpamScores = class extends ExtensionCommon.ExtensionAPI {
   onShutdown(isAppShutdown) {
     if (isAppShutdown) return
@@ -28,6 +36,7 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
 
   getAPI(context) {
     context.callOnClose(this)
+    // All functions should be added in schema.json
     return {
       SpamScores: {
         addWindowListener(dummy) {
@@ -68,41 +77,53 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
 
   close() {
     ExtensionSupport.unregisterWindowListener(EXTENSION_NAME)
-    for (let win of Services.wm.getEnumerator('mail:3pane')) {
+    for (const win of Services.wm.getEnumerator('mail:3pane')) {
       unpaint(win)
     }
   }
 }
 
+/**
+ *
+ * @param {*} win
+ */
 function paint(win) {
   win.SpamScores = {}
-  Services.scriptloader.loadSubScript(extension.getURL('src/experiments/custom_score_column.js'), win.SpamScores)
+  Services.scriptloader.loadSubScript(custom_score_column, win.SpamScores)
   win.SpamScores.SpamScores_ScoreHdrView.init(win, scoreHdrViewParams)
 }
 
+/**
+ *
+ * @param {*} win
+ */
 function unpaint(win) {
   win.SpamScores.SpamScores_ScoreHdrView.destroy()
   delete win.SpamScores
 }
 
+/**
+ *
+ * @param {*} dynamicHeaders
+ */
 function updatePrefs(dynamicHeaders = []) {
-  let staticHeaders = ['x-spam-status', 'x-spamd-result', 'x-spam-score', 'x-rspamd-score', 'x-spam-report']
-  let customDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
+  const staticHeaders = ['x-spam-status', 'x-spamd-result', 'x-spam-score', 'x-rspamd-score', 'x-spam-report']
+  const prefs = Services.prefs
+  const customDBHeaders = prefs.getCharPref('mailnews.customDBHeaders')
+  const customHeaders = prefs.getCharPref('mailnews.customHeaders')
+
   let newCustomDBHeaders = customDBHeaders
-  for (let header of staticHeaders) {
-    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
-  }
-  for (let header of dynamicHeaders) {
-    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
-  }
-  Services.prefs.getBranch('mailnews').setCharPref('.customDBHeaders', newCustomDBHeaders.trim())
-  let customHeaders = Services.prefs.getCharPref('mailnews.customHeaders')
   let newCustomHeaders = customHeaders
-  for (let header of staticHeaders) {
+
+  for (const header of staticHeaders) {
+    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
     if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
   }
-  for (let header of dynamicHeaders) {
+  for (const header of dynamicHeaders) {
+    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
     if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
   }
-  Services.prefs.getBranch('mailnews').setCharPref('.customHeaders', newCustomHeaders.trim())
+
+  prefs.getBranch('mailnews').setCharPref('.customDBHeaders', newCustomDBHeaders.trim())
+  prefs.getBranch('mailnews').setCharPref('.customHeaders', newCustomHeaders.trim())
 }

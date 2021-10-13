@@ -1,8 +1,12 @@
-var { AppConstants } = ChromeUtils.import('resource://gre/modules/AppConstants.jsm')
-var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
+/**
+ * In experiment.js we use extension.getURL('src/experiments/custom_score_column.js')
+ * When we load it is concatenated to the code so is not independent.
+ * That would be a hassle for debugging...
+ */
 
-const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
-const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
+const { AppConstants } = ChromeUtils.import('resource://gre/modules/AppConstants.jsm')
+
+//
 const SCORE_REGEX = {
   spamdResult: /.*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
   spamScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
@@ -23,17 +27,19 @@ class ColumnHandler {
     return false
   }
   getCellProperties(row, col, props) {
-    let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
+    const upperScoreBounds = this.params.upperScoreBounds
+    const lowerScoreBounds = this.params.lowerScoreBounds
+    const score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > this.params.upperScoreBounds) {
+    if (score > upperScoreBounds) {
       if (this.params.hideIconScorePositive === true) return null
       return 'positive'
     }
-    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds) {
+    if (score <= upperScoreBounds && score >= lowerScoreBounds) {
       if (this.params.hideIconScoreNeutral === true) return null
       return 'neutral'
     }
-    if (score < this.params.lowerScoreBounds) {
+    if (score < lowerScoreBounds) {
       if (this.params.hideIconScoreNegative === true) return null
       return 'negative'
     }
@@ -70,17 +76,19 @@ class ColumnHandler {
     return null
   }
   getCellText(row, col) {
-    let score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
+    const upperScoreBounds = this.params.upperScoreBounds
+    const lowerScoreBounds = this.params.lowerScoreBounds
+    const score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > this.params.upperScoreBounds) {
+    if (score > upperScoreBounds) {
       if (this.params.hideIconScorePositive === true) return null
       return ' ' + score
     }
-    if (score <= this.params.upperScoreBounds && score >= this.params.lowerScoreBounds) {
+    if (score <= upperScoreBounds && score >= lowerScoreBounds) {
       if (this.params.hideIconScoreNeutral === true) return null
       return ' ' + score
     }
-    if (score < this.params.lowerScoreBounds) {
+    if (score < lowerScoreBounds) {
       if (this.params.hideIconScoreNegative === true) return null
       return ' ' + score
     }
@@ -118,6 +126,11 @@ class ColumnOverlay {
     }
   }
 
+  /**
+   * dlh2 TODO: this.win = win?
+   * @param {*} win 
+   * @returns 
+   */
   addColumn(win) {
     if (win.document.getElementById(this.columnId)) return
 
@@ -133,8 +146,8 @@ class ColumnOverlay {
     const threadCols = win.document.getElementById('threadCols')
     threadCols.appendChild(treeCol)
     let attributes = Services.xulStore.getAttributeEnumerator(this.win.document.URL, this.columnId)
-    for (let attribute of attributes) {
-      let value = Services.xulStore.getValue(this.win.document.URL, this.columnId, attribute)
+    for (const attribute of attributes) {
+      const value = Services.xulStore.getValue(this.win.document.URL, this.columnId, attribute)
       if (attribute != 'ordinal' || parseInt(AppConstants.MOZ_APP_VERSION, 10) < 74) {
         treeCol.setAttribute(attribute, value)
       } else {
@@ -167,10 +180,11 @@ class SpamScores_ScoreHdrViewColumn {
   }
 }
 
+// dlh2 TODO: Hm... I suppose this one is special
 var SpamScores_ScoreHdrView = new SpamScores_ScoreHdrViewColumn()
 
-let styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
+const styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
   Components.interfaces.nsIStyleSheetService
 )
-let uri = Services.io.newURI(extension.getURL('src/experiments/custom_score_column.css'), null, null)
+const uri = Services.io.newURI(extension.getURL('src/experiments/custom_score_column.css'), null, null)
 styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET)
