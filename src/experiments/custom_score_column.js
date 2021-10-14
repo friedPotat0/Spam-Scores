@@ -4,6 +4,7 @@
  * That would be a hassle for debugging...
  */
 
+/** @type {DestructuredAppConstants} */
 const { AppConstants } = ChromeUtils.import('resource://gre/modules/AppConstants.jsm')
 
 //
@@ -128,8 +129,8 @@ class ColumnOverlay {
 
   /**
    * dlh2 TODO: this.win = win?
-   * @param {*} win 
-   * @returns 
+   * @param {*} win
+   * @returns
    */
   addColumn(win) {
     if (win.document.getElementById(this.columnId)) return

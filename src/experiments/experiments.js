@@ -1,8 +1,18 @@
 'use strict'
 // Libs
+
+/** @type {DestructuredServices} */
 const { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
+
+/** @type {DestructuredExtensionSupport} */
 const { ExtensionSupport } = ChromeUtils.import('resource:///modules/ExtensionSupport.jsm')
+
+/** @type {DestructuredExtensionParent} */
 const { ExtensionParent } = ChromeUtils.import('resource://gre/modules/ExtensionParent.jsm')
+
+/**
+ * dlh2 TODO: Is this used?
+ */
 const { MailServices } = ChromeUtils.import('resource:///modules/MailServices.jsm')
 
 const EXTENSION_NAME = 'spamscores@czaenker'
@@ -26,11 +36,26 @@ let scoreHdrViewParams = {
 var SpamScores = class extends ExtensionCommon.ExtensionAPI {
   onShutdown(isAppShutdown) {
     if (isAppShutdown) return
+    /**
+     * This method is called to notify all observers for a particular topic. See Example.
+     * .notifyObservers(null, "myTopicID", "someAdditionalInformationPassedAs'Data'Parameter");
+     *
+     * void notifyObservers(in nsISupports aSubject, in string aTopic, in wstring someData);
+     * aSubject A notification specific interface pointer. This usually corresponds to the source of the notification, but could be defined differently depending on the notification topic and may even be null.
+     * aTopic The notification topic. This string-valued key uniquely identifies the notification. This parameter must not be null.
+     * someData A notification specific string value. The meaning of this parameter is dependent on the topic. It may be null.
+     */
     Services.obs.notifyObservers(null, 'startupcache-invalidate')
   }
 
   onStartup() {
     updatePrefs()
+
+    /**
+     * A convenient method for logging simple messages.
+     * void logStringMessage(  in wstring message);
+     * message The string to log.
+     */
     Services.console.logStringMessage('Spam Scores startup completed')
   }
 
