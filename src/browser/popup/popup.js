@@ -53,8 +53,8 @@ browser.tabs
 
 /**
  * Parse the headers
- * @param {object} headers
- * @returns
+ * @param {Object<string, string[]} headers
+ * @returns {parsedDetailScores[]}
  */
 async function getParsedDetailScores(headers) {
   const storage = await browser.storage.local.get(['customMailscannerHeaders'])
@@ -103,6 +103,11 @@ async function getParsedDetailScores(headers) {
   return parsedDetailScores
 }
 
+/**
+ * Trims then replaces Groups of Doubles whitespaces to one whitespace
+ * @param {string} result 
+ * @returns {string}
+ */
 function sanitizeRegexResult(result) {
   return result?.trim()?.replace(/\s\s+/g, ' ')
 }

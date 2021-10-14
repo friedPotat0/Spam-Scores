@@ -1,17 +1,46 @@
-/** @constant {number} */
+/**
+ * Constants module.
+ * @module constants
+ * @see module:functions
+ */
+
+/**
+ * Less than this score is a good email
+ * @constant {number}
+ */
 export const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
 
-/** @constant {number} */
+/**
+ * Greater than this score is a bad email
+ * @constant {number}
+ */
 export const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
 
+/**
+ * Minimum score for SCORE_INTERPOLATION
+ * @constant {number} Minimum score seen from the first Score Domain that was made for (Rspamd score)
+ * @see module:functions.scoreInterpolation
+ */
 export const MIN_SCORE_SEEN = -40
+
+/**
+ * Maximum score for SCORE_INTERPOLATION
+ * @constant {number} Maximum score seen from the first Score Domain that was made for (Rspamd score)
+ * @see module:functions.scoreInterpolation
+ */
 export const MAX_SCORE_SEEN = 40
 
+/**
+ * @constant {Object<string, interpolationBounds>}
+ * @type {Object<string, interpolationBounds>}
+ */
 export const SCORE_INTERPOLATION = {
   'x-vr-spamscore': { MIN_VALUE: 0, MAX_VALUE: 900, LOWER_BOUNDS: 100, UPPER_BOUNDS: 300 }
 }
 
-/** @constant {Object<RegExp>} */
+/**
+ * @constant {Object<RegExp>}
+ */
 export const SCORE_REGEX = {
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
@@ -21,7 +50,9 @@ export const SCORE_REGEX = {
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/
 }
 
-/** @constant {String[]} */
+/**
+ * @constant {String[]}
+ */
 export const SCORE_ARRAY = [
   'x-spam-score',
   'x-rspamd-score',

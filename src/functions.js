@@ -1,3 +1,7 @@
+/**
+ * Functions module.
+ * @module functions
+ */
 import {
   DEFAULT_SCORE_LOWER_BOUNDS,
   DEFAULT_SCORE_UPPER_BOUNDS,
@@ -21,6 +25,12 @@ export function getBounds(storage) {
   return [lowerBounds, upperBounds]
 }
 
+/**
+ * 
+ * @param {string} headername 
+ * @param {string} score 
+ * @returns {string} Interpolated Score | Score
+ */
 export function scoreInterpolation(headername, score) {
   const scoreType = SCORE_INTERPOLATION[headername]
   if (scoreType) {

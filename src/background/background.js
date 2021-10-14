@@ -2,6 +2,9 @@
 import { SCORE_ARRAY, SCORE_REGEX, CUSTOM_SCORE_REGEX } from '../constants.js'
 import { getBounds, scoreInterpolation } from '../functions.js'
 
+/**
+ * @type {StorageArea}
+ */
 const localStorage = browser.storage.local
 
 /**
