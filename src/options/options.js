@@ -115,24 +115,13 @@ async function save() {
 
 function initTranslations() {
   const i18n = browser.i18n
-  document
-    .querySelectorAll('*[data-i18n="optionsIconRanges"]')
-    .forEach(el => (el.textContent = i18n.getMessage('optionsIconRanges')))
-  document
-    .querySelectorAll('*[data-i18n="optionsScoreGreater"]')
-    .forEach(el => (el.textContent = i18n.getMessage('optionsScoreGreater')))
-  document
-    .querySelectorAll('*[data-i18n="optionsScoreBetween"]')
-    .forEach(
-      el =>
-        (el.textContent = i18n.getMessage('optionsScoreBetween', [
-          DEFAULT_SCORE_LOWER_BOUNDS,
-          DEFAULT_SCORE_UPPER_BOUNDS
-        ]))
-    )
-  document
-    .querySelectorAll('*[data-i18n="optionsScoreLess"]')
-    .forEach(el => (el.textContent = i18n.getMessage('optionsScoreLess')))
+  document.querySelector('*[data-i18n="optionsIconRanges"]').textContent = i18n.getMessage('optionsIconRanges')
+  document.querySelector('*[data-i18n="optionsScoreGreater"]').textContent = i18n.getMessage('optionsScoreGreater')
+  document.querySelector('*[data-i18n="optionsScoreBetween"]').textContent = i18n.getMessage('optionsScoreBetween', [
+    DEFAULT_SCORE_LOWER_BOUNDS,
+    DEFAULT_SCORE_UPPER_BOUNDS
+  ])
+  document.querySelector('*[data-i18n="optionsScoreLess"]').textContent = i18n.getMessage('optionsScoreLess')
   document
     .querySelectorAll('*[data-i18n="optionsHideIconAndScore"]')
     .forEach(el => (el.textContent = i18n.getMessage('optionsHideIconAndScore')))
