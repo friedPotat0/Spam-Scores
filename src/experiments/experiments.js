@@ -4,6 +4,9 @@
 /** @type {DestructuredServices} */
 const { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
 
+function log(msg, line = '?') {
+  Services.wm.getMostRecentWindow('mail:3pane').alert('[Line ' + line + '] :' + msg)
+}
 /** @type {DestructuredExtensionSupport} */
 const { ExtensionSupport } = ChromeUtils.import('resource:///modules/ExtensionSupport.jsm')
 
@@ -35,6 +38,7 @@ let scoreHdrViewParams = {
  */
 var SpamScores = class extends ExtensionCommon.ExtensionAPI {
   onShutdown(isAppShutdown) {
+    log(isAppShutdown, 43)
     if (isAppShutdown) return
     /**
      * This method is called to notify all observers for a particular topic. See Example.
@@ -48,15 +52,11 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
     Services.obs.notifyObservers(null, 'startupcache-invalidate')
   }
 
-  onStartup() {
-    updatePrefs()
-
     /**
-     * A convenient method for logging simple messages.
-     * void logStringMessage(  in wstring message);
-     * message The string to log.
+   *
      */
-    Services.console.logStringMessage('Spam Scores startup completed')
+  onStartup() {
+    log('StartUp', 61)
   }
 
   getAPI(context) {
