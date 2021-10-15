@@ -96,7 +96,6 @@ async function onMessageDisplayed(tab, message) {
         (!storage.customMailscannerHeaders ||
           (storage.customMailscannerHeaders && storage.customMailscannerHeaders.indexOf(headerName) === -1))
       ) {
-        await browser.SpamScores.addDynamicCustomHeaders([header])
         localStorage.set({
           customMailscannerHeaders: [...(storage.customMailscannerHeaders || []), headerName]
         })

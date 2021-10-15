@@ -80,19 +80,6 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
           scoreHdrViewParams.hideIconScoreNeutral = hideNeutral
           scoreHdrViewParams.hideIconScoreNegative = hideNegative
         },
-        getHelloFlag() {
-          try {
-            return Services.prefs.getBoolPref('spamscores.hello')
-          } catch (err) {
-            return false
-          }
-        },
-        setHelloFlag() {
-          Services.prefs.setBoolPref('spamscores.hello', true)
-        },
-        addDynamicCustomHeaders(dynamicHeaders) {
-          updatePrefs(dynamicHeaders)
-        },
         setCustomMailscannerHeaders(customMailscannerHeaders) {
           scoreHdrViewParams.customMailscannerHeaders = customMailscannerHeaders
         }
@@ -125,30 +112,4 @@ function paint(win) {
 function unpaint(win) {
   win.SpamScores.SpamScores_ScoreHdrView.destroy()
   delete win.SpamScores
-}
-
-/**
- *
- * @param {*} dynamicHeaders
- */
-function updatePrefs(dynamicHeaders = []) {
-  const staticHeaders = ['x-spam-status', 'x-spamd-result', 'x-spam-score', 'x-rspamd-score', 'x-spam-report']
-  const prefs = Services.prefs
-  const customDBHeaders = prefs.getCharPref('mailnews.customDBHeaders')
-  const customHeaders = prefs.getCharPref('mailnews.customHeaders')
-
-  let newCustomDBHeaders = customDBHeaders
-  let newCustomHeaders = customHeaders
-
-  for (const header of staticHeaders) {
-    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
-    if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
-  }
-  for (const header of dynamicHeaders) {
-    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
-    if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
-  }
-
-  prefs.getBranch('mailnews').setCharPref('.customDBHeaders', newCustomDBHeaders.trim())
-  prefs.getBranch('mailnews').setCharPref('.customHeaders', newCustomHeaders.trim())
 }
