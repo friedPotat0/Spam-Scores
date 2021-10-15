@@ -2,12 +2,10 @@
 const EXTENSION_NAME = 'spamscores@czaenker'
 const extension = WebExtensionPolicy.getByID(EXTENSION_NAME).extension
 
-// Libs
-function log(msg, line = '?') {
-  Services.wm.getMostRecentWindow('mail:3pane').alert('[Line ' + line + '] :' + msg)
-}
-
-/** @type {DestructuredExtensionSupport} */
+/** 
+ * This is going to be deprecated anytime.
+ * @type {DestructuredExtensionSupport} 
+ */ 
 const { ExtensionSupport } = Cu.import('resource:///modules/ExtensionSupport.jsm')
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
@@ -48,7 +46,13 @@ var SpamScores = class extends ExtensionAPI {
     Services.obs.notifyObservers(null, 'startupcache-invalidate')
   }
 
+  /**
+   *
+   * @param {*} context
+   * @returns
+   */
   getAPI(context) {
+    // log(Object.keys(context)) // Does callOnClose Exist?
     context.callOnClose(this)
     // All functions should be added in schema.json
     return {
@@ -105,4 +109,9 @@ function paint(win) {
 function unpaint(win) {
   win.SpamScores.SpamScores_ScoreHdrView.destroy()
   delete win.SpamScores
+}
+
+// Logger
+function log(msg, line = '?') {
+  Services.wm.getMostRecentWindow('mail:3pane').alert('[Line ' + line + '] :' + msg)
 }

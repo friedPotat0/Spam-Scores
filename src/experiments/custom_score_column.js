@@ -43,6 +43,13 @@ class ColumnHandler {
   }
   getRowProperties(row, props) {}
   getImageSrc(row, col) {}
+  /**
+   * dlh2 TODO: We... redo the work that we already did in background? We stupid
+   * 
+   * - This part gets the score that is shown in Column SpamScores
+   * @param {*} hdr Probably Headers?
+   * @returns 
+   */
   getScore(hdr) {
     let score = null
     if (SCORE_REGEX.spamdResult.test(hdr.getStringProperty('x-spamd-result'))) {
@@ -59,6 +66,9 @@ class ColumnHandler {
     }
     if (!score && SCORE_REGEX.rspamdScore.test(hdr.getStringProperty('x-rspamd-score'))) {
       score = hdr.getStringProperty('x-rspamd-score').replace(SCORE_REGEX.rspamdScore, '$1')
+    }
+    if (!score && SCORE_REGEX.vrScore.test(hdr.getStringProperty('x-vr-spamscore'))) {
+      score = hdr.getStringProperty('x-vr-spamscore').replace(SCORE_REGEX.vrScore, '$1')
     }
     if (!score && this.params.customMailscannerHeaders) {
       for (let header of this.params.customMailscannerHeaders) {
