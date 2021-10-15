@@ -18,7 +18,7 @@ function initTranslations() {
   ]) {
     document
       .querySelectorAll(`*[data-i18n="${i18nKey}"]`)
-      .forEach(el => (el.innerHTML = browser.i18n.getMessage(i18nKey)))
+      .forEach(el => (el.innerHTML = messenger.i18n.getMessage(i18nKey)))
   }
-  document.title = browser.i18n.getMessage('helloPopupTitle')
+  document.title = messenger.i18n.getMessage('helloPopupTitle')
 }

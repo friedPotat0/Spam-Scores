@@ -26,7 +26,7 @@ async function init() {
   checkboxIconScoreNegative.addEventListener('change', save)
 
   // Load Values from Storage
-  const storage = await browser.storage.local.get([
+  const storage = await messenger.storage.local.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
     'hideIconScorePositive',
@@ -39,7 +39,7 @@ async function init() {
   // Set Values
   inputScoreBoundsLower.value = lowerBounds
   inputScoreBoundsUpper.value = upperBounds
-  inputScoreBoundsBetween.textContent = browser.i18n.getMessage('optionsScoreBetween', [lowerBounds, upperBounds])
+  inputScoreBoundsBetween.textContent = messenger.i18n.getMessage('optionsScoreBetween', [lowerBounds, upperBounds])
   ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(lowerBounds, upperBounds)
 
   checkboxIconScorePositive.checked = storage.hideIconScorePositive || false
@@ -79,7 +79,7 @@ async function save() {
   const hideIconScoreNeutral = checkboxIconScoreNeutral.checked
   const hideIconScoreNegative = checkboxIconScoreNegative.checked
 
-  const localStorage = browser.storage.local
+  const localStorage = messenger.storage.local
 
   // If we can save
   if (canSave) {
@@ -97,7 +97,7 @@ async function save() {
   // This way the value is a number
   inputScoreBoundsLower.value = newLowerBounds
   inputScoreBoundsUpper.value = newUpperBounds
-  inputScoreBoundsBetween.textContent = browser.i18n.getMessage('optionsScoreBetween', [newLowerBounds, newUpperBounds])
+  inputScoreBoundsBetween.textContent = messenger.i18n.getMessage('optionsScoreBetween', [newLowerBounds, newUpperBounds])
   ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(newLowerBounds, newUpperBounds)
   ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setHideIconScoreOptions(
     hideIconScorePositive,
@@ -114,7 +114,7 @@ async function save() {
 }
 
 function initTranslations() {
-  const i18n = browser.i18n
+  const i18n = messenger.i18n
   document.querySelector('*[data-i18n="optionsIconRanges"]').textContent = i18n.getMessage('optionsIconRanges')
   document.querySelector('*[data-i18n="optionsScoreGreater"]').textContent = i18n.getMessage('optionsScoreGreater')
   document.querySelector('*[data-i18n="optionsScoreBetween"]').textContent = i18n.getMessage('optionsScoreBetween', [

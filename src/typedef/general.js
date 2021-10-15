@@ -14,11 +14,14 @@
 // Program
 
 /**
- * Browser namespace.
+ * Messenger namespace.
+ * In Thunderbird, all WebExtension API can be accessed through the messenger.* namespace,
+ * as with Firefox, but also through the messenger.* namespace, which is a better fit for Thunderbird.
  * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API
+ * https://webextension-api.thunderbird.net/en/91/#thunderbird-webextension-api-documentation
  * @namespace
  */
-const browser = {
+const messenger = {
   storage: {
     /**
      * @type {StorageArea}
@@ -128,6 +131,17 @@ const browser = {
     getMessage: (messageName, substitutions) => ''
   },
   /**
+   * This module provides information about your extension and the environment it's running in.
+   */
+  runtime: {
+    /**
+     * Retrieves the Window object for the background page running inside the current extension.
+     * @returns {Promise<Window>} A Promise that will be fulfilled with the Window object for the background page, if there is one.
+     * If the extension does not include a background page, the promise is rejected with an error message.
+     */
+    getBackgroundPage: () => {}
+  },
+  /**
    * @type {SpamScores}
    */
   SpamScores: {}
@@ -201,27 +215,6 @@ const browser = {
  * @typedef {object} MessageHeader
  * @property {number} id
  */
-
-/**
- * Messenger namespace.
- * In Thunderbird, all WebExtension API can be accessed through the browser.* namespace, 
- * as with Firefox, but also through the messenger.* namespace, which is a better fit for Thunderbird.
- * https://webextension-api.thunderbird.net/en/91/#thunderbird-webextension-api-documentation
- * @namespace
- */
-const messenger = {
-  /**
-   * This module provides information about your extension and the environment it's running in.
-   */
-  runtime: {
-    /**
-     * Retrieves the Window object for the background page running inside the current extension.
-     * @returns {Promise<Window>} A Promise that will be fulfilled with the Window object for the background page, if there is one. 
-     * If the extension does not include a background page, the promise is rejected with an error message.
-     */
-    getBackgroundPage: () => {}
-  }
-}
 
 /**
  * Custom

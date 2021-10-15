@@ -5,7 +5,7 @@ import { getBounds, scoreInterpolation } from '../functions.js'
 /**
  * @type {StorageArea}
  */
-const localStorage = browser.storage.local
+const localStorage = messenger.storage.local
 
 /**
  * Functions
@@ -67,8 +67,8 @@ async function getImageSrc(score) {
 async function onMessageDisplayed(tab, message) {
   // Declaration / Values
   const idTab = tab.id
-  const fullMessage = await browser.messages.getFull(message.id)
-  const messageButton = browser.messageDisplayAction
+  const fullMessage = await messenger.messages.getFull(message.id)
+  const messageButton = messenger.messageDisplayAction
 
   // Get Score
   const scores = getScores(fullMessage.headers) // Get Scores
@@ -104,7 +104,7 @@ async function onMessageDisplayed(tab, message) {
  */
 const init = async () => {
   // Declaration / Values
-  const spamScores = browser.SpamScores
+  const spamScores = messenger.SpamScores
   const storage = await localStorage.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
@@ -128,7 +128,7 @@ const init = async () => {
 
   // Add Listeners
   spamScores.addWindowListener('none')
-  browser.messageDisplay.onMessageDisplayed.addListener(onMessageDisplayed)
+  messenger.messageDisplay.onMessageDisplayed.addListener(onMessageDisplayed)
 
   // Init Data
   const [lowerBounds, upperBounds] = getBounds(storage)

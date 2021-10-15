@@ -1,7 +1,7 @@
 import { SCORE_SYMBOLS } from './score_symbols.js'
 import { SCORE_DETAILS_ARRAY, SYMBOL_REGEX } from '../../constants.js'
 
-browser.tabs
+messenger.tabs
   .query({
     active: true,
     currentWindow: true
@@ -9,8 +9,8 @@ browser.tabs
   .then(async tabs => {
     // Declaration / Values
     const tabId = tabs[0].id
-    browser.messageDisplay.getDisplayedMessage(tabId).then(async message => {
-      const fullMessage = await browser.messages.getFull(message.id)
+    messenger.messageDisplay.getDisplayedMessage(tabId).then(async message => {
+      const fullMessage = await messenger.messages.getFull(message.id)
       const parsedDetailScores = await getParsedDetailScores(fullMessage.headers)
       if (parsedDetailScores.length !== 0) {
         const groupedDetailScores = {
@@ -57,7 +57,7 @@ browser.tabs
  * @returns {parsedDetailScores[]}
  */
 async function getParsedDetailScores(headers) {
-  const storage = await browser.storage.local.get(['customMailscannerHeaders'])
+  const storage = await messenger.storage.local.get(['customMailscannerHeaders'])
   const customHeaders = Object.values(storage).map(value => value[0])
   let parsedDetailScores = []
   for (const headerName in headers) {
