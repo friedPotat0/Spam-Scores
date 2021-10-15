@@ -28,6 +28,17 @@ const Services = {}
  * @namespace
  * @property {number} MOZ_APP_VERSION Thunderbird Version
  */
- const AppConstants = {}
+const AppConstants = {}
 
- 
+/**
+ * WebExtensionPolicy
+ * @namespace
+ */
+const WebExtensionPolicy = {
+  /**
+   *
+   * @param {*} id
+   * @returns {extension}
+   */
+  getByID: id => {}
+}

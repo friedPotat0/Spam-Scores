@@ -1,21 +1,14 @@
 'use strict'
+const EXTENSION_NAME = 'spamscores@czaenker'
+const extension = WebExtensionPolicy.getByID(EXTENSION_NAME).extension
+
 // Libs
 function log(msg, line = '?') {
   Services.wm.getMostRecentWindow('mail:3pane').alert('[Line ' + line + '] :' + msg)
 }
+
 /** @type {DestructuredExtensionSupport} */
 const { ExtensionSupport } = Cu.import('resource:///modules/ExtensionSupport.jsm')
-
-/** @type {DestructuredExtensionParent} */
-const { ExtensionParent } = Cu.import('resource://gre/modules/ExtensionParent.jsm')
-
-const EXTENSION_NAME = 'spamscores@czaenker'
-const extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
-
-// Doesn't work with ES6
-// const { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } = ChromeUtils.import(extension.getURL("src/constants.jsm"));
-
-const custom_score_column = extension.getURL('src/experiments/custom_score_column.js')
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
@@ -92,18 +85,22 @@ var SpamScores = class extends ExtensionAPI {
 }
 
 /**
- *
- * @param {*} win
+ * Paint
+ * @param {Window} win Literally Window
  */
 function paint(win) {
+  // Basically we create a object of SpamScores
   win.SpamScores = {}
-  Services.scriptloader.loadSubScript(custom_score_column, win.SpamScores)
+  // Then Load the Custom Script into it
+  // https://developer.thunderbird.net/add-ons/mailextensions/experiments#structuring-experiment-code
+  Services.scriptloader.loadSubScript(extension.rootURI.resolve('src/experiments/custom_score_column.js'), win.SpamScores)
+  // So we can save it and destroy it in unpaint?
   win.SpamScores.SpamScores_ScoreHdrView.init(win, scoreHdrViewParams)
 }
 
 /**
- *
- * @param {*} win
+ * Unpaint
+ * @param {Window} win
  */
 function unpaint(win) {
   win.SpamScores.SpamScores_ScoreHdrView.destroy()

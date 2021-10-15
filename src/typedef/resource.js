@@ -19,22 +19,6 @@
  */
 
 /**
- * @typedef {object} DestructuredExtensionParent
- * @property {ExtensionParent} ExtensionParent
- */
-
-/**
- * Extensions, so many yet no actual documentation.
- * @typedef {object} ExtensionParent
- * @property {object} GlobalManager
- */
-
-// /**
-//  *
-//  * @typedef {object} MailServices
-//  */
-
-/**
  * Getting AppConstants
  * @typedef {object} Components
  * @property {Object<string, object>} classes
