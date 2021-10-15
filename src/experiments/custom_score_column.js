@@ -15,40 +15,41 @@ const SCORE_REGEX = {
   vrScore: /([0-9]+).*/is
 }
 class ColumnHandler {
-  init(win, params) {
-    this.win = win
-    this.params = params
+  constructor(gDBView, params) {
+    this.gDBView = gDBView
+    this.upperScoreBounds = params.upperScoreBounds
+    this.lowerScoreBounds = params.lowerScoreBounds
+    this.hideIconScorePositive = params.hideIconScorePositive || false
+    this.hideIconScoreNeutral = params.hideIconScoreNeutral || false
+    this.hideIconScoreNegative = params.hideIconScoreNegative || false
+    this.customMailscannerHeaders = params.customMailscannerHeaders
   }
 
-  isString() {
-    return false
-  }
   getCellProperties(row, col, props) {
-    const upperScoreBounds = this.params.upperScoreBounds
-    const lowerScoreBounds = this.params.lowerScoreBounds
-    const score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
+    const upperScoreBounds = this.upperScoreBounds
+    const lowerScoreBounds = this.lowerScoreBounds
+    const score = this.getScore(this.gDBView.getMsgHdrAt(row))
     if (score === null) return null
     if (score > upperScoreBounds) {
-      if (this.params.hideIconScorePositive === true) return null
+      if (this.hideIconScorePositive) return null
       return 'positive'
     }
     if (score <= upperScoreBounds && score >= lowerScoreBounds) {
-      if (this.params.hideIconScoreNeutral === true) return null
+      if (this.hideIconScoreNeutral) return null
       return 'neutral'
     }
     if (score < lowerScoreBounds) {
-      if (this.params.hideIconScoreNegative === true) return null
+      if (this.hideIconScoreNegative) return null
       return 'negative'
     }
   }
-  getRowProperties(row, props) {}
-  getImageSrc(row, col) {}
+
   /**
    * dlh2 TODO: We... redo the work that we already did in background? We stupid
-   * 
+   *
    * - This part gets the score that is shown in Column SpamScores
    * @param {*} hdr Probably Headers?
-   * @returns 
+   * @returns
    */
   getScore(hdr) {
     let score = null
@@ -70,8 +71,8 @@ class ColumnHandler {
     if (!score && SCORE_REGEX.vrScore.test(hdr.getStringProperty('x-vr-spamscore'))) {
       score = hdr.getStringProperty('x-vr-spamscore').replace(SCORE_REGEX.vrScore, '$1')
     }
-    if (!score && this.params.customMailscannerHeaders) {
-      for (let header of this.params.customMailscannerHeaders) {
+    if (!score && this.customMailscannerHeaders) {
+      for (let header of this.customMailscannerHeaders) {
         let headerScore = hdr.getStringProperty(header).replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
         if (!isNaN(parseFloat(headerScore))) {
           score = headerScore
@@ -83,22 +84,14 @@ class ColumnHandler {
     return null
   }
   getCellText(row, col) {
-    const upperScoreBounds = this.params.upperScoreBounds
-    const lowerScoreBounds = this.params.lowerScoreBounds
-    const score = this.getScore(this.win.gDBView.getMsgHdrAt(row))
+    const upperScoreBounds = this.upperScoreBounds
+    const lowerScoreBounds = this.lowerScoreBounds
+    const score = this.getScore(this.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > upperScoreBounds) {
-      if (this.params.hideIconScorePositive === true) return null
-      return ' ' + score
-    }
-    if (score <= upperScoreBounds && score >= lowerScoreBounds) {
-      if (this.params.hideIconScoreNeutral === true) return null
-      return ' ' + score
-    }
-    if (score < lowerScoreBounds) {
-      if (this.params.hideIconScoreNegative === true) return null
-      return ' ' + score
-    }
+    if (score > upperScoreBounds && this.hideIconScorePositive) return null
+    if (score <= upperScoreBounds && score >= lowerScoreBounds && this.hideIconScoreNeutral) return null
+    if (score < lowerScoreBounds && this.hideIconScoreNegative) return null
+    return ' ' + score
   }
   getSortStringForRow(hdr) {
     return this.getScore(hdr)
@@ -108,15 +101,21 @@ class ColumnHandler {
     if (score === null) return 999999
     return this.getScore(hdr) * 1e4 + 1e8
   }
+
+  // My Little Graveyard
+  isString = () => false
+  getRowProperties(row, props) {}
+  getImageSrc(row, col) {}
 }
 
 class ColumnOverlay {
-  init(win, params) {
-    this.win = win
-    this.params = params
+  constructor(gDBView, document, params) {
+    this.gDBView = gDBView
+    this.document = document
     this.columnId = 'spamscore'
-    this.addColumn(win)
-    this.columnHandler = new ColumnHandler()
+    this.addColumn()
+    this.columnHandler = new ColumnHandler(this.gDBView, params)
+    log(Object.keys(this))
   }
 
   destroy() {
@@ -125,8 +124,8 @@ class ColumnOverlay {
 
   observe(aMsgFolder, aTopic, aData) {
     try {
-      this.columnHandler.init(this.win, this.params)
-      this.win.gDBView.addColumnHandler(this.columnId, this.columnHandler)
+      this.columnHandler.init()
+      this.gDBView.addColumnHandler(this.columnId, this.columnHandler)
     } catch (ex) {
       console.error(ex)
       throw new Error('Cannot add column handler')
@@ -134,14 +133,14 @@ class ColumnOverlay {
   }
 
   /**
-   * dlh2 TODO: this.win = win?
-   * @param {*} win
+   *
    * @returns
    */
-  addColumn(win) {
-    if (win.document.getElementById(this.columnId)) return
+  addColumn() {
+    const document = this.document
+    if (document.getElementById(this.columnId)) return
 
-    const treeCol = win.document.createXULElement('treecol')
+    const treeCol = document.createXULElement('treecol')
     treeCol.setAttribute('id', this.columnId)
     treeCol.setAttribute('persist', 'hidden ordinal sortDirection width')
     treeCol.setAttribute('flex', '2')
@@ -150,11 +149,11 @@ class ColumnOverlay {
     treeCol.setAttribute('label', 'Spam score')
     treeCol.setAttribute('tooltiptext', 'Sort by spam score')
 
-    const threadCols = win.document.getElementById('threadCols')
+    const threadCols = document.getElementById('threadCols')
     threadCols.appendChild(treeCol)
-    let attributes = Services.xulStore.getAttributeEnumerator(this.win.document.URL, this.columnId)
+    let attributes = Services.xulStore.getAttributeEnumerator(document.URL, this.columnId)
     for (const attribute of attributes) {
-      const value = Services.xulStore.getValue(this.win.document.URL, this.columnId, attribute)
+      const value = Services.xulStore.getValue(document.URL, this.columnId, attribute)
       if (attribute != 'ordinal' || parseInt(AppConstants.MOZ_APP_VERSION, 10) < 74) {
         treeCol.setAttribute(attribute, value)
       } else {
@@ -165,7 +164,7 @@ class ColumnOverlay {
   }
 
   destroyColumn() {
-    const treeCol = this.win.document.getElementById(this.columnId)
+    const treeCol = this.document.getElementById(this.columnId)
     if (!treeCol) return
     treeCol.remove()
     Services.obs.removeObserver(this, 'MsgCreateDBView')
@@ -173,15 +172,21 @@ class ColumnOverlay {
 }
 
 class SpamScores_ScoreHdrViewColumn {
-  init(win, params) {
-    this.win = win
-    this.params = params
-    this.columnOverlay = new ColumnOverlay()
-    this.columnOverlay.init(win, params)
-    if (win.gDBView && win.document.documentElement.getAttribute('windowtype') == 'mail:3pane') {
+  /**
+   *
+   * @param {*} win
+   * @param {*} params
+   */
+  init(gDBView, document, params) {
+    this.columnOverlay = new ColumnOverlay(gDBView, document, params)
+    if (gDBView && document.documentElement.getAttribute('windowtype') == 'mail:3pane') {
       Services.obs.notifyObservers(null, 'MsgCreateDBView')
     }
   }
+
+  /**
+   *
+   */
   destroy() {
     this.columnOverlay.destroy()
   }

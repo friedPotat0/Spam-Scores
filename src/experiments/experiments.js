@@ -2,10 +2,10 @@
 const EXTENSION_NAME = 'spamscores@czaenker'
 const extension = WebExtensionPolicy.getByID(EXTENSION_NAME).extension
 
-/** 
+/**
  * This is going to be deprecated anytime.
- * @type {DestructuredExtensionSupport} 
- */ 
+ * @type {DestructuredExtensionSupport}
+ */
 const { ExtensionSupport } = Cu.import('resource:///modules/ExtensionSupport.jsm')
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
@@ -97,9 +97,12 @@ function paint(win) {
   win.SpamScores = {}
   // Then Load the Custom Script into it
   // https://developer.thunderbird.net/add-ons/mailextensions/experiments#structuring-experiment-code
-  Services.scriptloader.loadSubScript(extension.rootURI.resolve('src/experiments/custom_score_column.js'), win.SpamScores)
+  Services.scriptloader.loadSubScript(
+    extension.rootURI.resolve('src/experiments/custom_score_column.js'),
+    win.SpamScores
+  )
   // So we can save it and destroy it in unpaint?
-  win.SpamScores.SpamScores_ScoreHdrView.init(win, scoreHdrViewParams)
+  win.SpamScores.SpamScores_ScoreHdrView.init(win.gDBView, win.document, scoreHdrViewParams)
 }
 
 /**
