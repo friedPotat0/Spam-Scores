@@ -120,15 +120,18 @@ const init = async () => {
     'hideIconScoreNegative'
   ])
 
+  // Get Hello Flag
+  const helloFlag = await localStorage.get(['spamscores.hello'])
+
   // Hello Message
-  if (!(await spamScores.getHelloFlag())) {
+  if (emptyObject(helloFlag)) {
     messenger.windows.create({
       height: 680,
       width: 488,
       url: '/src/static/hello.html',
       type: 'popup'
     })
-    spamScores.setHelloFlag()
+    localStorage.set({ 'spamscores.hello': true })
   }
 
   // Add Listeners
@@ -151,3 +154,8 @@ const init = async () => {
   }
 }
 init()
+
+function emptyObject(object) {
+  for (const key in object) return false
+  return true
+}
