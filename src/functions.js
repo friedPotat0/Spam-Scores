@@ -16,12 +16,8 @@ import {
  * @returns {number[]} Lower & Upper Bound
  */
 export function getBounds(storage) {
-  const lowerBounds = parseFloat(
-    storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
-  )
-  const upperBounds = parseFloat(
-    storage.scoreIconUpperBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
-  )
+  const lowerBounds = parseFloat(storage.scoreIconLowerBounds || DEFAULT_SCORE_LOWER_BOUNDS)
+  const upperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
   return [lowerBounds, upperBounds]
 }
 
