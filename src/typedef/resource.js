@@ -2,27 +2,7 @@
 
 // Big Note: There's no actual documentation it seems that it will be deprecated or whatever...
 
-
-// Services
-
-/**
- * @typedef {object} DestructuredServices
- * @property {Services} Services
- */
-
-/**
- * Based on Mozilla xpCOM
- * https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/57#changes_for_add-on_and_mozilla_developers
- * Services, so many yet no actual documentation.
- * @typedef {object} Services
- * @property {object} xulStore
- * @property {object} obs https://web.archive.org/web/20210603143450/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIObserverService
- * @property {object} io
- * @property {object} console
- * @property {object} prefs
- * @property {object} wm
- * @property {object} scriptloader
- */
+// https://firefox-source-docs.mozilla.org/toolkit/components/extensions/webextensions/basics.html#globals-available-in-the-api-scripts-global
 
 // Extension Support
 
@@ -60,15 +40,3 @@
  * @property {Object<string, object>} classes
  */
 
-// App Constants
-
-/**
- * @typedef {object} DestructuredAppConstants
- * @property {AppConstants} AppConstants
- */
-
-/**
- * Getting AppConstants
- * @typedef {object} AppConstants
- * @property {number} MOZ_APP_VERSION Thunderbird Version
- */

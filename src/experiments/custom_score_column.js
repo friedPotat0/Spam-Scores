@@ -4,9 +4,10 @@
  * That would be a hassle for debugging...
  */
 
-/** @type {DestructuredAppConstants} */
-const { AppConstants } = ChromeUtils.import('resource://gre/modules/AppConstants.jsm')
-
+// /** @type {DestructuredAppConstants} */
+// const { AppConstants } = ChromeUtils.import('resource://gre/modules/AppConstants.jsm')
+// Components.utils.import("resource://gre/modules/Console.jsm");
+// console.log("Hello from Firefox code"); //output messages to the console
 //
 const SCORE_REGEX = {
   spamdResult: /.*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
@@ -15,9 +16,9 @@ const SCORE_REGEX = {
   spamReport: /.*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
   rspamdScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
   mailscannerSpamcheck:
-    /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is
+    /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is,
+  vrScore: /([0-9]+).*/is
 }
-
 class ColumnHandler {
   init(win, params) {
     this.win = win

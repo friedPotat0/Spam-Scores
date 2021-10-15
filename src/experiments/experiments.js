@@ -36,7 +36,13 @@ let scoreHdrViewParams = {
  * Do not change var
  * https://webextension-api.thunderbird.net/en/91/how-to/experiments.html#implementing-functions
  */
-var SpamScores = class extends ExtensionCommon.ExtensionAPI {
+var SpamScores = class extends ExtensionAPI {
+  /**
+   * This function is called if the extension is disabled or removed, or Thunderbird closes.
+   * We usually do not have to do any cleanup, if Thunderbird is shutting down entirely
+   * @param {*} isAppShutdown
+   * @returns
+   */
   onShutdown(isAppShutdown) {
     log(isAppShutdown, 43)
     if (isAppShutdown) return
@@ -52,9 +58,9 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
     Services.obs.notifyObservers(null, 'startupcache-invalidate')
   }
 
-    /**
+  /**
    *
-     */
+   */
   onStartup() {
     log('StartUp', 61)
   }
