@@ -47,7 +47,6 @@ export function scoreInterpolation(headername, score) {
       denominator = scoreType.UPPER_BOUNDS - scoreType.LOWER_BOUNDS
     }
     const scale = numerator / denominator
-    console.log(scale, denominator, numerator, score)
     score *= scale
   }
   return score

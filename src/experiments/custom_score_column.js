@@ -4,11 +4,6 @@
  * That would be a hassle for debugging...
  */
 
-// /** @type {DestructuredAppConstants} */
-// const { AppConstants } = ChromeUtils.import('resource://gre/modules/AppConstants.jsm')
-// Components.utils.import("resource://gre/modules/Console.jsm");
-// console.log("Hello from Firefox code"); //output messages to the console
-//
 const SCORE_REGEX = {
   spamdResult: /.*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
   spamScore: /([-+]?[0-9]+\.?[0-9]*).*/is,

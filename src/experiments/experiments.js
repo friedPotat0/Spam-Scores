@@ -1,9 +1,5 @@
 'use strict'
 // Libs
-
-/** @type {DestructuredServices} */
-const { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
-
 function log(msg, line = '?') {
   Services.wm.getMostRecentWindow('mail:3pane').alert('[Line ' + line + '] :' + msg)
 }
