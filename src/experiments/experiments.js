@@ -9,11 +9,6 @@ const { ExtensionSupport } = ChromeUtils.import('resource:///modules/ExtensionSu
 /** @type {DestructuredExtensionParent} */
 const { ExtensionParent } = ChromeUtils.import('resource://gre/modules/ExtensionParent.jsm')
 
-/**
- * dlh2 TODO: Is this used?
- */
-const { MailServices } = ChromeUtils.import('resource:///modules/MailServices.jsm')
-
 const EXTENSION_NAME = 'spamscores@czaenker'
 const extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
 
@@ -21,6 +16,7 @@ const extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
 // const { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } = ChromeUtils.import(extension.getURL("src/constants.jsm"));
 
 const custom_score_column = extension.getURL('src/experiments/custom_score_column.js')
+
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
 let scoreHdrViewParams = {
@@ -34,13 +30,18 @@ let scoreHdrViewParams = {
  */
 var SpamScores = class extends ExtensionAPI {
   /**
+   * Called on Startup
+   * dlh2 - When reloading it also happens
+   */
+  onStartup() {}
+
+  /**
    * This function is called if the extension is disabled or removed, or Thunderbird closes.
-   * We usually do not have to do any cleanup, if Thunderbird is shutting down entirely
-   * @param {*} isAppShutdown
-   * @returns
+   * We usually do not have to do any cleanup, if Thunderbird is shutting down entirely.
+   * dlh2 - When reloading it also happens
+   * @param {boolean} isAppShutdown
    */
   onShutdown(isAppShutdown) {
-    log(isAppShutdown, 43)
     if (isAppShutdown) return
     /**
      * This method is called to notify all observers for a particular topic. See Example.
@@ -52,13 +53,6 @@ var SpamScores = class extends ExtensionAPI {
      * someData A notification specific string value. The meaning of this parameter is dependent on the topic. It may be null.
      */
     Services.obs.notifyObservers(null, 'startupcache-invalidate')
-  }
-
-  /**
-   *
-   */
-  onStartup() {
-    log('StartUp', 61)
   }
 
   getAPI(context) {
