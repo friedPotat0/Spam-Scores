@@ -12,7 +12,7 @@ import {
 
 /**
  * Returns Lower & Upper Bound
- * @param {*} storage Local storage with Lower & Upper bounds
+ * @param {Object<string, string>} storage Local storage with Lower & Upper bounds
  * @returns {number[]} Lower & Upper Bound
  */
 export function getBounds(storage) {

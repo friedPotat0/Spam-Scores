@@ -91,13 +91,9 @@ async function onMessageDisplayed(tab, message) {
       const headerName = headerFound[0] // header [Header Name, Header Value]
       // Note: The header is always lowercase in messages.getFull
       const storage = await localStorage.get(['customMailscannerHeaders'])
-      if (
-        !storage.customMailscannerHeaders ||
-        (storage.customMailscannerHeaders && storage.customMailscannerHeaders.indexOf(headerName) === -1)
-      ) {
-        localStorage.set({
-          customMailscannerHeaders: [...(storage.customMailscannerHeaders || []), headerName]
-        })
+      const customHeaders = storage.customMailscannerHeaders
+      if (!customHeaders || (customHeaders && !customHeaders.includes(headerName))) {
+        localStorage.set({ customMailscannerHeaders: [...(customHeaders || []), headerName] })
       }
     }
   }
