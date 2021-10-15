@@ -4,16 +4,26 @@
  * That would be a hassle for debugging...
  */
 
-const SCORE_REGEX = {
-  spamdResult: /.*\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];.*/is,
-  spamScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
-  spamStatus: /.*(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*).*/is,
-  spamReport: /.*?([-+]?[0-9]+\.?[0-9]*) hits, .*/is,
-  rspamdScore: /([-+]?[0-9]+\.?[0-9]*).*/is,
-  mailscannerSpamcheck:
-    /.*(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),.*/is,
-  vrScore: /([0-9]+).*/is
+// Copy of constants.js until ES6
+const CUSTOM_SCORE_REGEX = {
+  'mailscanner-spamcheck':
+    /(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),/
 }
+
+// Copy of constants.js until ES6
+const SCORE_REGEX = {
+  'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-vr-spamscore': /([0-9]+)/,
+  'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
+  'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/
+}
+
+/**
+ * We can't use log in this class, because it executes as a thread on each message
+ * https://web.archive.org/web/20191010075908/https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Thunderbird_extensions/Creating_a_Custom_Column
+ */
 class ColumnHandler {
   constructor(gDBView, params) {
     this.gDBView = gDBView
@@ -26,84 +36,82 @@ class ColumnHandler {
   }
 
   getCellProperties(row, col, props) {
-    const upperScoreBounds = this.upperScoreBounds
-    const lowerScoreBounds = this.lowerScoreBounds
     const score = this.getScore(this.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > upperScoreBounds) {
+    if (score > this.upperScoreBounds) {
       if (this.hideIconScorePositive) return null
       return 'positive'
     }
-    if (score <= upperScoreBounds && score >= lowerScoreBounds) {
+    if (score <= this.upperScoreBounds && score >= this.lowerScoreBounds) {
       if (this.hideIconScoreNeutral) return null
       return 'neutral'
     }
-    if (score < lowerScoreBounds) {
+    if (score < this.lowerScoreBounds) {
       if (this.hideIconScoreNegative) return null
       return 'negative'
     }
   }
 
   /**
-   * dlh2 TODO: We... redo the work that we already did in background? We stupid
+   * From what I understand, getScore executes when Thunderbird loads the Add-on
    *
    * - This part gets the score that is shown in Column SpamScores
-   * @param {*} hdr Probably Headers?
-   * @returns
+   * @param {*} hdr Probably Headers? https://web.archive.org/web/20210601181130/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIMsgDBHdr
+   *
    */
   getScore(hdr) {
-    let score = null
-    if (SCORE_REGEX.spamdResult.test(hdr.getStringProperty('x-spamd-result'))) {
-      score = hdr.getStringProperty('x-spamd-result').replace(SCORE_REGEX.spamdResult, '$1')
+    for (const regExName in SCORE_REGEX) {
+      const headerValue = hdr.getStringProperty(regExName)
+      if (headerValue === '') continue
+      const scoreField = headerValue.match(SCORE_REGEX[regExName])
+      if (!scoreField) continue // If no match iterate - Note: This shouldn't be needed
+      const score = parseFloat(scoreField[1])
+      if (!isNaN(score)) return score
+      // return scoreInterpolation(regExName, scoreField[1])
     }
-    if (!score && SCORE_REGEX.spamStatus.test(hdr.getStringProperty('x-spam-status'))) {
-      score = hdr.getStringProperty('x-spam-status').replace(SCORE_REGEX.spamStatus, '$1')
-    }
-    if (!score && SCORE_REGEX.spamScore.test(hdr.getStringProperty('x-spam-score'))) {
-      score = hdr.getStringProperty('x-spam-score').replace(SCORE_REGEX.spamScore, '$1')
-    }
-    if (!score && SCORE_REGEX.spamReport.test(hdr.getStringProperty('x-spam-report'))) {
-      score = hdr.getStringProperty('x-spam-report').replace(SCORE_REGEX.spamReport, '$1')
-    }
-    if (!score && SCORE_REGEX.rspamdScore.test(hdr.getStringProperty('x-rspamd-score'))) {
-      score = hdr.getStringProperty('x-rspamd-score').replace(SCORE_REGEX.rspamdScore, '$1')
-    }
-    if (!score && SCORE_REGEX.vrScore.test(hdr.getStringProperty('x-vr-spamscore'))) {
-      score = hdr.getStringProperty('x-vr-spamscore').replace(SCORE_REGEX.vrScore, '$1')
-    }
-    if (!score && this.customMailscannerHeaders) {
-      for (let header of this.customMailscannerHeaders) {
-        let headerScore = hdr.getStringProperty(header).replace(SCORE_REGEX.mailscannerSpamcheck, '$1')
-        if (!isNaN(parseFloat(headerScore))) {
-          score = headerScore
-          break
+
+    for (const headerName of this.customMailscannerHeaders) {
+      for (const regExName in CUSTOM_SCORE_REGEX) {
+        if (headerName.endsWith(regExName)) {
+          const headerValue = hdr.getStringProperty(headerName)
+          const scoreField = headerValue.match(CUSTOM_SCORE_REGEX[regExName])
+          if (!scoreField) continue // If no match iterate
+          const score = parseFloat(scoreField[1])
+          if (!isNaN(score)) return score
         }
       }
     }
-    if (score && !isNaN(parseFloat(score))) return parseFloat(score)
     return null
   }
   getCellText(row, col) {
-    const upperScoreBounds = this.upperScoreBounds
-    const lowerScoreBounds = this.lowerScoreBounds
     const score = this.getScore(this.gDBView.getMsgHdrAt(row))
     if (score === null) return null
-    if (score > upperScoreBounds && this.hideIconScorePositive) return null
-    if (score <= upperScoreBounds && score >= lowerScoreBounds && this.hideIconScoreNeutral) return null
-    if (score < lowerScoreBounds && this.hideIconScoreNegative) return null
+    if (score > this.upperScoreBounds && this.hideIconScorePositive) return null
+    if (score <= this.upperScoreBounds && score >= this.lowerScoreBounds && this.hideIconScoreNeutral) return null
+    if (score < this.lowerScoreBounds && this.hideIconScoreNegative) return null
     return ' ' + score
   }
+
   getSortStringForRow(hdr) {
     return this.getScore(hdr)
   }
+
+  /**
+   * 
+   * @param {*} hdr 
+   * @returns 
+   */
   getSortLongForRow(hdr) {
     let score = this.getScore(hdr)
+    // What is this for?
     if (score === null) return 999999
     return this.getScore(hdr) * 1e4 + 1e8
   }
 
   // My Little Graveyard
-  isString = () => false
+  isString() {
+    return false
+  }
   getRowProperties(row, props) {}
   getImageSrc(row, col) {}
 }
@@ -115,21 +123,6 @@ class ColumnOverlay {
     this.columnId = 'spamscore'
     this.addColumn()
     this.columnHandler = new ColumnHandler(this.gDBView, params)
-    log(Object.keys(this))
-  }
-
-  destroy() {
-    this.destroyColumn()
-  }
-
-  observe(aMsgFolder, aTopic, aData) {
-    try {
-      this.columnHandler.init()
-      this.gDBView.addColumnHandler(this.columnId, this.columnHandler)
-    } catch (ex) {
-      console.error(ex)
-      throw new Error('Cannot add column handler')
-    }
   }
 
   /**
@@ -137,10 +130,10 @@ class ColumnOverlay {
    * @returns
    */
   addColumn() {
-    const document = this.document
-    if (document.getElementById(this.columnId)) return
+    const doc = this.document
+    if (doc.getElementById(this.columnId)) return
 
-    const treeCol = document.createXULElement('treecol')
+    const treeCol = doc.createXULElement('treecol')
     treeCol.setAttribute('id', this.columnId)
     treeCol.setAttribute('persist', 'hidden ordinal sortDirection width')
     treeCol.setAttribute('flex', '2')
@@ -149,11 +142,11 @@ class ColumnOverlay {
     treeCol.setAttribute('label', 'Spam score')
     treeCol.setAttribute('tooltiptext', 'Sort by spam score')
 
-    const threadCols = document.getElementById('threadCols')
+    const threadCols = doc.getElementById('threadCols')
     threadCols.appendChild(treeCol)
-    let attributes = Services.xulStore.getAttributeEnumerator(document.URL, this.columnId)
+    let attributes = Services.xulStore.getAttributeEnumerator(doc.URL, this.columnId)
     for (const attribute of attributes) {
-      const value = Services.xulStore.getValue(document.URL, this.columnId, attribute)
+      const value = Services.xulStore.getValue(doc.URL, this.columnId, attribute)
       if (attribute != 'ordinal' || parseInt(AppConstants.MOZ_APP_VERSION, 10) < 74) {
         treeCol.setAttribute(attribute, value)
       } else {
@@ -163,11 +156,24 @@ class ColumnOverlay {
     Services.obs.addObserver(this, 'MsgCreateDBView', false)
   }
 
+  observe(aMsgFolder, aTopic, aData) {
+    try {
+      this.gDBView.addColumnHandler(this.columnId, this.columnHandler)
+    } catch (ex) {
+      console.error(ex)
+      throw new Error('Cannot add column handler')
+    }
+  }
+
   destroyColumn() {
     const treeCol = this.document.getElementById(this.columnId)
     if (!treeCol) return
     treeCol.remove()
     Services.obs.removeObserver(this, 'MsgCreateDBView')
+  }
+
+  destroy() {
+    this.destroyColumn()
   }
 }
 
@@ -177,9 +183,9 @@ class SpamScores_ScoreHdrViewColumn {
    * @param {*} win
    * @param {*} params
    */
-  init(gDBView, document, params) {
-    this.columnOverlay = new ColumnOverlay(gDBView, document, params)
-    if (gDBView && document.documentElement.getAttribute('windowtype') == 'mail:3pane') {
+  init(gDBView, doc, params) {
+    this.columnOverlay = new ColumnOverlay(gDBView, doc, params)
+    if (gDBView && doc.documentElement.getAttribute('windowtype') == 'mail:3pane') {
       Services.obs.notifyObservers(null, 'MsgCreateDBView')
     }
   }
@@ -191,10 +197,8 @@ class SpamScores_ScoreHdrViewColumn {
     this.columnOverlay.destroy()
   }
 }
-
 // dlh2 TODO: Hm... I suppose this one is special
 var SpamScores_ScoreHdrView = new SpamScores_ScoreHdrViewColumn()
-
 const styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
   Components.interfaces.nsIStyleSheetService
 )
