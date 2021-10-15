@@ -36,12 +36,9 @@ async function init() {
 
   const [lowerBounds, upperBounds] = getBounds(storage)
 
-  const hideIconScorePositive =
-    storage && storage.hideIconScorePositive !== undefined ? storage.hideIconScorePositive : false
-  const hideIconScoreNeutral =
-    storage && storage.hideIconScoreNeutral !== undefined ? storage.hideIconScoreNeutral : false
-  const hideIconScoreNegative =
-    storage && storage.hideIconScoreNegative !== undefined ? storage.hideIconScoreNegative : false
+  const hideIconScorePositive = storage.hideIconScorePositive !== undefined ? storage.hideIconScorePositive : false
+  const hideIconScoreNeutral = storage.hideIconScoreNeutral !== undefined ? storage.hideIconScoreNeutral : false
+  const hideIconScoreNegative = storage.hideIconScoreNegative !== undefined ? storage.hideIconScoreNegative : false
 
   // Set Values
   inputScoreBoundsLower.value = lowerBounds
@@ -60,44 +57,37 @@ init()
  */
 async function save() {
   // Declaration
+  const localStorage = browser.storage.local
   let newLowerBounds, newUpperBounds, hideIconScorePositive, hideIconScoreNeutral, hideIconScoreNegative
-  const storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   try {
     newLowerBounds = parseFloat(inputScoreBoundsLower.value)
     newUpperBounds = parseFloat(inputScoreBoundsUpper.value)
     if (newLowerBounds > newUpperBounds) {
       newLowerBounds = parseFloat(
-        storage && storage.scoreIconLowerBounds !== undefined
-          ? storage.scoreIconLowerBounds
-          : DEFAULT_SCORE_LOWER_BOUNDS
+        storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
       )
       newUpperBounds = parseFloat(
-        storage && storage.scoreIconLowerBounds !== undefined
-          ? storage.scoreIconUpperBounds
-          : DEFAULT_SCORE_UPPER_BOUNDS
+        storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
       )
       throw Error('Upper score cannot be lower than lower bounds')
     }
     if (newUpperBounds < -10000) {
       newLowerBounds = parseFloat(
-        storage && storage.scoreIconLowerBounds !== undefined
-          ? storage.scoreIconLowerBounds
-          : DEFAULT_SCORE_LOWER_BOUNDS
+        storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
       )
       throw Error('Wrong score lower bounds')
     }
     if (newUpperBounds > 10000) {
       newUpperBounds = parseFloat(
-        storage && storage.scoreIconLowerBounds !== undefined
-          ? storage.scoreIconUpperBounds
-          : DEFAULT_SCORE_UPPER_BOUNDS
+        storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
       )
       throw Error('Wrong score upper bounds')
     }
     hideIconScorePositive = checkboxIconScorePositive.checked
     hideIconScoreNeutral = checkboxIconScoreNeutral.checked
     hideIconScoreNegative = checkboxIconScoreNegative.checked
-    browser.storage.local.set({
+    localStorage.set({
       scoreIconLowerBounds: newLowerBounds,
       scoreIconUpperBounds: newUpperBounds,
       hideIconScorePositive: hideIconScorePositive,

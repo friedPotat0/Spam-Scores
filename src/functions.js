@@ -17,18 +17,18 @@ import {
  */
 export function getBounds(storage) {
   const lowerBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
+    storage.scoreIconLowerBounds !== undefined ? storage.scoreIconLowerBounds : DEFAULT_SCORE_LOWER_BOUNDS
   )
   const upperBounds = parseFloat(
-    storage && storage.scoreIconLowerBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
+    storage.scoreIconUpperBounds !== undefined ? storage.scoreIconUpperBounds : DEFAULT_SCORE_UPPER_BOUNDS
   )
   return [lowerBounds, upperBounds]
 }
 
 /**
- * 
- * @param {string} headername 
- * @param {string} score 
+ *
+ * @param {string} headername
+ * @param {string} score
  * @returns {string} Interpolated Score | Score
  */
 export function scoreInterpolation(headername, score) {

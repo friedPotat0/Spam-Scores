@@ -92,9 +92,8 @@ async function onMessageDisplayed(tab, message) {
       // Note: The header is always lowercase in messages.getFull
       const storage = await localStorage.get(['customMailscannerHeaders'])
       if (
-        storage &&
-        (!storage.customMailscannerHeaders ||
-          (storage.customMailscannerHeaders && storage.customMailscannerHeaders.indexOf(headerName) === -1))
+        !storage.customMailscannerHeaders ||
+        (storage.customMailscannerHeaders && storage.customMailscannerHeaders.indexOf(headerName) === -1)
       ) {
         localStorage.set({
           customMailscannerHeaders: [...(storage.customMailscannerHeaders || []), headerName]
@@ -116,21 +115,19 @@ const init = async () => {
     'customMailscannerHeaders',
     'hideIconScorePositive',
     'hideIconScoreNeutral',
-    'hideIconScoreNegative'
+    'hideIconScoreNegative',
+    'hello'
   ])
 
-  // Get Hello Flag
-  const helloFlag = await localStorage.get(['spamscores.hello'])
-
   // Hello Message
-  if (emptyObject(helloFlag)) {
+  if (!storage.hello) {
     messenger.windows.create({
       height: 680,
       width: 488,
       url: '/src/static/hello.html',
       type: 'popup'
     })
-    localStorage.set({ 'spamscores.hello': true })
+    localStorage.set({ hello: true })
   }
 
   // Add Listeners
@@ -141,20 +138,13 @@ const init = async () => {
   const [lowerBounds, upperBounds] = getBounds(storage)
   spamScores.setScoreBounds(lowerBounds, upperBounds)
 
-  if (storage) {
-    if (storage.customMailscannerHeaders) {
-      spamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
-    }
-    spamScores.setHideIconScoreOptions(
-      storage.hideIconScorePositive || false,
-      storage.hideIconScoreNeutral || false,
-      storage.hideIconScoreNegative || false
-    )
+  if (storage.customMailscannerHeaders) {
+    spamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
   }
+  spamScores.setHideIconScoreOptions(
+    storage.hideIconScorePositive || false,
+    storage.hideIconScoreNeutral || false,
+    storage.hideIconScoreNegative || false
+  )
 }
 init()
-
-function emptyObject(object) {
-  for (const key in object) return false
-  return true
-}
