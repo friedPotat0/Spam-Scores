@@ -4,10 +4,10 @@ function log(msg, line = '?') {
   Services.wm.getMostRecentWindow('mail:3pane').alert('[Line ' + line + '] :' + msg)
 }
 /** @type {DestructuredExtensionSupport} */
-const { ExtensionSupport } = ChromeUtils.import('resource:///modules/ExtensionSupport.jsm')
+const { ExtensionSupport } = Cu.import('resource:///modules/ExtensionSupport.jsm')
 
 /** @type {DestructuredExtensionParent} */
-const { ExtensionParent } = ChromeUtils.import('resource://gre/modules/ExtensionParent.jsm')
+const { ExtensionParent } = Cu.import('resource://gre/modules/ExtensionParent.jsm')
 
 const EXTENSION_NAME = 'spamscores@czaenker'
 const extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
