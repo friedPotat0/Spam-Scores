@@ -70,14 +70,16 @@ class ColumnHandler {
       // return scoreInterpolation(regExName, scoreField[1])
     }
 
-    for (const headerName of this.customMailscannerHeaders) {
-      for (const regExName in CUSTOM_SCORE_REGEX) {
-        if (headerName.endsWith(regExName)) {
-          const headerValue = hdr.getStringProperty(headerName)
-          const scoreField = headerValue.match(CUSTOM_SCORE_REGEX[regExName])
-          if (!scoreField) continue // If no match iterate
-          const score = parseFloat(scoreField[1])
-          if (!isNaN(score)) return score
+    if (this.customMailscannerHeaders) {
+      for (const headerName of this.customMailscannerHeaders) {
+        for (const regExName in CUSTOM_SCORE_REGEX) {
+          if (headerName.endsWith(regExName)) {
+            const headerValue = hdr.getStringProperty(headerName)
+            const scoreField = headerValue.match(CUSTOM_SCORE_REGEX[regExName])
+            if (!scoreField) continue // If no match iterate
+            const score = parseFloat(scoreField[1])
+            if (!isNaN(score)) return score
+          }
         }
       }
     }
@@ -125,28 +127,25 @@ class ColumnOverlay {
     this.columnHandler = new ColumnHandler(this.gDBView, params)
   }
 
-  /**
-   *
-   * @returns
-   */
   addColumn() {
+    const columnId = this.columnId
     const doc = this.document
     if (doc.getElementById(this.columnId)) return
-
     const treeCol = doc.createXULElement('treecol')
-    treeCol.setAttribute('id', this.columnId)
+    const threadCols = doc.getElementById('threadCols')
+
+    treeCol.setAttribute('id', columnId)
     treeCol.setAttribute('persist', 'hidden ordinal sortDirection width')
     treeCol.setAttribute('flex', '2')
     treeCol.setAttribute('closemenu', 'none')
-
     treeCol.setAttribute('label', 'Spam score')
     treeCol.setAttribute('tooltiptext', 'Sort by spam score')
 
-    const threadCols = doc.getElementById('threadCols')
     threadCols.appendChild(treeCol)
-    let attributes = Services.xulStore.getAttributeEnumerator(doc.URL, this.columnId)
+
+    const attributes = Services.xulStore.getAttributeEnumerator(doc.URL, columnId)
     for (const attribute of attributes) {
-      const value = Services.xulStore.getValue(doc.URL, this.columnId, attribute)
+      const value = Services.xulStore.getValue(doc.URL, columnId, attribute)
       if (attribute != 'ordinal' || parseInt(AppConstants.MOZ_APP_VERSION, 10) < 74) {
         treeCol.setAttribute(attribute, value)
       } else {
@@ -169,36 +168,39 @@ class ColumnOverlay {
     const treeCol = this.document.getElementById(this.columnId)
     if (!treeCol) return
     treeCol.remove()
-    Services.obs.removeObserver(this, 'MsgCreateDBView')
-  }
-
-  destroy() {
-    this.destroyColumn()
-  }
-}
-
-class SpamScores_ScoreHdrViewColumn {
-  /**
-   *
-   * @param {*} win
-   * @param {*} params
-   */
-  init(gDBView, doc, params) {
-    this.columnOverlay = new ColumnOverlay(gDBView, doc, params)
-    if (gDBView && doc.documentElement.getAttribute('windowtype') == 'mail:3pane') {
-      Services.obs.notifyObservers(null, 'MsgCreateDBView')
+    try {
+      Services.obs.removeObserver(this, 'MsgCreateDBView')
+    } catch (error) {
+      if (error.name === 'NS_ERROR_ILLEGAL_VALUE') {
+        console.log('This only happens when you reload the addon if a mail folder it is activated')
+      } else {
+        console.error(error)
+      }
     }
   }
+}
 
-  /**
-   *
-   */
-  destroy() {
-    this.columnOverlay.destroy()
+let columnOverlay
+
+/**
+ * TODO: When is not mail:3pane?
+ * @param {*} gDBView 
+ * @param {*} doc 
+ * @param {*} params 
+ */
+function init(gDBView, doc, params) {
+  if (gDBView && doc.documentElement.getAttribute('windowtype') == 'mail:3pane') {
+    this.columnOverlay = new ColumnOverlay(gDBView, doc, params)
+    Services.obs.notifyObservers(null, 'MsgCreateDBView')
   }
 }
-// dlh2 TODO: Hm... I suppose this one is special
-var SpamScores_ScoreHdrView = new SpamScores_ScoreHdrViewColumn()
+
+function destroy() {
+  if (this.columnOverlay) {
+    this.columnOverlay.destroyColumn()
+    this.columnOverlay = undefined
+  }
+}
 const styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
   Components.interfaces.nsIStyleSheetService
 )

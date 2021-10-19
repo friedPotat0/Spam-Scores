@@ -3,19 +3,6 @@
     "namespace": "SpamScores",
     "functions": [
       {
-        "name": "addWindowListener",
-        "type": "function",
-        "description": "",
-        "async": false,
-        "parameters": [
-          {
-            "name": "none",
-            "type": "string",
-            "description": "none"
-          }
-        ]
-      },
-      {
         "name": "setScoreBounds",
         "type": "function",
         "description": "",
@@ -65,6 +52,25 @@
             }
           }
         ]
+      },
+      {
+        "name": "repaint",
+        "type": "function",
+        "description": "",
+        "async": false,
+        "parameters": [
+          {
+            "name": "windowId",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "name": "clear",
+        "type": "function",
+        "description": "",
+        "async": false,
+        "parameters": []
       }
     ]
   }

@@ -20,7 +20,7 @@
   "background": {
     "page": "src/background/background.html"
   },
-  "permissions": ["messagesRead", "storage"],
+  "permissions": ["messagesRead", "accountsRead", "storage"],
   "experiment_apis": {
     "SpamScores": {
       "schema": "schema.json",

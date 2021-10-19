@@ -4,19 +4,6 @@
 
 // https://firefox-source-docs.mozilla.org/toolkit/components/extensions/webextensions/basics.html#globals-available-in-the-api-scripts-global
 
-// Extension Support
-
-/**
- * @typedef {object} DestructuredExtensionSupport
- * @property {ExtensionSupport} ExtensionSupport
- */
-
-/**
- * Extensions, so many yet no actual documentation.
- * @typedef {object} ExtensionSupport
- * @property {object} registerWindowListener
- * @property {object} unregisterWindowListener
- */
 
 /**
  * Getting AppConstants

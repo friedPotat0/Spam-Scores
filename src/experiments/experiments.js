@@ -2,12 +2,6 @@
 const EXTENSION_NAME = 'spamscores@czaenker'
 const extension = WebExtensionPolicy.getByID(EXTENSION_NAME).extension
 
-/**
- * This is going to be deprecated anytime.
- * @type {DestructuredExtensionSupport}
- */
-const { ExtensionSupport } = Cu.import('resource:///modules/ExtensionSupport.jsm')
-
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
 let scoreHdrViewParams = {
@@ -16,7 +10,21 @@ let scoreHdrViewParams = {
 }
 
 /**
- * Do not change var
+ * For debugging Experiments.js, press CTRL + SHIFT + U/I
+ */
+
+const experiments = {
+  hdrView: {}
+}
+// Then Load the Custom Script into it
+// https://developer.thunderbird.net/add-ons/mailextensions/experiments#structuring-experiment-code
+Services.scriptloader.loadSubScript(
+  extension.rootURI.resolve('src/experiments/custom_score_column.js'),
+  experiments.hdrView
+)
+
+/**
+ * Do not change var because it's a Global Class
  * https://webextension-api.thunderbird.net/en/91/how-to/experiments.html#implementing-functions
  */
 var SpamScores = class extends ExtensionAPI {
@@ -57,13 +65,6 @@ var SpamScores = class extends ExtensionAPI {
     // All functions should be added in schema.json
     return {
       SpamScores: {
-        addWindowListener(dummy) {
-          ExtensionSupport.registerWindowListener(EXTENSION_NAME, {
-            chromeURLs: ['chrome://messenger/content/messenger.xul', 'chrome://messenger/content/messenger.xhtml'],
-            onLoadWindow: paint,
-            onUnloadWindow: unpaint
-          })
-        },
         setScoreBounds(lower, upper) {
           scoreHdrViewParams.lowerScoreBounds = lower
           scoreHdrViewParams.upperScoreBounds = upper
@@ -75,17 +76,21 @@ var SpamScores = class extends ExtensionAPI {
         },
         setCustomMailscannerHeaders(customMailscannerHeaders) {
           scoreHdrViewParams.customMailscannerHeaders = customMailscannerHeaders
+        },
+        repaint(windowId) {
+          // Get a real window from a window ID:
+          const windowObject = context.extension.windowManager.get(windowId)
+          unpaint()
+          paint(windowObject.window)
+        },
+        clear() {
+          unpaint()
         }
       }
     }
   }
 
-  close() {
-    ExtensionSupport.unregisterWindowListener(EXTENSION_NAME)
-    for (const win of Services.wm.getEnumerator('mail:3pane')) {
-      unpaint(win)
-    }
-  }
+  close() {}
 }
 
 /**
@@ -93,28 +98,15 @@ var SpamScores = class extends ExtensionAPI {
  * @param {Window} win Literally Window
  */
 function paint(win) {
-  // Basically we create a object of SpamScores
-  win.SpamScores = {}
-  // Then Load the Custom Script into it
-  // https://developer.thunderbird.net/add-ons/mailextensions/experiments#structuring-experiment-code
-  Services.scriptloader.loadSubScript(
-    extension.rootURI.resolve('src/experiments/custom_score_column.js'),
-    win.SpamScores
-  )
-  // So we can save it and destroy it in unpaint?
-  win.SpamScores.SpamScores_ScoreHdrView.init(win.gDBView, win.document, scoreHdrViewParams)
+  experiments.hdrView.init(win.gDBView, win.document, scoreHdrViewParams)
 }
 
 /**
  * Unpaint
  * @param {Window} win
  */
-function unpaint(win) {
-  win.SpamScores.SpamScores_ScoreHdrView.destroy()
-  delete win.SpamScores
-}
-
-// Logger
-function log(msg, line = '?') {
-  Services.wm.getMostRecentWindow('mail:3pane').alert('[Line ' + line + '] :' + msg)
+function unpaint() {
+  if (experiments.hdrView) {
+    experiments.hdrView.destroy()
+  }
 }

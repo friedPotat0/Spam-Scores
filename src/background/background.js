@@ -100,6 +100,22 @@ async function onMessageDisplayed(tab, message) {
 }
 
 /**
+ * 
+ * @param {*} tab 
+ * @param {*} displayedFolder 
+ */
+async function onDisplayedFolderChanged(tab, displayedFolder) {
+  const spamScores = messenger.SpamScores
+  // Do not try to use addon on Root
+  if (displayedFolder.path !== '/') {
+    const win = await messenger.windows.getCurrent()
+    spamScores.repaint(win.id)
+  } else {
+    // Cleans in case we go to root
+    spamScores.clear()
+  }
+}
+/**
  * Main
  */
 const init = async () => {
@@ -127,8 +143,8 @@ const init = async () => {
   }
 
   // Add Listeners
-  spamScores.addWindowListener('none')
   messenger.messageDisplay.onMessageDisplayed.addListener(onMessageDisplayed)
+  messenger.mailTabs.onDisplayedFolderChanged.addListener(onDisplayedFolderChanged)
 
   // Init Data
   const [lowerBounds, upperBounds] = getBounds(storage)
