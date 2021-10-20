@@ -21,7 +21,7 @@ const SCORE_REGEX = {
 }
 
 /**
- * We can't use log in this class, because it executes as a thread on each message
+ * nsIMsgCustomColumnHandler
  * https://web.archive.org/web/20191010075908/https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Thunderbird_extensions/Creating_a_Custom_Column
  */
 class ColumnHandler {
@@ -33,23 +33,7 @@ class ColumnHandler {
     this.hideIconScoreNeutral = params.hideIconScoreNeutral || false
     this.hideIconScoreNegative = params.hideIconScoreNegative || false
     this.customMailscannerHeaders = params.customMailscannerHeaders
-  }
-
-  getCellProperties(row, col, props) {
-    const score = this.getScore(this.gDBView.getMsgHdrAt(row))
-    if (score === null) return null
-    if (score > this.upperScoreBounds) {
-      if (this.hideIconScorePositive) return null
-      return 'positive'
-    }
-    if (score <= this.upperScoreBounds && score >= this.lowerScoreBounds) {
-      if (this.hideIconScoreNeutral) return null
-      return 'neutral'
-    }
-    if (score < this.lowerScoreBounds) {
-      if (this.hideIconScoreNegative) return null
-      return 'negative'
-    }
+    this.scores = {}
   }
 
   /**
@@ -85,8 +69,42 @@ class ColumnHandler {
     }
     return null
   }
-  getCellText(row, col) {
+
+  /**
+   * dlh2: Called First on Load Cell
+   * The image path for a given cell.
+   * @param {Number} row The index of the row.
+   * @param {nsITreeColumn} col The index of the column.
+   * @returns {string} The image path of the cell.
+   */
+  getImageSrc(row, col) {
     const score = this.getScore(this.gDBView.getMsgHdrAt(row))
+    // Save it so getCellText doesn't need to recalculate
+    this.scores[row] = score
+    if (score === null) return null
+    if (score > this.upperScoreBounds) {
+      if (this.hideIconScorePositive) return null
+      return extension.getURL('images/score_positive.png')
+    }
+    if (score <= this.upperScoreBounds && score >= this.lowerScoreBounds) {
+      if (this.hideIconScoreNeutral) return null
+      return extension.getURL('images/score_neutral.png')
+    }
+    if (score < this.lowerScoreBounds) {
+      if (this.hideIconScoreNegative) return null
+      return extension.getURL('images/score_negative.png')
+    }
+  }
+
+  /**
+   * dlh2: Called Second on Load Cell
+   * The text for a given cell. If a column consists only of an image, then the empty string is returned.
+   * @param {Number} row The index of the row.
+   * @param {nsITreeColumn} col The column of the cell. (Note that this is not the column index.)
+   * @returns {string} The text of the cell.
+   */
+  getCellText(row, col) {
+    const score = this.scores[row] 
     if (score === null) return null
     if (score > this.upperScoreBounds && this.hideIconScorePositive) return null
     if (score <= this.upperScoreBounds && score >= this.lowerScoreBounds && this.hideIconScoreNeutral) return null
@@ -94,28 +112,30 @@ class ColumnHandler {
     return ' ' + score
   }
 
-  getSortStringForRow(hdr) {
-    return this.getScore(hdr)
+  /**
+   * dlh2: Called First on Load Column on each Cell if the column its "Sort Activated"
+   * If the column displays a number, this will return the number that the column should be sorted by.
+   * @param {nsIMsgDBHdr} hdr
+   * @returns {Number} The value that sorting will be done with.
+   */
+  getSortLongForRow(hdr) {
+    const score = this.getScore(hdr)
+    // Mail without spam score should be put down
+    if (score === null) return 0
+    // The reason behind this is that the sorting doesn't take into account
+    // negative numbers and decimals
+    return score * 1e4 + 1e8
   }
 
   /**
-   * 
-   * @param {*} hdr 
-   * @returns 
+   * This affects whether getSortStringForRow or getSortLongForRow is used
+   * to determine the sort key for the column. It does not affect whether
+   * getCellText vs. getImageSrc is used to determine what to display.
+   * @returns true if the column displays a string value. false otherwise.
    */
-  getSortLongForRow(hdr) {
-    let score = this.getScore(hdr)
-    // What is this for?
-    if (score === null) return 999999
-    return this.getScore(hdr) * 1e4 + 1e8
-  }
-
-  // My Little Graveyard
   isString() {
     return false
   }
-  getRowProperties(row, props) {}
-  getImageSrc(row, col) {}
 }
 
 class ColumnOverlay {
@@ -128,6 +148,7 @@ class ColumnOverlay {
   }
 
   addColumn() {
+    console.log('hi')
     const columnId = this.columnId
     const doc = this.document
     if (doc.getElementById(this.columnId)) return
@@ -140,6 +161,8 @@ class ColumnOverlay {
     treeCol.setAttribute('closemenu', 'none')
     treeCol.setAttribute('label', 'Spam score')
     treeCol.setAttribute('tooltiptext', 'Sort by spam score')
+    // Recommended Width
+    treeCol.setAttribute('width', '82')
 
     threadCols.appendChild(treeCol)
 
@@ -184,9 +207,9 @@ let columnOverlay
 
 /**
  * TODO: When is not mail:3pane?
- * @param {*} gDBView 
- * @param {*} doc 
- * @param {*} params 
+ * @param {*} gDBView
+ * @param {*} doc
+ * @param {*} params
  */
 function init(gDBView, doc, params) {
   if (gDBView && doc.documentElement.getAttribute('windowtype') == 'mail:3pane') {
@@ -201,8 +224,3 @@ function destroy() {
     this.columnOverlay = undefined
   }
 }
-const styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
-  Components.interfaces.nsIStyleSheetService
-)
-const uri = Services.io.newURI(extension.getURL('src/experiments/custom_score_column.css'), null, null)
-styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET)

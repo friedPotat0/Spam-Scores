@@ -40,5 +40,10 @@
     "page": "src/options/options.html",
     "open_in_tab": false,
     "browser_style": true
-  }
+  },
+  "web_accesible_resources":[
+    "images/score_neutral.png",
+    "images/score_positive.png",
+    "images/score_negative.png"
+  ]
 }
