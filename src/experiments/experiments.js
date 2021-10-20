@@ -116,7 +116,9 @@ function unpaint() {
 
 /**
  * This is what it lets nsIMsgDBHdr have the properties of the headers
- * 
+ * http://kb.mozillazine.org/Mail_and_news_settings // 2019
+ * http://udn.realityripple.com/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
+ * https://searchfox.org/comm-central/source/mailnews/mailnews.js // 2021
  * Requeriments: Repair Folders then Restart
  * @param {string[]} dynamicHeaders
  */
@@ -133,7 +135,15 @@ function updatePrefs(dynamicHeaders = []) {
   ]
   const headers = [...staticHeaders, ...dynamicHeaders]
   const customDBHeaders = headers.join(' ').trim()
+  const customHeaders = headers.join(': ').trim()
   mailnews.setCharPref('.customDBHeaders', customDBHeaders)
-  const customHeaders = headers.join(': ').trim() + ':'
   mailnews.setCharPref('.customHeaders', customHeaders)
+
+  /**
+   * PREF_INVALID	0	long
+   * PREF_STRING	32	long data type.
+   * PREF_INT	64	long data type.
+   * PREF_BOOL	128	long data type.
+   */
+  // console.log(mailnews.getPrefType('.customDBHeaders'))
 }
