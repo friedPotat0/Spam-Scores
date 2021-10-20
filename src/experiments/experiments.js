@@ -32,7 +32,9 @@ var SpamScores = class extends ExtensionAPI {
    * Called on Startup
    * dlh2 - When reloading it also happens
    */
-  onStartup() {}
+  onStartup() {
+    updatePrefs()
+  }
 
   /**
    * This function is called if the extension is disabled or removed, or Thunderbird closes.
@@ -77,6 +79,9 @@ var SpamScores = class extends ExtensionAPI {
         setCustomMailscannerHeaders(customMailscannerHeaders) {
           scoreHdrViewParams.customMailscannerHeaders = customMailscannerHeaders
         },
+        addDynamicCustomHeaders(dynamicHeaders) {
+          updatePrefs(dynamicHeaders)
+        },
         repaint(windowId) {
           // Get a real window from a window ID:
           const windowObject = context.extension.windowManager.get(windowId)
@@ -107,4 +112,28 @@ function paint(win) {
  */
 function unpaint() {
   if (experiments.hdrView) experiments.hdrView.destroy()
+}
+
+/**
+ * This is what it lets nsIMsgDBHdr have the properties of the headers
+ * 
+ * Requeriments: Repair Folders then Restart
+ * @param {string[]} dynamicHeaders
+ */
+function updatePrefs(dynamicHeaders = []) {
+  const mailnews = Services.prefs.getBranch('mailnews')
+  // Copy of constants.js until ES6
+  const staticHeaders = [
+    'x-spam-score',
+    'x-rspamd-score',
+    'x-vr-spamscore',
+    'x-spamd-result',
+    'x-spam-status',
+    'x-spam-report'
+  ]
+  const headers = [...staticHeaders, ...dynamicHeaders]
+  const customDBHeaders = headers.join(' ').trim()
+  mailnews.setCharPref('customDBHeaders', customDBHeaders)
+  const customHeaders = headers.join(': ').trim() + ':'
+  mailnews.setCharPref('customHeaders', customHeaders)
 }

@@ -54,6 +54,21 @@
         ]
       },
       {
+        "name": "addDynamicCustomHeaders",
+        "type": "function",
+        "description": "",
+        "async": true,
+        "parameters": [
+          {
+            "name": "dynamicHeaders",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      {
         "name": "repaint",
         "type": "function",
         "description": "",

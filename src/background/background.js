@@ -83,7 +83,7 @@ async function onMessageDisplayed(tab, message) {
     messageButton.setIcon({ path: await getImageSrc(score) })
   }
 
-  // Save Custom Name Header for... something of the Dynamic custom headers. dlh2 TODO: I'll try to understand it later.
+  // Save Custom Name Header for... something of the Dynamic custom headers.
   for (const regExName in CUSTOM_SCORE_REGEX) {
     const headersFound = Object.entries(fullMessage.headers).filter(([key, value]) => key.endsWith(regExName))
     // I think we need to deal it in another way, it could be that there's other emails that could end the same way.
@@ -93,6 +93,8 @@ async function onMessageDisplayed(tab, message) {
       const storage = await localStorage.get(['customMailscannerHeaders'])
       const customHeaders = storage.customMailscannerHeaders
       if (!customHeaders || (customHeaders && !customHeaders.includes(headerName))) {
+        // This thing is what it makes us restart Thunderbird & Repair Folder
+        await messenger.SpamScores.addDynamicCustomHeaders([headerName])
         localStorage.set({ customMailscannerHeaders: [...(customHeaders || []), headerName] })
       }
     }
