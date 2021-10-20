@@ -133,7 +133,7 @@ function updatePrefs(dynamicHeaders = []) {
   ]
   const headers = [...staticHeaders, ...dynamicHeaders]
   const customDBHeaders = headers.join(' ').trim()
-  mailnews.setCharPref('customDBHeaders', customDBHeaders)
+  mailnews.setCharPref('.customDBHeaders', customDBHeaders)
   const customHeaders = headers.join(': ').trim() + ':'
-  mailnews.setCharPref('customHeaders', customHeaders)
+  mailnews.setCharPref('.customHeaders', customHeaders)
 }
