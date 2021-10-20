@@ -106,7 +106,5 @@ function paint(win) {
  * @param {Window} win
  */
 function unpaint() {
-  if (experiments.hdrView) {
-    experiments.hdrView.destroy()
-  }
+  if (experiments.hdrView) experiments.hdrView.destroy()
 }

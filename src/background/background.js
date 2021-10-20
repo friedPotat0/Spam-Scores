@@ -100,9 +100,9 @@ async function onMessageDisplayed(tab, message) {
 }
 
 /**
- * 
- * @param {*} tab 
- * @param {*} displayedFolder 
+ * Fired when the displayed folder changes in any mail tab.
+ * @param {Tab} tab
+ * @param {MailFolder} displayedFolder
  */
 async function onDisplayedFolderChanged(tab, displayedFolder) {
   const spamScores = messenger.SpamScores

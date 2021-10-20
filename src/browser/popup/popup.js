@@ -20,31 +20,24 @@ messenger.tabs
         }
         let scoreDetailElements =
           '<table class="score-details"><tr><th>Score</th><th>Name</th><th>Description</th></tr>'
-        for (let groupType of ['positive', 'negative', 'neutral']) {
-          scoreDetailElements += `
-          ${groupedDetailScores[groupType]
+        for (const groupType of ['positive', 'negative', 'neutral']) {
+          scoreDetailElements += groupedDetailScores[groupType]
             .map(el => {
               const symbol = SCORE_SYMBOLS.find(sym => sym.name === el.name)
-              let element = `<tr class="score ${groupType}">`
-              element += `<td><span>${el.score}</span></td>`
-              element += `<td><span>${el.name || '-'}</span></td>`
-              element += `<td><span>${
-                symbol || el.description
-                  ? `${symbol ? symbol.description : el.description}${
-                      el.info ? ` <div class="info">[${el.info}]</div>` : ''
-                    }`
-                  : ''
-              }</span></td>`
-              element += '</tr>'
+              let element = '<tr class="score ' + groupType + '">'
+              element += '<td><span>' + el.score + '</span></td>'
+              element += '<td><span>' + (el.name || '-') + '</span></td>' + '<td><span>'
+              if (symbol || el.description) {
+                element += symbol ? symbol.description : el.description
+                if (el.info) element += ' <div class="info">[' + el.info + ']</div>'
+              }
+              element += '</span></td>' + '</tr>'
               return element
             })
-            .join('')}
-        `
+            .join('')
         }
         scoreDetailElements += '</table>'
-        document.body.innerHTML = `
-        ${scoreDetailElements}
-      `
+        document.body.innerHTML = scoreDetailElements
       } else {
         document.body.innerHTML = '<h5>No details available</h5>'
       }
@@ -59,6 +52,7 @@ messenger.tabs
 async function getParsedDetailScores(headers) {
   const storage = await messenger.storage.local.get(['customMailscannerHeaders'])
   const customHeaders = Object.values(storage).map(value => value[0])
+  /** @type {parsedDetailScores[]} */
   let parsedDetailScores = []
   for (const headerName in headers) {
     if (SCORE_DETAILS_ARRAY.includes(headerName) || customHeaders.includes(headerName)) {
@@ -105,7 +99,7 @@ async function getParsedDetailScores(headers) {
 
 /**
  * Trims then replaces Groups of Doubles whitespaces to one whitespace
- * @param {string} result 
+ * @param {string} result
  * @returns {string}
  */
 function sanitizeRegexResult(result) {

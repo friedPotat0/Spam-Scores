@@ -9,22 +9,28 @@ const checkboxIconScorePositive = document.getElementById('hide-icon-score-posit
 const checkboxIconScoreNeutral = document.getElementById('hide-icon-score-neutral')
 const checkboxIconScoreNegative = document.getElementById('hide-icon-score-negative')
 
+// Translations
+const i18n = messenger.i18n
+for (const i18nKey of ['optionsIconRanges', 'optionsScoreGreater', 'optionsScoreLess']) {
+  document.querySelector('*[data-i18n="' + i18nKey + '"]').textContent = i18n.getMessage(i18nKey)
+}
+document
+  .querySelectorAll('*[data-i18n="optionsHideIconAndScore"]')
+  .forEach(el => (el.textContent = i18n.getMessage('optionsHideIconAndScore')))
+
+// DOM Events
+
+/**
+ * TODO: [General] For every event from one input, it gets all data from the others,
+ * which is not optimized
+ */
+inputScoreBoundsLower.addEventListener('change', save)
+inputScoreBoundsUpper.addEventListener('change', save)
+checkboxIconScorePositive.addEventListener('change', save)
+checkboxIconScoreNeutral.addEventListener('change', save)
+checkboxIconScoreNegative.addEventListener('change', save)
+
 async function init() {
-  // Preparations
-  initTranslations()
-
-  // DOM Events
-
-  /**
-   * TODO: [General] For every event from one input, it gets all data from the others,
-   * which is not optimized
-   */
-  inputScoreBoundsLower.addEventListener('change', save)
-  inputScoreBoundsUpper.addEventListener('change', save)
-  checkboxIconScorePositive.addEventListener('change', save)
-  checkboxIconScoreNeutral.addEventListener('change', save)
-  checkboxIconScoreNegative.addEventListener('change', save)
-
   // Load Values from Storage
   const storage = await messenger.storage.local.get([
     'scoreIconLowerBounds',
@@ -97,7 +103,10 @@ async function save() {
   // This way the value is a number
   inputScoreBoundsLower.value = newLowerBounds
   inputScoreBoundsUpper.value = newUpperBounds
-  inputScoreBoundsBetween.textContent = messenger.i18n.getMessage('optionsScoreBetween', [newLowerBounds, newUpperBounds])
+  inputScoreBoundsBetween.textContent = messenger.i18n.getMessage('optionsScoreBetween', [
+    newLowerBounds,
+    newUpperBounds
+  ])
   ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(newLowerBounds, newUpperBounds)
   ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setHideIconScoreOptions(
     hideIconScorePositive,
@@ -111,18 +120,4 @@ async function save() {
     hideIconScoreNeutral,
     hideIconScoreNegative
   })
-}
-
-function initTranslations() {
-  const i18n = messenger.i18n
-  document.querySelector('*[data-i18n="optionsIconRanges"]').textContent = i18n.getMessage('optionsIconRanges')
-  document.querySelector('*[data-i18n="optionsScoreGreater"]').textContent = i18n.getMessage('optionsScoreGreater')
-  document.querySelector('*[data-i18n="optionsScoreBetween"]').textContent = i18n.getMessage('optionsScoreBetween', [
-    DEFAULT_SCORE_LOWER_BOUNDS,
-    DEFAULT_SCORE_UPPER_BOUNDS
-  ])
-  document.querySelector('*[data-i18n="optionsScoreLess"]').textContent = i18n.getMessage('optionsScoreLess')
-  document
-    .querySelectorAll('*[data-i18n="optionsHideIconAndScore"]')
-    .forEach(el => (el.textContent = i18n.getMessage('optionsHideIconAndScore')))
 }

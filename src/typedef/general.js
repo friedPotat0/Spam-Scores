@@ -224,3 +224,11 @@ const messenger = {
  * @property {string} info
  * @property {string} [description]
  */
+
+/**
+ * An object describing a mail folder.
+ * https://webextension-api.thunderbird.net/en/91/folders.html#folders-mailfolder
+ * dlh2: Is not complete
+ * @typedef {object} MailFolder
+ * @property {string} path Path to this folder in the account. Although paths look predictable, never guess a folder’s path, as there are a number of reasons why it may not be what you think it is.
+ */

@@ -40,8 +40,9 @@ class ColumnHandler {
    * From what I understand, getScore executes when Thunderbird loads the Add-on
    *
    * - This part gets the score that is shown in Column SpamScores
-   * @param {*} hdr Probably Headers? https://web.archive.org/web/20210601181130/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIMsgDBHdr
-   *
+   * https://web.archive.org/web/20210601181130/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIMsgDBHdr
+   * @param {nsIMsgDBHdr} hdr Probably Headers?
+   * @returns {number|null} Score value
    */
   getScore(hdr) {
     for (const regExName in SCORE_REGEX) {
@@ -75,7 +76,7 @@ class ColumnHandler {
    * The image path for a given cell.
    * @param {Number} row The index of the row.
    * @param {nsITreeColumn} col The index of the column.
-   * @returns {string} The image path of the cell.
+   * @returns {string|null} The image path of the cell.
    */
   getImageSrc(row, col) {
     const score = this.getScore(this.gDBView.getMsgHdrAt(row))
@@ -104,7 +105,7 @@ class ColumnHandler {
    * @returns {string} The text of the cell.
    */
   getCellText(row, col) {
-    const score = this.scores[row] 
+    const score = this.scores[row]
     if (score === null) return null
     if (score > this.upperScoreBounds && this.hideIconScorePositive) return null
     if (score <= this.upperScoreBounds && score >= this.lowerScoreBounds && this.hideIconScoreNeutral) return null
@@ -131,7 +132,7 @@ class ColumnHandler {
    * This affects whether getSortStringForRow or getSortLongForRow is used
    * to determine the sort key for the column. It does not affect whether
    * getCellText vs. getImageSrc is used to determine what to display.
-   * @returns true if the column displays a string value. false otherwise.
+   * @returns {boolean} true if the column displays a string value. false otherwise.
    */
   isString() {
     return false
