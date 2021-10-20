@@ -149,7 +149,6 @@ class ColumnOverlay {
   }
 
   addColumn() {
-    console.log('hi')
     const columnId = this.columnId
     const doc = this.document
     if (doc.getElementById(this.columnId)) return

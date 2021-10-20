@@ -1,6 +1,10 @@
 import { DEFAULT_SCORE_LOWER_BOUNDS, DEFAULT_SCORE_UPPER_BOUNDS } from '../constants.js'
 import { getBounds } from '../functions.js'
 
+// Variables
+const localStorage = messenger.storage.local
+const i18n = messenger.i18n
+
 // DOM Variables
 const inputScoreBoundsLower = document.getElementById('score-bounds-lower')
 const inputScoreBoundsUpper = document.getElementById('score-bounds-upper')
@@ -10,7 +14,6 @@ const checkboxIconScoreNeutral = document.getElementById('hide-icon-score-neutra
 const checkboxIconScoreNegative = document.getElementById('hide-icon-score-negative')
 
 // Translations
-const i18n = messenger.i18n
 for (const i18nKey of ['optionsIconRanges', 'optionsScoreGreater', 'optionsScoreLess']) {
   document.querySelector('*[data-i18n="' + i18nKey + '"]').textContent = i18n.getMessage(i18nKey)
 }
@@ -19,20 +22,15 @@ document
   .forEach(el => (el.textContent = i18n.getMessage('optionsHideIconAndScore')))
 
 // DOM Events
-
-/**
- * TODO: [General] For every event from one input, it gets all data from the others,
- * which is not optimized
- */
-inputScoreBoundsLower.addEventListener('change', save)
-inputScoreBoundsUpper.addEventListener('change', save)
-checkboxIconScorePositive.addEventListener('change', save)
-checkboxIconScoreNeutral.addEventListener('change', save)
-checkboxIconScoreNegative.addEventListener('change', save)
+inputScoreBoundsLower.addEventListener('change', saveScoreLower)
+inputScoreBoundsUpper.addEventListener('change', saveScoreUpper)
+checkboxIconScorePositive.addEventListener('change', saveIconPositive)
+checkboxIconScoreNeutral.addEventListener('change', saveIconNeutral)
+checkboxIconScoreNegative.addEventListener('change', saveIconNegative)
 
 async function init() {
   // Load Values from Storage
-  const storage = await messenger.storage.local.get([
+  const storage = await localStorage.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
     'hideIconScorePositive',
@@ -45,8 +43,8 @@ async function init() {
   // Set Values
   inputScoreBoundsLower.value = lowerBounds
   inputScoreBoundsUpper.value = upperBounds
-  inputScoreBoundsBetween.textContent = messenger.i18n.getMessage('optionsScoreBetween', [lowerBounds, upperBounds])
-  ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(lowerBounds, upperBounds)
+  inputScoreBoundsBetween.textContent = i18n.getMessage('optionsScoreBetween', [lowerBounds, upperBounds])
+  messenger.SpamScores.setScoreBounds(lowerBounds, upperBounds)
 
   checkboxIconScorePositive.checked = storage.hideIconScorePositive || false
   checkboxIconScoreNeutral.checked = storage.hideIconScoreNeutral || false
@@ -54,70 +52,77 @@ async function init() {
 }
 init()
 
-/**
- * Everytime you modify an option is saves.
- */
-async function save() {
-  // Get Values that can kill the program
-  const scoreBoundsLower = inputScoreBoundsLower.value
-  const scoreBoundsUpper = inputScoreBoundsUpper.value
-  let canSave = true
+function saveIconPositive() {
+  const hideIconScorePositive = checkboxIconScorePositive.checked
+  localStorage.set({ hideIconScorePositive })
+  saveIcons()
+}
 
-  // Checkers
-  canSave = scoreBoundsLower !== ''
-  canSave = scoreBoundsUpper !== ''
+function saveIconNeutral() {
+  const hideIconScoreNeutral = checkboxIconScoreNeutral.checked
+  localStorage.set({ hideIconScoreNeutral })
+  saveIcons()
+}
 
-  let newLowerBounds, newUpperBounds
-  if (canSave) {
-    newLowerBounds = parseFloat(scoreBoundsLower)
-    newUpperBounds = parseFloat(scoreBoundsUpper)
-    try {
-      if (newLowerBounds > newUpperBounds) throw Error('Upper score cannot be lower than lower bounds')
-      if (newLowerBounds < -10000) throw Error('Wrong score lower bounds')
-      if (newUpperBounds > 10000) throw Error('Wrong score upper bounds')
-    } catch (error) {
-      canSave = false
-    }
-  }
+function saveIconNegative() {
+  const hideIconScoreNegative = checkboxIconScoreNegative.checked
+  localStorage.set({ hideIconScoreNegative })
+  saveIcons()
+}
 
+function saveIcons() {
   // Get rest of values
   const hideIconScorePositive = checkboxIconScorePositive.checked
   const hideIconScoreNeutral = checkboxIconScoreNeutral.checked
   const hideIconScoreNegative = checkboxIconScoreNegative.checked
 
-  const localStorage = messenger.storage.local
+  messenger.SpamScores.setHideIconScoreOptions(hideIconScorePositive, hideIconScoreNeutral, hideIconScoreNegative)
+}
 
-  // If we can save
-  if (canSave) {
-    // Declaration
-    localStorage.set({
-      scoreIconLowerBounds: newLowerBounds,
-      scoreIconUpperBounds: newUpperBounds
-    })
-  } else {
-    // Restore data or Defaults
-    const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
-    newLowerBounds = parseFloat(storage.scoreIconLowerBounds || DEFAULT_SCORE_LOWER_BOUNDS)
-    newUpperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
+async function saveScoreLower() {
+  // Get Values that can kill the program
+  const scoreBoundsLower = inputScoreBoundsLower.value
+  const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  const newUpperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
+
+  if (scoreBoundsLower !== '') {
+    let newLowerBounds = parseFloat(scoreBoundsLower)
+    try {
+      if (newLowerBounds > newUpperBounds) throw Error('Upper score cannot be lower than lower bounds')
+      if (newLowerBounds < -10000) throw Error('Wrong score lower bounds')
+      localStorage.set({ scoreIconLowerBounds: newLowerBounds })
+      saveScores(newLowerBounds, newUpperBounds)
+    } catch (error) {
+      // Restore data or Defaults
+      newLowerBounds = parseFloat(storage.scoreIconLowerBounds || DEFAULT_SCORE_LOWER_BOUNDS)
+    }
+    // This way the value is a number
+    inputScoreBoundsLower.value = newLowerBounds
   }
-  // This way the value is a number
-  inputScoreBoundsLower.value = newLowerBounds
-  inputScoreBoundsUpper.value = newUpperBounds
-  inputScoreBoundsBetween.textContent = messenger.i18n.getMessage('optionsScoreBetween', [
-    newLowerBounds,
-    newUpperBounds
-  ])
-  ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setScoreBounds(newLowerBounds, newUpperBounds)
-  ;(await messenger.runtime.getBackgroundPage()).messenger.SpamScores.setHideIconScoreOptions(
-    hideIconScorePositive,
-    hideIconScoreNeutral,
-    hideIconScoreNegative
-  )
-  // Why restore hideIcon when you can always save?
+}
 
-  localStorage.set({
-    hideIconScorePositive,
-    hideIconScoreNeutral,
-    hideIconScoreNegative
-  })
+async function saveScoreUpper() {
+  const scoreBoundsUpper = inputScoreBoundsUpper.value
+  const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  const newLowerBounds = parseFloat(storage.scoreIconLowerBounds || DEFAULT_SCORE_LOWER_BOUNDS)
+
+  if (scoreBoundsUpper !== '') {
+    let newUpperBounds = parseFloat(scoreBoundsUpper)
+    try {
+      if (newLowerBounds > newUpperBounds) throw Error('Upper score cannot be lower than lower bounds')
+      if (newUpperBounds > 10000) throw Error('Wrong score upper bounds')
+      localStorage.set({ scoreIconUpperBounds: newUpperBounds })
+      saveScores(newLowerBounds, newUpperBounds)
+    } catch (error) {
+      // Restore data or Defaults
+      newUpperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
+    }
+    // This way the value is a number
+    inputScoreBoundsUpper.value = newUpperBounds
+  }
+}
+
+function saveScores(lower, upper) {
+  inputScoreBoundsBetween.textContent = i18n.getMessage('optionsScoreBetween', [lower, upper])
+  messenger.SpamScores.setScoreBounds(lower, upper)
 }
