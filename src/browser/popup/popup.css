@@ -1,62 +1,64 @@
 body {
   padding: 0px;
 }
-h5 {
-  margin: 0;
-}
 h4 {
   margin: 0 4px 10px 4px;
 }
-table.score-details {
+h5#no-details {
+  margin: 0;
+  display: none;
+}
+table#score-details {
   border-collapse: collapse;
   margin: 0;
   padding: 0;
   width: 100%;
   font-size: 14px;
+  display: none;
 }
-table.score-details tr th {
+table#score-details tr th {
   text-align: left;
   padding: 5px;
 }
-table.score-details tr td {
+table#score-details tr td {
   vertical-align: top;
   padding: 5px;
 }
-table.score-details tr:last-child td {
+table#score-details tr:last-child td {
   border-bottom: none;
 }
-table.score-details tr td:nth-child(1) {
+table#score-details tr th:nth-child(1) {
+  padding: 0 20px;
+}
+table#score-details tr td:nth-child(1) {
   text-align: center;
   padding: 5px 20px;
 }
-table.score-details tr td:nth-child(2),
-table.score-details tr td:nth-child(3) {
+table#score-details tr td:nth-child(2),
+table#score-details tr td:nth-child(3) {
   padding: 7px 5px;
 }
-table.score-details tr td:nth-child(3) {
+table#score-details tr td:nth-child(3) {
   max-width: 400px;
 }
-table.score-details tr th:nth-child(1) {
-  padding: 0 20px;
-}
-table.score-details tr.score td div.info {
+table#score-details tr.score-detail-row td div.info {
   font-size: 80%;
   word-break: break-all;
 }
-table.score-details tr.score td:nth-child(1) span {
+table#score-details tr.score-detail-row .score {
   display: inline-block;
   padding: 2px 4px;
   border-radius: 3px;
   color: white;
   width: 100%;
 }
-table.score-details tr.score.negative td:nth-child(1) span {
+table#score-details tr.score-detail-row.negative .score {
   background-color: #28b62c;
 }
-table.score-details tr.score.positive td:nth-child(1) span {
+table#score-details tr.score-detail-row.positive .score {
   background-color: #fe330a;
 }
-table.score-details tr.score.neutral td:nth-child(1) span {
+table#score-details tr.score-detail-row.neutral .score {
   background-color: #a1a1a1;
 }
 
@@ -66,10 +68,10 @@ table.score-details tr.score.neutral td:nth-child(1) span {
     color: black;
     background: white;
   }
-  table.score-details tr.score td div.info {
+  table#score-details tr.score-detail-row td div.info {
     color: #7a7a7a;
   }
-  table.score-details tr td {
+  table#score-details tr td {
     border-bottom: 1px solid #eee;
   }
 }
@@ -79,13 +81,13 @@ table.score-details tr.score.neutral td:nth-child(1) span {
     color: white;
     background: #333;
   }
-  table.score-details tr.score td div.info {
+  table#score-details tr.score-detail-row td div.info {
     color: #a0a0a0;
   }
-  table.score-details tr td {
+  table#score-details tr td {
     border-bottom: 1px solid #464646;
   }
-  table.score-details tr.score.neutral td:nth-child(1) span {
+  table#score-details tr.score-detail-row.neutral .score {
     background-color: #6d6d6d;
   }
 }

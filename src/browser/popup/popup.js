@@ -18,28 +18,37 @@ messenger.tabs
           negative: parsedDetailScores.filter(el => el.score < 0).sort((a, b) => a.score - b.score),
           neutral: parsedDetailScores.filter(el => el.score === 0).sort((a, b) => a.name.localeCompare(b.name))
         }
-        let scoreDetailElements =
-          '<table class="score-details"><tr><th>Score</th><th>Name</th><th>Description</th></tr>'
+        let scoreDetailTable = document.querySelector('table#score-details')
+        scoreDetailTable.style.display = 'block'
+        const rowTemplate = document.querySelector('template#score-detail-row')
+
         for (const groupType of ['positive', 'negative', 'neutral']) {
-          scoreDetailElements += groupedDetailScores[groupType]
-            .map(el => {
-              const symbol = SCORE_SYMBOLS.find(sym => sym.name === el.name)
-              let element = '<tr class="score ' + groupType + '">'
-              element += '<td><span>' + el.score + '</span></td>'
-              element += '<td><span>' + (el.name || '-') + '</span></td>' + '<td><span>'
-              if (symbol || el.description) {
-                element += symbol ? symbol.description : el.description
-                if (el.info) element += ' <div class="info">[' + el.info + ']</div>'
-              }
-              element += '</span></td>' + '</tr>'
-              return element
-            })
-            .join('')
+          for (const detailElement of groupedDetailScores[groupType]) {
+            // Get symbol description
+            const symbolDescription = SCORE_SYMBOLS.find(sym => sym.name === detailElement.name)?.description
+
+            // Clone template row
+            let detailRow = document.importNode(rowTemplate.content, true)
+
+            // Fill in data
+            detailRow.querySelector('.score-detail-row').classList.add(groupType)
+            detailRow.querySelector('.score').textContent = detailElement.score
+            detailRow.querySelector('.name').textContent = detailElement.name || '-'
+            if (symbolDescription) {
+              detailRow.querySelector('.description').textContent = symbolDescription
+            } else {
+              detailRow.querySelector('.description').textContent = detailElement.description
+            }
+            if (detailElement.info) {
+              detailRow.querySelector('.info').textContent = `[${detailElement.info}]`
+            }
+
+            // Add row to table
+            scoreDetailTable.append(detailRow)
+          }
         }
-        scoreDetailElements += '</table>'
-        document.body.innerHTML = scoreDetailElements
       } else {
-        document.body.innerHTML = '<h5>No details available</h5>'
+        document.querySelector('#no-details').style.display = 'block'
       }
     })
   })
