@@ -12,8 +12,6 @@ const localStorage = messenger.storage.local
  */
 
 /**
- * [dlh2] TODO: How we should deal with multiple scores?
- * We can treat them as just scores then making an average or retrieving every score
  * @param {object} headers
  * @returns {string[]} Score value
  */
@@ -26,7 +24,6 @@ function getScores(headers) {
   const customHeaders = Object.fromEntries(auxHeadersNoMozilla)
   for (const headerName in customHeaders) {
     if (SCORE_ARRAY.includes(headerName)) {
-      // dlh2: There's gotta be simpler code for this ~_~
       const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
       if (!scoreField) continue // If no match iterate
       const score = scoreInterpolation(headerName, scoreField[1])
@@ -72,7 +69,7 @@ async function onMessageDisplayed(tab, message) {
 
   // Get Score
   const scores = getScores(fullMessage.headers) // Get Scores
-  const score = isNaN(scores[0]) ? null : scores[0] // THIS CODE IS BAD, deciding on next commit
+  const score = isNaN(scores[0]) ? null : scores[0]
 
   // Message Score Button
   if (score === null) {
@@ -86,14 +83,12 @@ async function onMessageDisplayed(tab, message) {
   // Save Custom Name Header for... something of the Dynamic custom headers.
   for (const regExName in CUSTOM_SCORE_REGEX) {
     const headersFound = Object.entries(fullMessage.headers).filter(([key, value]) => key.endsWith(regExName))
-    // I think we need to deal it in another way, it could be that there's other emails that could end the same way.
     for (const headerFound of headersFound) {
-      const headerName = headerFound[0] // header [Header Name, Header Value]
-      // Note: The header is always lowercase in messages.getFull
+      const headerName = headerFound[0] // header [Header Name, Header Value] - always lowercase
       const storage = await localStorage.get(['customMailscannerHeaders'])
       const customHeaders = storage.customMailscannerHeaders
       if (!customHeaders || (customHeaders && !customHeaders.includes(headerName))) {
-        // This thing is what it makes us restart Thunderbird & Repair Folder
+        // Reason to restart Thunderbird & Repair Folder
         await messenger.SpamScores.addDynamicCustomHeaders([headerName])
         localStorage.set({ customMailscannerHeaders: [...(customHeaders || []), headerName] })
       }
@@ -102,13 +97,13 @@ async function onMessageDisplayed(tab, message) {
 }
 
 /**
- * Fired when the displayed folder changes in any mail tab.
+ * Fired when the displayed folder changes in any mail tab
  * @param {Tab} tab
  * @param {MailFolder} displayedFolder
  */
 async function onDisplayedFolderChanged(tab, displayedFolder) {
   const spamScores = messenger.SpamScores
-  // Do not try to use addon on Root
+  // Do not try to use addon on root folder
   if (displayedFolder.path !== '/') {
     const win = await messenger.windows.getCurrent()
     spamScores.repaint(win.id)
