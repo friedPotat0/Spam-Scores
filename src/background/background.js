@@ -1,6 +1,6 @@
 'use strict'
-import { SCORE_ARRAY, SCORE_REGEX, CUSTOM_SCORE_REGEX } from '../constants.js'
-import { getBounds, scoreInterpolation } from '../functions.js'
+import { SCORE_REGEX, CUSTOM_SCORE_REGEX } from '../constants.js'
+import { getBounds /* , scoreInterpolation */ } from '../functions.js'
 
 /**
  * @type {StorageArea}
@@ -22,18 +22,21 @@ function getScores(headers) {
   // Remove Mozilla Headers
   const auxHeadersNoMozilla = auxHeaders.filter(([key, value]) => !key.startsWith('x-mozilla'))
   const customHeaders = Object.fromEntries(auxHeadersNoMozilla)
+  const scoreHeaders = Object.keys(SCORE_REGEX)
   for (const headerName in customHeaders) {
-    if (SCORE_ARRAY.includes(headerName)) {
+    if (scoreHeaders.includes(headerName)) {
       const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
       if (!scoreField) continue // If no match iterate
-      const score = scoreInterpolation(headerName, scoreField[1])
+      // const score = scoreInterpolation(headerName, scoreField[1])
+      const score = scoreField[1]
       scores.push(score)
     } else {
       for (const regExName in CUSTOM_SCORE_REGEX) {
         if (headerName.endsWith(regExName)) {
           const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
           if (!scoreField) continue // If no match iterate
-          const score = scoreInterpolation(headerName, scoreField[1])
+          // const score = scoreInterpolation(headerName, scoreField[1])
+          const score = scoreField[1]
           scores.push(score)
         }
       }
@@ -51,9 +54,9 @@ async function getImageSrc(score) {
   const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   const [lowerBounds, upperBounds] = getBounds(storage)
   if (score > upperBounds) return '/images/score_positive.svg'
-  else if (score <= upperBounds && score >= lowerBounds) return '/images/score_neutral.svg'
-  else if (score < lowerBounds) return '/images/score_negative.svg'
-  else return '/images/score_neutral.svg'
+  if (score <= upperBounds && score >= lowerBounds) return '/images/score_neutral.svg'
+  if (score < lowerBounds) return '/images/score_negative.svg'
+  return '/images/score_neutral.svg'
 }
 
 /**
@@ -80,7 +83,7 @@ async function onMessageDisplayed(tab, message) {
     messageButton.setIcon({ path: await getImageSrc(score) })
   }
 
-  // Save Custom Name Header for... something of the Dynamic custom headers.
+  // Save custom header name for X-<MYCOMPANY>-MailScanner-SpamCheck headers
   for (const regExName in CUSTOM_SCORE_REGEX) {
     const headersFound = Object.entries(fullMessage.headers).filter(([key, value]) => key.endsWith(regExName))
     for (const headerFound of headersFound) {
@@ -103,7 +106,7 @@ async function onMessageDisplayed(tab, message) {
  */
 async function onDisplayedFolderChanged(tab, displayedFolder) {
   const spamScores = messenger.SpamScores
-  // Do not try to use addon on root folder
+  // Disable addon on root folder
   if (displayedFolder.path !== '/') {
     const win = await messenger.windows.getCurrent()
     spamScores.repaint(win.id)

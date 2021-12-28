@@ -1,4 +1,4 @@
-// For some reason it works for vscode even if is not imported.
+// For some reason it works for VSCode even if is not imported.
 
 // Constants
 
@@ -57,7 +57,7 @@ const messenger = {
      */
     onMessageDisplayed: {
       /**
-       * A function that will be called when this event occurs.
+       * Called when message is displayed
        * @param {function(Tab, MessageHeader)} listener
        */
       addListener: listener => {}
@@ -149,7 +149,7 @@ const messenger = {
 
 /**
  * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/local
- * dlh2: Is not complete
+ * TODO: Incomplete
  * @typedef {object} StorageArea
  * @property {function(string[]=):Promise<(Object<string, object>)>} get
  * @property {function(Object<string, any>):Promise<void>} set
@@ -202,7 +202,7 @@ const messenger = {
 
 /**
  * https://webextension-api.thunderbird.net/en/91/tabs.html#tabs-tab
- * dlh2: Is not complete
+ * TODO: Incomplete
  * @typedef {object} Tab
  * @property {number} id The ID of the tab. Tab IDs are unique within a browser session.
  * Under some circumstances a Tab may not be assigned an ID.
@@ -211,7 +211,7 @@ const messenger = {
 
 /**
  * https://webextension-api.thunderbird.net/en/91/messages.html#messages-messageheader
- * dlh2: Is not complete
+ * TODO: Incomplete
  * @typedef {object} MessageHeader
  * @property {number} id
  */
@@ -228,7 +228,7 @@ const messenger = {
 /**
  * An object describing a mail folder.
  * https://webextension-api.thunderbird.net/en/91/folders.html#folders-mailfolder
- * dlh2: Is not complete
+ * TODO: Incomplete
  * @typedef {object} MailFolder
  * @property {string} path Path to this folder in the account. Although paths look predictable, never guess a folder’s path, as there are a number of reasons why it may not be what you think it is.
  */

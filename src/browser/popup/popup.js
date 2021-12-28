@@ -66,13 +66,7 @@ async function getParsedDetailScores(headers) {
   for (const headerName in headers) {
     if (SCORE_DETAILS_ARRAY.includes(headerName) || customHeaders.includes(headerName)) {
       let headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
-      // We might use directly switch case instead of checking if the header is there
       if (headerName === 'x-spam-report') {
-        /**
-         * dlh2 TODO: Okay #34 problem is here, we have a lot of ways to deal with it,
-         * but you know, we can't split with \n as somehow the email is translated to
-         * some whitespaces therefore this gotta be interesting.
-         */
         const reportSplitted = headerValue.split('Content analysis details:')
         if (reportSplitted.length > 1) {
           headerValue = reportSplitted[1]
@@ -107,7 +101,7 @@ async function getParsedDetailScores(headers) {
 }
 
 /**
- * Trims then replaces Groups of Doubles whitespaces to one whitespace
+ * Trims and removes double whitespaces
  * @param {string} result
  * @returns {string}
  */

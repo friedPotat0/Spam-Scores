@@ -3,7 +3,7 @@
 // https://firefox-source-docs.mozilla.org/toolkit/components/extensions/webextensions/basics.html#globals-available-in-the-api-scripts-global
 
 /**
- * Services namespace.
+ * Services namespace
  * Based on Mozilla xpCOM
  * https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/57#changes_for_add-on_and_mozilla_developers
  * @namespace

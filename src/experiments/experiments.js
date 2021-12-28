@@ -16,7 +16,7 @@ let scoreHdrViewParams = {
 const experiments = {
   hdrView: {}
 }
-// Then Load the Custom Script into it
+// Load the custom script
 // https://developer.thunderbird.net/add-ons/mailextensions/experiments#structuring-experiment-code
 Services.scriptloader.loadSubScript(
   extension.rootURI.resolve('src/experiments/custom_score_column.js'),
@@ -24,22 +24,19 @@ Services.scriptloader.loadSubScript(
 )
 
 /**
- * Do not change var because it's a Global Class
+ * Do not change var because it's a global class
  * https://webextension-api.thunderbird.net/en/91/how-to/experiments.html#implementing-functions
  */
 var SpamScores = class extends ExtensionAPI {
   /**
-   * Called on Startup
-   * dlh2 - When reloading it also happens
+   * Called on startup and on reload
    */
   onStartup() {
     updatePrefs()
   }
 
   /**
-   * This function is called if the extension is disabled or removed, or Thunderbird closes.
-   * We usually do not have to do any cleanup, if Thunderbird is shutting down entirely.
-   * dlh2 - When reloading it also happens
+   * Called when the extension is disabled, removed, reloaded, or Thunderbird closes.
    * @param {boolean} isAppShutdown
    */
   onShutdown(isAppShutdown) {
@@ -62,7 +59,6 @@ var SpamScores = class extends ExtensionAPI {
    * @returns
    */
   getAPI(context) {
-    // log(Object.keys(context)) // Does callOnClose Exist?
     context.callOnClose(this)
     // All functions should be added in schema.json
     return {
@@ -124,7 +120,7 @@ function unpaint() {
  */
 function updatePrefs(dynamicHeaders = []) {
   const mailnews = Services.prefs.getBranch('mailnews')
-  // Copy of constants.js until ES6
+  // Copy of constants.js until support of ES6 modules
   const staticHeaders = [
     'x-spam-score',
     'x-rspamd-score',

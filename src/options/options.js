@@ -5,7 +5,7 @@ import { getBounds } from '../functions.js'
 const localStorage = messenger.storage.local
 const i18n = messenger.i18n
 
-// DOM Variables
+// DOM variables
 const inputScoreBoundsLower = document.getElementById('score-bounds-lower')
 const inputScoreBoundsUpper = document.getElementById('score-bounds-upper')
 const inputScoreBoundsBetween = document.getElementById('score-bounds-between')
@@ -21,7 +21,7 @@ document
   .querySelectorAll('*[data-i18n="optionsHideIconAndScore"]')
   .forEach(el => (el.textContent = i18n.getMessage('optionsHideIconAndScore')))
 
-// DOM Events
+// DOM events
 inputScoreBoundsLower.addEventListener('change', saveScoreLower)
 inputScoreBoundsUpper.addEventListener('change', saveScoreUpper)
 checkboxIconScorePositive.addEventListener('change', saveIconPositive)
@@ -29,7 +29,7 @@ checkboxIconScoreNeutral.addEventListener('change', saveIconNeutral)
 checkboxIconScoreNegative.addEventListener('change', saveIconNegative)
 
 async function init() {
-  // Load Values from Storage
+  // Load values from storage
   const storage = await localStorage.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
@@ -40,7 +40,7 @@ async function init() {
 
   const [lowerBounds, upperBounds] = getBounds(storage)
 
-  // Set Values
+  // Set values
   inputScoreBoundsLower.value = lowerBounds
   inputScoreBoundsUpper.value = upperBounds
   inputScoreBoundsBetween.textContent = i18n.getMessage('optionsScoreBetween', [lowerBounds, upperBounds])
@@ -80,7 +80,6 @@ function saveIcons() {
 }
 
 async function saveScoreLower() {
-  // Get Values that can kill the program
   const scoreBoundsLower = inputScoreBoundsLower.value
   const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   const newUpperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
@@ -93,11 +92,10 @@ async function saveScoreLower() {
       localStorage.set({ scoreIconLowerBounds: newLowerBounds })
       saveScores(newLowerBounds, newUpperBounds)
     } catch (error) {
-      // Restore data or Defaults
+      // Restore previously saved bounds or fallback to defaults
       newLowerBounds = parseFloat(storage.scoreIconLowerBounds || DEFAULT_SCORE_LOWER_BOUNDS)
     }
-    // This way the value is a number
-    inputScoreBoundsLower.value = newLowerBounds
+    inputScoreBoundsLower.value = newLowerBounds // number
   }
 }
 
@@ -114,11 +112,10 @@ async function saveScoreUpper() {
       localStorage.set({ scoreIconUpperBounds: newUpperBounds })
       saveScores(newLowerBounds, newUpperBounds)
     } catch (error) {
-      // Restore data or Defaults
+      // Restore previously saved bounds or fallback to defaults
       newUpperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
     }
-    // This way the value is a number
-    inputScoreBoundsUpper.value = newUpperBounds
+    inputScoreBoundsUpper.value = newUpperBounds // number
   }
 }
 

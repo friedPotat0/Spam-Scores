@@ -1,23 +1,22 @@
 /**
  * In experiment.js we use extension.getURL('src/experiments/custom_score_column.js')
- * When we load it is concatenated to the code so is not independent.
- * That would be a hassle for debugging...
+ * It is concatenated to the code so is not independent during debugging.
  */
 
-// Copy of constants.js until ES6
+// Copy of constants.js until Experiments API supports ES6 modules
 const CUSTOM_SCORE_REGEX = {
   'mailscanner-spamcheck':
     /(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),/
 }
 
-// Copy of constants.js until ES6
+// Copy of constants.js until Experiments API supports ES6 modules
 const SCORE_REGEX = {
-  'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
-  'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
-  'x-vr-spamscore': /([0-9]+)/,
   'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
   'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
-  'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/
+  'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
+  'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-vr-spamscore': /([0-9]+)/
 }
 
 /**
@@ -37,11 +36,9 @@ class ColumnHandler {
   }
 
   /**
-   * From what I understand, getScore executes when Thunderbird loads the Add-on
-   *
-   * - This part gets the score that is shown in Column SpamScores
+   * Gets the score that is shown in the spam score column
    * https://web.archive.org/web/20210601181130/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIMsgDBHdr
-   * @param {nsIMsgDBHdr} hdr Probably Headers?
+   * @param {nsIMsgDBHdr} hdr Header of a single mail row
    * @returns {number|null} Score value
    */
   getScore(hdr) {
@@ -52,7 +49,6 @@ class ColumnHandler {
       if (!scoreField) continue // If no match iterate - Note: This shouldn't be needed
       const score = parseFloat(scoreField[1])
       if (!isNaN(score)) return score
-      // return scoreInterpolation(regExName, scoreField[1])
     }
 
     if (this.customMailscannerHeaders) {
@@ -72,10 +68,10 @@ class ColumnHandler {
   }
 
   /**
-   * dlh2: Called First on Load Cell
-   * The image path for a given cell.
+   * Called first on cell load
+   * Returns the image path of the given cell
    * @param {Number} row The index of the row.
-   * @param {nsITreeColumn} col The index of the column.
+   * @param {nsITreeColumn} col The column of the cell. (Note: This is not the column index.)
    * @returns {string|null} The image path of the cell.
    */
   getImageSrc(row, col) {
@@ -98,10 +94,10 @@ class ColumnHandler {
   }
 
   /**
-   * dlh2: Called Second on Load Cell
-   * The text for a given cell. If a column consists only of an image, then the empty string is returned.
+   * Called second on cell load
+   * Returns the score text for a given cell. If mail has no score or the score and text should be hidden (checkbox in add-on settings), null is returned.
    * @param {Number} row The index of the row.
-   * @param {nsITreeColumn} col The column of the cell. (Note that this is not the column index.)
+   * @param {nsITreeColumn} col The column of the cell. (Note: This is not the column index.)
    * @returns {string} The text of the cell.
    */
   getCellText(row, col) {
@@ -114,7 +110,7 @@ class ColumnHandler {
   }
 
   /**
-   * dlh2: Called First on Load Column on each Cell if the column its "Sort Activated"
+   * Called first on cell load when column is sorted
    * If the column displays a number, this will return the number that the column should be sorted by.
    * @param {nsIMsgDBHdr} hdr
    * @returns {Number} The value that sorting will be done with.
@@ -123,8 +119,7 @@ class ColumnHandler {
     const score = this.getScore(hdr)
     // Mail without spam score should be put down
     if (score === null) return 0
-    // The reason behind this is that the sorting doesn't take into account
-    // negative numbers and decimals
+    // Sorting doesn't take into account negative numbers and decimals by default
     return score * 1e4 + 1e8
   }
 
@@ -132,7 +127,7 @@ class ColumnHandler {
    * This affects whether getSortStringForRow or getSortLongForRow is used
    * to determine the sort key for the column. It does not affect whether
    * getCellText vs. getImageSrc is used to determine what to display.
-   * @returns {boolean} true if the column displays a string value. false otherwise.
+   * @returns {boolean} true if the column displays a string value, false otherwise.
    */
   isString() {
     return false
@@ -161,7 +156,7 @@ class ColumnOverlay {
     treeCol.setAttribute('closemenu', 'none')
     treeCol.setAttribute('label', 'Spam score')
     treeCol.setAttribute('tooltiptext', 'Sort by spam score')
-    // Recommended Width
+    // Recommended width
     treeCol.setAttribute('width', '82')
 
     threadCols.appendChild(treeCol)
@@ -195,7 +190,7 @@ class ColumnOverlay {
       Services.obs.removeObserver(this, 'MsgCreateDBView')
     } catch (error) {
       if (error.name === 'NS_ERROR_ILLEGAL_VALUE') {
-        console.log('This only happens when you reload the addon if a mail folder it is activated')
+        console.log('This only happens when you reload the addon if a mail folder is activated')
       } else {
         console.error(error)
       }
@@ -206,7 +201,6 @@ class ColumnOverlay {
 let columnOverlay
 
 /**
- * TODO: When is not mail:3pane?
  * @param {*} gDBView
  * @param {*} doc
  * @param {*} params
