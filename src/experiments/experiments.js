@@ -115,7 +115,7 @@ function unpaint() {
  * http://kb.mozillazine.org/Mail_and_news_settings // 2019
  * http://udn.realityripple.com/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
  * https://searchfox.org/comm-central/source/mailnews/mailnews.js // 2021
- * Requeriments: Repair Folders then Restart
+ * Requirements: Repair Folders then Restart
  * @param {string[]} dynamicHeaders
  */
 function updatePrefs(dynamicHeaders = []) {

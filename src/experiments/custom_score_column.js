@@ -1,6 +1,6 @@
 /**
  * In experiment.js we use extension.getURL('src/experiments/custom_score_column.js')
- * It is concatenated to the code so is not independent during debugging.
+ * It is concatenated to the code so it is not independent during debugging.
  */
 
 // Copy of constants.js until Experiments API supports ES6 modules
