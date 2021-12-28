@@ -83,19 +83,33 @@ async function onMessageDisplayed(tab, message) {
     messageButton.setIcon({ path: await getImageSrc(score) })
   }
 
-  // Save custom header name for X-<MYCOMPANY>-MailScanner-SpamCheck headers
-  for (const regExName in CUSTOM_SCORE_REGEX) {
-    const headersFound = Object.entries(fullMessage.headers).filter(([key, value]) => key.endsWith(regExName))
-    for (const headerFound of headersFound) {
-      const headerName = headerFound[0] // header [Header Name, Header Value] - always lowercase
-      const storage = await localStorage.get(['customMailscannerHeaders'])
-      const customHeaders = storage.customMailscannerHeaders
-      if (!customHeaders || (customHeaders && !customHeaders.includes(headerName))) {
-        // Reason to restart Thunderbird & Repair Folder
-        await messenger.SpamScores.addDynamicCustomHeaders([headerName])
-        localStorage.set({ customMailscannerHeaders: [...(customHeaders || []), headerName] })
+  /**
+   * Save static (e.g. x-spam-score, x-rspamd-score) and dynamic (X-<MYCOMPANY>-MailScanner-SpamCheck) header names
+   * in global preferences to be stored by Thunderbird for each mail
+   *
+   * Reason to restart Thunderbird & repair folders
+   */
+  const dynamicHeaders = []
+  let dynamicHeaderFound = false
+  for (const dynamicHeaderSuffix in CUSTOM_SCORE_REGEX) {
+    const fullDynamicHeaderName = Object.keys(fullMessage.headers).find(key => key.endsWith(dynamicHeaderSuffix))
+    if (fullDynamicHeaderName) {
+      dynamicHeaders.push(fullDynamicHeaderName)
+      dynamicHeaderFound = true
+    }
+  }
+  // Static header names will be automatically added
+  await messenger.SpamScores.addHeadersToPrefs(dynamicHeaders)
+  // Store new dynamic header names in localStorage to be recognised by the score column
+  if (dynamicHeaderFound) {
+    const storage = await localStorage.get(['customMailscannerHeaders'])
+    let customMailscannerHeaders = storage.customMailscannerHeaders || []
+    for (const header of dynamicHeaders) {
+      if (!customMailscannerHeaders.includes(header)) {
+        customMailscannerHeaders.push(header)
       }
     }
+    localStorage.set({ customMailscannerHeaders })
   }
 }
 

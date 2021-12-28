@@ -54,7 +54,7 @@
         ]
       },
       {
-        "name": "addDynamicCustomHeaders",
+        "name": "addHeadersToPrefs",
         "type": "function",
         "description": "",
         "async": true,
@@ -62,6 +62,7 @@
           {
             "name": "dynamicHeaders",
             "type": "array",
+            "optional": true,
             "items": {
               "type": "string"
             }

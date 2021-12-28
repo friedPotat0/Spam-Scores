@@ -75,7 +75,7 @@ var SpamScores = class extends ExtensionAPI {
         setCustomMailscannerHeaders(customMailscannerHeaders) {
           scoreHdrViewParams.customMailscannerHeaders = customMailscannerHeaders
         },
-        addDynamicCustomHeaders(dynamicHeaders) {
+        addHeadersToPrefs(dynamicHeaders) {
           updatePrefs(dynamicHeaders)
         },
         repaint(windowId) {
@@ -130,10 +130,24 @@ function updatePrefs(dynamicHeaders = []) {
     'x-spam-report'
   ]
   const headers = [...staticHeaders, ...dynamicHeaders]
-  const customDBHeaders = headers.join(' ').trim()
-  const customHeaders = headers.join(': ').trim()
-  mailnews.setCharPref('.customDBHeaders', customDBHeaders)
-  mailnews.setCharPref('.customHeaders', customHeaders)
+
+  // customDBHeaders: String in the form of "header1 header2 header3"
+  // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
+  const existingCustomDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
+  let newCustomDBHeaders = headers.filter(el => !existingCustomDBHeaders.includes(el))
+  if (newCustomDBHeaders.length > 0) {
+    newCustomDBHeaders = `${existingCustomDBHeaders} ${newCustomDBHeaders.join(' ')}`
+    mailnews.setCharPref('.customDBHeaders', newCustomDBHeaders)
+  }
+
+  // customHeaders: String in the form of "header1: header2: header3:"
+  // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
+  const existingCustomHeaders = Services.prefs.getCharPref('mailnews.customHeaders')
+  let newCustomHeaders = headers.filter(el => !existingCustomHeaders.includes(`${el}:`))
+  if (newCustomHeaders.length > 0) {
+    newCustomHeaders = `${existingCustomHeaders} ${newCustomHeaders.join(': ')}:` // trailing colon for the last header in the list!
+    mailnews.setCharPref('.customHeaders', newCustomHeaders)
+  }
 
   /**
    * PREF_INVALID	0	long
