@@ -1,42 +1,68 @@
 'use strict'
-var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
-var { ExtensionSupport } = ChromeUtils.import('resource:///modules/ExtensionSupport.jsm')
-var { ExtensionParent } = ChromeUtils.import('resource://gre/modules/ExtensionParent.jsm')
-var { MailServices } = ChromeUtils.import('resource:///modules/MailServices.jsm')
-
 const EXTENSION_NAME = 'spamscores@czaenker'
-var extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
+const extension = WebExtensionPolicy.getByID(EXTENSION_NAME).extension
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
-
-var scoreHdrViewParams = {
+let scoreHdrViewParams = {
   lowerScoreBounds: DEFAULT_SCORE_LOWER_BOUNDS,
   upperScoreBounds: DEFAULT_SCORE_UPPER_BOUNDS
 }
 
-var SpamScores = class extends ExtensionCommon.ExtensionAPI {
+/**
+ * For debugging Experiments.js, press CTRL + SHIFT + U/I
+ */
+
+const experiments = {
+  hdrView: {}
+}
+// Load the custom script
+// https://developer.thunderbird.net/add-ons/mailextensions/experiments#structuring-experiment-code
+Services.scriptloader.loadSubScript(
+  extension.rootURI.resolve('src/experiments/custom_score_column.js'),
+  experiments.hdrView
+)
+
+/**
+ * Do not change var because it's a global class
+ * https://webextension-api.thunderbird.net/en/91/how-to/experiments.html#implementing-functions
+ */
+var SpamScores = class extends ExtensionAPI {
+  /**
+   * Called on startup and on reload
+   */
+  onStartup() {
+    updatePrefs()
+  }
+
+  /**
+   * Called when the extension is disabled, removed, reloaded, or Thunderbird closes.
+   * @param {boolean} isAppShutdown
+   */
   onShutdown(isAppShutdown) {
     if (isAppShutdown) return
+    /**
+     * This method is called to notify all observers for a particular topic. See Example.
+     * .notifyObservers(null, "myTopicID", "someAdditionalInformationPassedAs'Data'Parameter");
+     *
+     * void notifyObservers(in nsISupports aSubject, in string aTopic, in wstring someData);
+     * aSubject A notification specific interface pointer. This usually corresponds to the source of the notification, but could be defined differently depending on the notification topic and may even be null.
+     * aTopic The notification topic. This string-valued key uniquely identifies the notification. This parameter must not be null.
+     * someData A notification specific string value. The meaning of this parameter is dependent on the topic. It may be null.
+     */
     Services.obs.notifyObservers(null, 'startupcache-invalidate')
   }
 
-  onStartup() {
-    updatePrefs()
-    Services.console.logStringMessage('Spam Scores startup completed')
-  }
-
+  /**
+   *
+   * @param {*} context
+   * @returns
+   */
   getAPI(context) {
     context.callOnClose(this)
+    // All functions should be added in schema.json
     return {
       SpamScores: {
-        addWindowListener(dummy) {
-          ExtensionSupport.registerWindowListener(EXTENSION_NAME, {
-            chromeURLs: ['chrome://messenger/content/messenger.xul', 'chrome://messenger/content/messenger.xhtml'],
-            onLoadWindow: paint,
-            onUnloadWindow: unpaint
-          })
-        },
         setScoreBounds(lower, upper) {
           scoreHdrViewParams.lowerScoreBounds = lower
           scoreHdrViewParams.upperScoreBounds = upper
@@ -46,63 +72,88 @@ var SpamScores = class extends ExtensionCommon.ExtensionAPI {
           scoreHdrViewParams.hideIconScoreNeutral = hideNeutral
           scoreHdrViewParams.hideIconScoreNegative = hideNegative
         },
-        getHelloFlag() {
-          try {
-            return Services.prefs.getBoolPref('spamscores.hello')
-          } catch (err) {
-            return false
-          }
-        },
-        setHelloFlag() {
-          Services.prefs.setBoolPref('spamscores.hello', true)
-        },
-        addDynamicCustomHeaders(dynamicHeaders) {
-          updatePrefs(dynamicHeaders)
-        },
         setCustomMailscannerHeaders(customMailscannerHeaders) {
           scoreHdrViewParams.customMailscannerHeaders = customMailscannerHeaders
+        },
+        addHeadersToPrefs(dynamicHeaders) {
+          updatePrefs(dynamicHeaders)
+        },
+        repaint(windowId) {
+          // Get a real window from a window ID:
+          const windowObject = context.extension.windowManager.get(windowId)
+          unpaint()
+          paint(windowObject.window)
+        },
+        clear() {
+          unpaint()
         }
       }
     }
   }
 
-  close() {
-    ExtensionSupport.unregisterWindowListener(EXTENSION_NAME)
-    for (let win of Services.wm.getEnumerator('mail:3pane')) {
-      unpaint(win)
-    }
-  }
+  close() {}
 }
 
+/**
+ * Paint
+ * @param {Window} win Literally Window
+ */
 function paint(win) {
-  win.SpamScores = {}
-  Services.scriptloader.loadSubScript(extension.getURL('src/experiments/custom_score_column.js'), win.SpamScores)
-  win.SpamScores.SpamScores_ScoreHdrView.init(win, scoreHdrViewParams)
+  experiments.hdrView.init(win.gDBView, win.document, scoreHdrViewParams)
 }
 
-function unpaint(win) {
-  win.SpamScores.SpamScores_ScoreHdrView.destroy()
-  delete win.SpamScores
+/**
+ * Unpaint
+ * @param {Window} win
+ */
+function unpaint() {
+  if (experiments.hdrView) experiments.hdrView.destroy()
 }
 
+/**
+ * This is what it lets nsIMsgDBHdr have the properties of the headers
+ * http://kb.mozillazine.org/Mail_and_news_settings // 2019
+ * http://udn.realityripple.com/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch
+ * https://searchfox.org/comm-central/source/mailnews/mailnews.js // 2021
+ * Requirements: Repair Folders then Restart
+ * @param {string[]} dynamicHeaders
+ */
 function updatePrefs(dynamicHeaders = []) {
-  let staticHeaders = ['x-spam-status', 'x-spamd-result', 'x-spam-score', 'x-rspamd-score', 'x-spam-report']
-  let customDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
-  let newCustomDBHeaders = customDBHeaders
-  for (let header of staticHeaders) {
-    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
+  const mailnews = Services.prefs.getBranch('mailnews')
+  // Copy of constants.js until support of ES6 modules
+  const staticHeaders = [
+    'x-spam-score',
+    'x-rspamd-score',
+    'x-vr-spamscore',
+    'x-spamd-result',
+    'x-spam-status',
+    'x-spam-report'
+  ]
+  const headers = [...staticHeaders, ...dynamicHeaders]
+
+  // customDBHeaders: String in the form of "header1 header2 header3"
+  // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
+  const existingCustomDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
+  let newCustomDBHeaders = headers.filter(el => !existingCustomDBHeaders.includes(el))
+  if (newCustomDBHeaders.length > 0) {
+    newCustomDBHeaders = `${existingCustomDBHeaders} ${newCustomDBHeaders.join(' ')}`
+    mailnews.setCharPref('.customDBHeaders', newCustomDBHeaders)
   }
-  for (let header of dynamicHeaders) {
-    if (customDBHeaders.indexOf(header) === -1) newCustomDBHeaders += ` ${header}`
+
+  // customHeaders: String in the form of "header1: header2: header3:"
+  // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
+  const existingCustomHeaders = Services.prefs.getCharPref('mailnews.customHeaders')
+  let newCustomHeaders = headers.filter(el => !existingCustomHeaders.includes(`${el}:`))
+  if (newCustomHeaders.length > 0) {
+    newCustomHeaders = `${existingCustomHeaders} ${newCustomHeaders.join(': ')}:` // trailing colon for the last header in the list!
+    mailnews.setCharPref('.customHeaders', newCustomHeaders)
   }
-  Services.prefs.getBranch('mailnews').setCharPref('.customDBHeaders', newCustomDBHeaders.trim())
-  let customHeaders = Services.prefs.getCharPref('mailnews.customHeaders')
-  let newCustomHeaders = customHeaders
-  for (let header of staticHeaders) {
-    if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
-  }
-  for (let header of dynamicHeaders) {
-    if (customHeaders.indexOf(`${header}:`) === -1) newCustomHeaders += ` ${header}:`
-  }
-  Services.prefs.getBranch('mailnews').setCharPref('.customHeaders', newCustomHeaders.trim())
+
+  /**
+   * PREF_INVALID	0	long
+   * PREF_STRING	32	long data type.
+   * PREF_INT	64	long data type.
+   * PREF_BOOL	128	long data type.
+   */
+  // console.log(mailnews.getPrefType('.customDBHeaders'))
 }

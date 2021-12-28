@@ -6,5 +6,27 @@
     <script type="module" src="popup.js" defer="true"></script>
     <link rel="stylesheet" href="popup.css" />
   </head>
-  <body></body>
+  <body>
+    <table id="score-details">
+      <tr>
+        <th>Score</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+      <!-- Template rows will be inserted here -->
+    </table>
+    <h5 id="no-details">No details available</h5>
+
+    <!-- TEMPLATES -->
+    <template id="score-detail-row">
+      <tr class="score-detail-row">
+        <td><span class="score"></span></td>
+        <td class="name"></td>
+        <td>
+          <div class="description"></div>
+          <div class="info"></div>
+        </td>
+      </tr>
+    </template>
+  </body>
 </html>

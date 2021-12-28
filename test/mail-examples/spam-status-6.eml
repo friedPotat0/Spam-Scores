@@ -1,6 +1,6 @@
 To: receiver@spamscores
 From: sender@spamscores
-Subject: [X-Spam-Status] Spam Scores test mail
+Subject: [X-Spam-Status] Spam Scores test mail (spam-status-6.eml)
 X-Spam-Status: Yes, score=-42.42 required=5.0 tests=R_DKIM_ALLOW,R_MIXED_CHARSET,
 FREEMAIL_FROM,DKIM_TRACE,MX_GOOD,BAYES_HAM autolearn=no version=3.3.2
 X-Spam-Report:
@@ -20,9 +20,9 @@ This is a message to test the Spam Scores Thunderbird add-on.
 -- 
 To: receiver@spamscores
 From: sender@spamscores
-Subject: [X-Spam-Status] Spam Scores test mail
-X-Spam-Status: Yes, score=-42.42 required=5.0 tests=BAYES_99,BAYES_999,
-T_DKIM_INVALID,UNPARSEABLE_RELAY autolearn=no version=3.3.2
+Subject: [X-Spam-Status] Spam Scores test mail (spam-status-6.eml)
+X-Spam-Status: Yes, score=-42.42 required=5.0 tests=R_DKIM_ALLOW,R_MIXED_CHARSET,
+FREEMAIL_FROM,DKIM_TRACE,MX_GOOD,BAYES_HAM autolearn=no version=3.3.2
 X-Spam-Report:
   * -0.2 R_DKIM_ALLOW DKIM verification succeed
   * 0.18 R_MIXED_CHARSET Mixed characters in a message

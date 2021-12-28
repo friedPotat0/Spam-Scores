@@ -1,23 +1,48 @@
 'use strict'
-import { SCORE_REGEX } from '../constants.js'
-import { getBounds } from '../functions.js'
+import { SCORE_REGEX, CUSTOM_SCORE_REGEX } from '../constants.js'
+import { getBounds /* , scoreInterpolation */ } from '../functions.js'
+
+/**
+ * @type {StorageArea}
+ */
+const localStorage = messenger.storage.local
 
 /**
  * Functions
  */
 
 /**
- * Returns the score value from the email header
- * @param {string} rawHeader Email Header
- * @returns {string|null} Score value
+ * @param {object} headers
+ * @returns {string[]} Score value
  */
-function getScore(rawHeader) {
-  for (const key in SCORE_REGEX) {
-    const data = rawHeader.match(SCORE_REGEX[key])
-    if (!data) continue // If no match iterate
-    return data[1]
+function getScores(headers) {
+  const scores = []
+  // Get Custom Mail Headers
+  const auxHeaders = Object.entries(headers).filter(([key, value]) => key.startsWith('x-'))
+  // Remove Mozilla Headers
+  const auxHeadersNoMozilla = auxHeaders.filter(([key, value]) => !key.startsWith('x-mozilla'))
+  const customHeaders = Object.fromEntries(auxHeadersNoMozilla)
+  const scoreHeaders = Object.keys(SCORE_REGEX)
+  for (const headerName in customHeaders) {
+    if (scoreHeaders.includes(headerName)) {
+      const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
+      if (!scoreField) continue // If no match iterate
+      // const score = scoreInterpolation(headerName, scoreField[1])
+      const score = scoreField[1]
+      scores.push(score)
+    } else {
+      for (const regExName in CUSTOM_SCORE_REGEX) {
+        if (headerName.endsWith(regExName)) {
+          const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
+          if (!scoreField) continue // If no match iterate
+          // const score = scoreInterpolation(headerName, scoreField[1])
+          const score = scoreField[1]
+          scores.push(score)
+        }
+      }
+    }
   }
-  return null
+  return scores
 }
 
 /**
@@ -26,7 +51,7 @@ function getScore(rawHeader) {
  * @returns {string} Path of Image
  */
 async function getImageSrc(score) {
-  const storage = await browser.storage.local.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
+  const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   const [lowerBounds, upperBounds] = getBounds(storage)
   if (score > upperBounds) return '/images/score_positive.svg'
   if (score <= upperBounds && score >= lowerBounds) return '/images/score_neutral.svg'
@@ -35,68 +60,117 @@ async function getImageSrc(score) {
 }
 
 /**
+ * Executed everytime a message is displayed
+ * @param {Tab} tab
+ * @param {MessageHeader} message
+ */
+async function onMessageDisplayed(tab, message) {
+  // Declaration / Values
+  const idTab = tab.id
+  const fullMessage = await messenger.messages.getFull(message.id)
+  const messageButton = messenger.messageDisplayAction
+
+  // Get Score
+  const scores = getScores(fullMessage.headers) // Get Scores
+  const score = isNaN(scores[0]) ? null : scores[0]
+
+  // Message Score Button
+  if (score === null) {
+    messageButton.disable(idTab)
+  } else {
+    messageButton.enable(idTab)
+    messageButton.setTitle({ tabId: idTab, title: 'Spam Score: ' + score })
+    messageButton.setIcon({ path: await getImageSrc(score) })
+  }
+
+  /**
+   * Save static (e.g. x-spam-score, x-rspamd-score) and dynamic (X-<MYCOMPANY>-MailScanner-SpamCheck) header names
+   * in global preferences to be stored by Thunderbird for each mail
+   *
+   * Reason to restart Thunderbird & repair folders
+   */
+  const dynamicHeaders = []
+  let dynamicHeaderFound = false
+  for (const dynamicHeaderSuffix in CUSTOM_SCORE_REGEX) {
+    const fullDynamicHeaderName = Object.keys(fullMessage.headers).find(key => key.endsWith(dynamicHeaderSuffix))
+    if (fullDynamicHeaderName) {
+      dynamicHeaders.push(fullDynamicHeaderName)
+      dynamicHeaderFound = true
+    }
+  }
+  // Static header names will be automatically added
+  await messenger.SpamScores.addHeadersToPrefs(dynamicHeaders)
+  // Store new dynamic header names in localStorage to be recognised by the score column
+  if (dynamicHeaderFound) {
+    const storage = await localStorage.get(['customMailscannerHeaders'])
+    let customMailscannerHeaders = storage.customMailscannerHeaders || []
+    for (const header of dynamicHeaders) {
+      if (!customMailscannerHeaders.includes(header)) {
+        customMailscannerHeaders.push(header)
+      }
+    }
+    localStorage.set({ customMailscannerHeaders })
+  }
+}
+
+/**
+ * Fired when the displayed folder changes in any mail tab
+ * @param {Tab} tab
+ * @param {MailFolder} displayedFolder
+ */
+async function onDisplayedFolderChanged(tab, displayedFolder) {
+  const spamScores = messenger.SpamScores
+  // Disable addon on root folder
+  if (displayedFolder.path !== '/') {
+    const win = await messenger.windows.getCurrent()
+    spamScores.repaint(win.id)
+  } else {
+    // Cleans in case we go to root
+    spamScores.clear()
+  }
+}
+/**
  * Main
  */
 const init = async () => {
-  browser.SpamScores.addWindowListener('none')
-  browser.messageDisplay.onMessageDisplayed.addListener(async (tab, message) => {
-    const rawMessage = await browser.messages.getRaw(message.id)
-    const rawHeader = rawMessage.split('\r\n\r\n')[0]
-    const score = getScore(rawHeader)
-    if (score === null) {
-      browser.messageDisplayAction.disable(tab.id)
-    } else {
-      browser.messageDisplayAction.enable(tab.id)
-      browser.messageDisplayAction.setTitle({ tabId: tab.id, title: 'Spam Score: ' + score })
-      browser.messageDisplayAction.setIcon({ path: await getImageSrc(score) })
-    }
+  // Declaration / Values
+  const spamScores = messenger.SpamScores
+  const storage = await localStorage.get([
+    'scoreIconLowerBounds',
+    'scoreIconUpperBounds',
+    'customMailscannerHeaders',
+    'hideIconScorePositive',
+    'hideIconScoreNeutral',
+    'hideIconScoreNegative',
+    'hello'
+  ])
 
-    if (SCORE_REGEX.mailscannerSpamcheck.test(rawHeader)) {
-      const header = rawHeader.replace(/.*(x-.*?mailscanner-spamcheck):.*/is, '$1').toLowerCase()
-      const storage = await browser.storage.local.get(['customMailscannerHeaders'])
-      if (
-        storage &&
-        (!storage.customMailscannerHeaders ||
-          (storage.customMailscannerHeaders && storage.customMailscannerHeaders.indexOf(header) === -1))
-      ) {
-        await browser.SpamScores.addDynamicCustomHeaders([header])
-        browser.storage.local.set({
-          customMailscannerHeaders: [...(storage.customMailscannerHeaders || []), header]
-        })
-      }
-    }
-  })
-
-  if (!(await browser.SpamScores.getHelloFlag())) {
+  // Hello Message
+  if (!storage.hello) {
     messenger.windows.create({
       height: 680,
       width: 488,
       url: '/src/static/hello.html',
       type: 'popup'
     })
-    browser.SpamScores.setHelloFlag()
+    localStorage.set({ hello: true })
   }
 
-  const storage = await browser.storage.local.get([
-    'scoreIconLowerBounds',
-    'scoreIconUpperBounds',
-    'customMailscannerHeaders',
-    'hideIconScorePositive',
-    'hideIconScoreNeutral',
-    'hideIconScoreNegative'
-  ])
+  // Add Listeners
+  messenger.messageDisplay.onMessageDisplayed.addListener(onMessageDisplayed)
+  messenger.mailTabs.onDisplayedFolderChanged.addListener(onDisplayedFolderChanged)
+
+  // Init Data
   const [lowerBounds, upperBounds] = getBounds(storage)
-  browser.SpamScores.setScoreBounds(lowerBounds, upperBounds)
+  spamScores.setScoreBounds(lowerBounds, upperBounds)
 
-  if (storage) {
-    if (storage.customMailscannerHeaders) {
-      browser.SpamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
-    }
-    browser.SpamScores.setHideIconScoreOptions(
-      storage.hideIconScorePositive || false,
-      storage.hideIconScoreNeutral || false,
-      storage.hideIconScoreNegative || false
-    )
+  if (storage.customMailscannerHeaders) {
+    spamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
   }
+  spamScores.setHideIconScoreOptions(
+    storage.hideIconScorePositive || false,
+    storage.hideIconScoreNeutral || false,
+    storage.hideIconScoreNegative || false
+  )
 }
 init()

@@ -29,12 +29,24 @@
     "message": "Thank you for installing Spam Scores!"
   },
   "helloParagraph1": {
-    "message": "In order to display the spam score column, you must first restart Thunderbird. After that right-click on a folder and select \"Properties\". Then click on \"Repair Folder\". This will scan the mail headers of all mails in this folder so that the spam score column can be displayed correctly."
+    "message": "In order to display the spam score column:"
+  },
+  "helloInstruction_1": {
+    "message": "Restart Thunderbird."
+  },
+  "helloInstruction_2": {
+    "message": "Right-click on a folder and select \"Properties\"."
+  },
+  "helloInstruction_3": {
+    "message": "Click on \"Repair Folder\"."
   },
   "helloParagraph2": {
-    "message": "Repair all folders like this in which you want to display the spam column."
+    "message": "This will scan the mail headers of all mails in this folder so that the spam score column can be displayed correctly."
   },
   "helloParagraph3": {
+    "message": "Repair all folders like this in which you want to display the spam column."
+  },
+  "helloParagraph4": {
     "message": "Finally, you can enable the \"Spam score\" column in the list view of the repaired folder."
   },
   "helloFooterParagraph1": {

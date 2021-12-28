@@ -1,0 +1,16 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-VR-SPAMSCORE] Spam Scores test mail (vr-spamscore-1.eml)
+X-VR-SPAMSTATE: SPAM
+X-VR-SPAMSCORE: 420
+X-VR-SPAMCAUSE: [...]
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+-- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-VR-SPAMSCORE] Spam Scores test mail (vr-spamscore-1.eml)
+X-VR-SPAMSTATE: SPAM
+X-VR-SPAMSCORE: 420
+X-VR-SPAMCAUSE: [...]

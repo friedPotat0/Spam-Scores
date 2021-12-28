@@ -1,34 +1,37 @@
 To: receiver@spamscores
 From: sender@spamscores
-Subject: [X-Spam-Status] Spam Scores test mail (spam-status-8.eml)
-X-Spam-Subject: [X-Spam-Status] Spam Scores test mail (spam-status-8.eml)
+Subject: [X-Spam-Report] Spam Scores test mail (spam-report-1.eml)
+X-Spam-Subject: ***SPAM***  =?utf-8?B?TmllIHByemVnYXAhIE5vd2/Fm2NpIC0yNSUgeiBrb2RlbSBGUkVTSDI1IQ==?=
 X-Spam-Status: Yes, score=-42.42
 X-Spam-Score: -4242
-X-Spam-Bar: +++++++++++++++++++++
-X-Spam-Report: Spam detection software, running on the system "*****",
+X-Spam-Bar: +++++++++++++
+X-Spam-Report: Spam detection software, running on the system "xxxxx",
  has identified this incoming email as possible spam.  The original
  message has been attached to this so you can view it or label
  similar future email.  If you have any questions, see
  root\@localhost for details.
- Content preview:  This is a message to test the Spam Scores Thunderbird add-on. [...] 
- Content analysis details:   (21.2 points, 5.0 required)
+ Content preview:  SprawdĹşsporstylestory_mailing-sale DARMOWA DOSTAWA OD 200
+    PLN Â Â  / Â Â  30 DNI NA ZWROT Â Â  / Â Â  BEZPIECZNE ZAKUPY Â Â  / Â Â 
+    RATY 0%Kampania realizowana przez Redgroup do bazy partnera Kampani [...]
+    
+ Content analysis details:   (13.3 points, 4.0 required)
   pts rule name              description
  ---- ---------------------- --------------------------------------------------
   4.5 URIBL_DBL_SPAM         Contains a spam URL listed in the Spamhaus DBL
                              blocklist
                              [URIs: topdelivery.net.pl]
+ -1.9 BAYES_00               BODY: Bayes spam probability is 0 to 1%
+                             [score: 0.0000]
   5.0 URIBL_BLACK            Contains an URL listed in the URIBL blacklist
                              [URIs: topdelivery.net.pl]
-  1.0 BAYES_999              BODY: Bayes spam probability is 99.9 to 100%
-                             [score: 1.0000]
-  5.0 BAYES_99               BODY: Bayes spam probability is 99 to 100%
-                             [score: 1.0000]
+ -0.0 SPF_PASS               SPF: sender matches SPF record
   0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
                              mail domains are different
- -0.0 SPF_PASS               SPF: sender matches SPF record
-  0.0 HTML_MESSAGE           BODY: HTML included in message
+  0.0 HTML_FONT_LOW_CONTRAST BODY: HTML font color similar or
+                             identical to background
   0.0 HTML_IMAGE_RATIO_02    BODY: HTML has a low ratio of text to image
                              area
+  0.0 HTML_MESSAGE           BODY: HTML included in message
   0.5 KAM_REALLYHUGEIMGSRC   RAW: Spam with image tags with ridiculously
                               huge http urls
  -0.1 DKIM_VALID             Message has at least one valid DKIM or DK signature
@@ -45,35 +48,38 @@ This is a message to test the Spam Scores Thunderbird add-on.
 -- 
 To: receiver@spamscores
 From: sender@spamscores
-Subject: [X-Spam-Status] Spam Scores test mail (spam-status-8.eml)
-X-Spam-Subject: [X-Spam-Status] Spam Scores test mail (spam-status-8.eml)
+Subject: [X-Spam-Report] Spam Scores test mail (spam-report-1.eml)
+X-Spam-Subject: ***SPAM***  =?utf-8?B?TmllIHByemVnYXAhIE5vd2/Fm2NpIC0yNSUgeiBrb2RlbSBGUkVTSDI1IQ==?=
 X-Spam-Status: Yes, score=-42.42
 X-Spam-Score: -4242
-X-Spam-Bar: +++++++++++++++++++++
-X-Spam-Report: Spam detection software, running on the system "*****",
+X-Spam-Bar: +++++++++++++
+X-Spam-Report: Spam detection software, running on the system "xxxxx",
  has identified this incoming email as possible spam.  The original
  message has been attached to this so you can view it or label
  similar future email.  If you have any questions, see
  root\@localhost for details.
- Content preview:  This is a message to test the Spam Scores Thunderbird add-on. [...] 
- Content analysis details:   (21.2 points, 5.0 required)
+ Content preview:  SprawdĹşsporstylestory_mailing-sale DARMOWA DOSTAWA OD 200
+    PLN Â Â  / Â Â  30 DNI NA ZWROT Â Â  / Â Â  BEZPIECZNE ZAKUPY Â Â  / Â Â 
+    RATY 0%Kampania realizowana przez Redgroup do bazy partnera Kampani [...]
+    
+ Content analysis details:   (13.3 points, 4.0 required)
   pts rule name              description
  ---- ---------------------- --------------------------------------------------
   4.5 URIBL_DBL_SPAM         Contains a spam URL listed in the Spamhaus DBL
                              blocklist
                              [URIs: topdelivery.net.pl]
+ -1.9 BAYES_00               BODY: Bayes spam probability is 0 to 1%
+                             [score: 0.0000]
   5.0 URIBL_BLACK            Contains an URL listed in the URIBL blacklist
                              [URIs: topdelivery.net.pl]
-  1.0 BAYES_999              BODY: Bayes spam probability is 99.9 to 100%
-                             [score: 1.0000]
-  5.0 BAYES_99               BODY: Bayes spam probability is 99 to 100%
-                             [score: 1.0000]
+ -0.0 SPF_PASS               SPF: sender matches SPF record
   0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
                              mail domains are different
- -0.0 SPF_PASS               SPF: sender matches SPF record
-  0.0 HTML_MESSAGE           BODY: HTML included in message
+  0.0 HTML_FONT_LOW_CONTRAST BODY: HTML font color similar or
+                             identical to background
   0.0 HTML_IMAGE_RATIO_02    BODY: HTML has a low ratio of text to image
                              area
+  0.0 HTML_MESSAGE           BODY: HTML included in message
   0.5 KAM_REALLYHUGEIMGSRC   RAW: Spam with image tags with ridiculously
                               huge http urls
  -0.1 DKIM_VALID             Message has at least one valid DKIM or DK signature

@@ -29,12 +29,24 @@
     "message": "Vielen Dank, dass Sie Spam Scores installiert haben!"
   },
   "helloParagraph1": {
-    "message": "Um die Spam-Score-Spalte anzuzeigen, müssen Sie zunächst Thunderbird neu starten. Klicken Sie anschließend mit der rechten Maustaste auf einen Ordner und wählen Sie \"Eigenschaften\". Klicken Sie dann auf \"Reparieren\". Dadurch werden die Mail-Header aller Mails in diesem Ordner gescannt, damit die Spam-Score-Spalte korrekt angezeigt werden kann."
+    "message": "Um die Spam-Score-Spalte anzuzeigen:"
+  },
+  "helloInstruction_1": {
+    "message": "Müssen Sie zunächst Thunderbird neu starten."
+  },
+  "helloInstruction_2": {
+    "message": "Klicken Sie anschließend mit der rechten Maustaste auf einen Ordner und wählen Sie \"Eigenschaften\"."
+  },
+  "helloInstruction_3": {
+    "message": "Klicken Sie dann auf \"Reparieren\"."
   },
   "helloParagraph2": {
-    "message": "Reparieren Sie alle Ordner, in denen Sie die Spalte anzeigen möchten."
+    "message": "Dadurch werden die Mail-Header aller Mails in diesem Ordner gescannt, damit die Spam-Score-Spalte korrekt angezeigt werden kann."
   },
   "helloParagraph3": {
+    "message": "Reparieren Sie alle Ordner, in denen Sie die Spalte anzeigen möchten."
+  },
+  "helloParagraph4": {
     "message": "Anschließend können Sie die Spalte \"Spam score\" in der Listenansicht des reparierten Ordners aktivieren."
   },
   "helloFooterParagraph1": {

@@ -20,7 +20,7 @@
   "background": {
     "page": "src/background/background.html"
   },
-  "permissions": ["messagesRead", "storage"],
+  "permissions": ["messagesRead", "accountsRead", "storage"],
   "experiment_apis": {
     "SpamScores": {
       "schema": "schema.json",
@@ -40,5 +40,6 @@
     "page": "src/options/options.html",
     "open_in_tab": false,
     "browser_style": true
-  }
+  },
+  "web_accessible_resources": ["images/score_neutral.png", "images/score_positive.png", "images/score_negative.png"]
 }
