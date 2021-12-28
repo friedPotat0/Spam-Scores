@@ -47,6 +47,9 @@ messenger.tabs
             scoreDetailTable.append(detailRow)
           }
         }
+
+        // Workaround for a bug where Thunderbird does not correctly calculate the popup window height in Wide View layout (see issue #33)
+        document.querySelector('body').style.maxHeight = `${window.screen.height / 2 - 60}px`
       } else {
         document.querySelector('#no-details').style.display = 'block'
       }

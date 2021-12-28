@@ -12,6 +12,7 @@ table#score-details {
   border-collapse: collapse;
   margin: 0;
   padding: 0;
+  padding-bottom: 5px;
   width: 100%;
   font-size: 14px;
   display: none;
