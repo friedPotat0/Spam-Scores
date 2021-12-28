@@ -41,7 +41,7 @@
     "message": "Klicken Sie dann auf \"Reparieren\"."
   },
   "helloParagraph2": {
-    "message": "Dadurch werden die Mail-Header aller Mails in diesem Ordner gescannt, damit die Spam-Score-Spalte korrekt angezeigt werden kann.."
+    "message": "Dadurch werden die Mail-Header aller Mails in diesem Ordner gescannt, damit die Spam-Score-Spalte korrekt angezeigt werden kann."
   },
   "helloParagraph3": {
     "message": "Reparieren Sie alle Ordner, in denen Sie die Spalte anzeigen möchten."
