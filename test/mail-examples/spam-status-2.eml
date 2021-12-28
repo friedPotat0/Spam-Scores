@@ -1,6 +1,6 @@
 To: receiver@spamscores
 From: sender@spamscores
-Subject: [X-Spam-Status] Spam Scores test mail 2
+Subject: [X-Spam-Status] Spam Scores test mail (spam-status-2.eml)
 X-Spam-Flag: NO
 X-Spam-Score: -42.42
 X-Spam-Level:
@@ -16,7 +16,7 @@ This is a message to test the Spam Scores Thunderbird add-on.
 -- 
 To: receiver@spamscores
 From: sender@spamscores
-Subject: Spam Scores test mail - X-Spam-Status
+Subject: [X-Spam-Status] Spam Scores test mail (spam-status-2.eml)
 X-Spam-Flag: NO
 X-Spam-Score: -42.42
 X-Spam-Level:

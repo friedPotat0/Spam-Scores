@@ -1,14 +1,9 @@
-MIME-Version: 1.0
-Content-Type: multipart/alternative;
-	boundary="_=aspNetEmail=_4d1094a12e524faf8923828cde92cb72"
-Precedence: bulk
-List-Unsubscribe: <http://info.topdelivery.net.pl/appreg/panel/Redirect.aspx?link_id=4833DA5C-36E3-4DF7-9695-D7E616F146EF&mail_id=01a6f998-3ea6-497a-9954-568e7f737fc1&d=14A96185-339C-41B4-8E28-CB069D47DA14&cntct_id=DWMTLRQjAFkMe1tBaW5AQhN9FDcRdhRoAQhCel0QPSJCSkZ4&p1=FBNFExdQBDNLWxYpa1trICl6ZXRddFkOBWkWbWULFQhLCCggHXRfdC1BEh4ZRXRKAVwNdxIIOGkbIHh0AXRpURIYDDpjC0QOAg8EbBpOXVESKiMuKnUoOGQZUBVtCnZmS2YLWGpcHDJNZWVpGSZPGnAcDWV4GgEMeB5xdHl7Yh4%2fVw9WKHwGZARbCFFZenk%3d&p2=EHhWL0UAUkReXB4IcUVuVltnfFZefxJiUz4zdGIHM1tLcglXAWExBENWehEeTx5fAR0mMkxZH0MsAgk8NjQyCF5CRhh4VhBlHhMZaExOCVsfVk1eDi1fS3R%2bUkd1AHgNWxUKVmEKbxVPFX88TFIiExppemdsFA4BfgoG&site=aHR0cCUzYSUyZiUyZmluZm8udG9wZGVsaXZlcnkubmV0LnBsJTJmYXBwcmVnJTJmcGFuZWwlMmZSZWdpc3Rlck91dFBhZ2UuYXNweCUzZm1haWxfaWQlM2QlMjMlMjNtYWlsX2lkJTIzJTIzJTI2YW1wJTNiZCUzZDE0QTk2MTg1LTMzOUMtNDFCNC04RTI4LUNCMDY5RDQ3REExNA%3d%3d>
-Feedback-ID: :53537:65841:net.pl
-X-Sid: 20211003.150020.1495@topdelivery.net.pl
-Message-ID: <14x65841.53537.1159794393@info.topdelivery.net.pl>
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Report] Spam Scores test mail (spam-report-1.eml)
 X-Spam-Subject: ***SPAM***  =?utf-8?B?TmllIHByemVnYXAhIE5vd2/Fm2NpIC0yNSUgeiBrb2RlbSBGUkVTSDI1IQ==?=
-X-Spam-Status: Yes, score=13.3
-X-Spam-Score: 133
+X-Spam-Status: Yes, score=-42.42
+X-Spam-Score: -4242
 X-Spam-Bar: +++++++++++++
 X-Spam-Report: Spam detection software, running on the system "xxxxx",
  has identified this incoming email as possible spam.  The original
@@ -48,13 +43,15 @@ X-Spam-Report: Spam detection software, running on the system "xxxxx",
                               DBL
 X-Spam-Flag: YES
 
-
 This is a message to test the Spam Scores Thunderbird add-on.
 
 -- 
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-Report] Spam Scores test mail (spam-report-1.eml)
 X-Spam-Subject: ***SPAM***  =?utf-8?B?TmllIHByemVnYXAhIE5vd2/Fm2NpIC0yNSUgeiBrb2RlbSBGUkVTSDI1IQ==?=
-X-Spam-Status: Yes, score=13.3
-X-Spam-Score: 133
+X-Spam-Status: Yes, score=-42.42
+X-Spam-Score: -4242
 X-Spam-Bar: +++++++++++++
 X-Spam-Report: Spam detection software, running on the system "xxxxx",
  has identified this incoming email as possible spam.  The original

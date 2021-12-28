@@ -1,6 +1,6 @@
 To: receiver@spamscores
 From: sender@spamscores
-Subject: [X-Spamd-Result] Spam Scores test mail
+Subject: [X-Spamd-Result] Spam Scores test mail (spamd-result-1.eml)
 X-Spamd-Result: default: False [-42.42 / 15.00];
 	 R_DKIM_ALLOW(-0.2)[];
 	 R_MIXED_CHARSET(0.18)[];
@@ -16,7 +16,7 @@ This is a message to test the Spam Scores Thunderbird add-on.
 -- 
 To: receiver@spamscores
 From: sender@spamscores
-Subject: Spam Scores test mail - X-Spamd-Result
+Subject: [X-Spamd-Result] Spam Scores test mail (spamd-result-1.eml)
 X-Spamd-Result: default: False [-42.42 / 15.00];
 	 R_DKIM_ALLOW(-0.2)[];
 	 R_MIXED_CHARSET(0.18)[];
