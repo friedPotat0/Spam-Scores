@@ -23,6 +23,13 @@ Services.scriptloader.loadSubScript(
   experiments.hdrView
 )
 
+// Load the custom stylesheet
+const styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
+  Components.interfaces.nsIStyleSheetService
+)
+const uri = Services.io.newURI(extension.getURL('src/experiments/custom_score_column.css'), null, null)
+styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET)
+
 /**
  * Do not change var because it's a global class
  * https://webextension-api.thunderbird.net/en/91/how-to/experiments.html#implementing-functions

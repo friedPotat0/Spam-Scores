@@ -69,32 +69,35 @@ class ColumnHandler {
 
   /**
    * Called first on cell load
+   * Can be used to style the cell using CSS selectors
+   * Returns the properties to be appended to the given cell
+   * @param {Number} row The index of the row.
+   * @param {nsITreeColumn} col The column of the cell. (Note: This is not the column index.)
+   * @returns {string|null} The properties to add to the HTML tag of the given cell
+   */
+  getCellProperties(row, col) {
+    const score = this.getScore(this.gDBView.getMsgHdrAt(row))
+    // Save it so getCellText doesn't need to recalculate
+    this.scores[row] = score
+    if (score === null) return null
+    if (!this.hideIconScorePositive && score > this.upperScoreBounds) return 'positive'
+    if (!this.hideIconScoreNeutral && score <= this.upperScoreBounds && score >= this.lowerScoreBounds) return 'neutral'
+    if (!this.hideIconScoreNegative && score < this.lowerScoreBounds) return 'negative'
+    return null
+  }
+
+  /**
+   * Called second on cell load
+   * Only supports raster icons. Therefore not used in favour of SVG icons (see issue #19).
    * Returns the image path of the given cell
    * @param {Number} row The index of the row.
    * @param {nsITreeColumn} col The column of the cell. (Note: This is not the column index.)
    * @returns {string|null} The image path of the cell.
    */
-  getImageSrc(row, col) {
-    const score = this.getScore(this.gDBView.getMsgHdrAt(row))
-    // Save it so getCellText doesn't need to recalculate
-    this.scores[row] = score
-    if (score === null) return null
-    if (score > this.upperScoreBounds) {
-      if (this.hideIconScorePositive) return null
-      return extension.getURL('images/score_positive.png')
-    }
-    if (score <= this.upperScoreBounds && score >= this.lowerScoreBounds) {
-      if (this.hideIconScoreNeutral) return null
-      return extension.getURL('images/score_neutral.png')
-    }
-    if (score < this.lowerScoreBounds) {
-      if (this.hideIconScoreNegative) return null
-      return extension.getURL('images/score_negative.png')
-    }
-  }
+  getImageSrc(row, col) {}
 
   /**
-   * Called second on cell load
+   * Called third on cell load
    * Returns the score text for a given cell. If mail has no score or the score and text should be hidden (checkbox in add-on settings), null is returned.
    * @param {Number} row The index of the row.
    * @param {nsITreeColumn} col The column of the cell. (Note: This is not the column index.)
