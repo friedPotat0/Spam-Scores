@@ -1,0 +1,14 @@
+/* COLOR SETTINGS FOR DARK/LIGHT THEME */
+@media (prefers-color-scheme: light) {
+  body {
+    color: black;
+    background: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: white;
+    background: #2b2a33;
+  }
+}
