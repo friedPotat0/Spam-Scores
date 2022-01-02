@@ -79,7 +79,7 @@ table#score-details tr.score-detail-row.neutral .score {
 @media (prefers-color-scheme: dark) {
   body {
     color: white;
-    background: #333;
+    background: #2b2a33;
   }
   table#score-details tr.score-detail-row td div.info {
     color: #a0a0a0;
