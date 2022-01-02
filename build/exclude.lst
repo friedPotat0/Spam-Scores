@@ -3,3 +3,4 @@ test/*
 build/*
 .prettierignore
 .prettierrc
+*.xpi
