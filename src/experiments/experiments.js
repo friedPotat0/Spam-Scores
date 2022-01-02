@@ -85,6 +85,14 @@ var SpamScores = class extends ExtensionAPI {
         addHeadersToPrefs(dynamicHeaders) {
           updatePrefs(dynamicHeaders)
         },
+        // Deprecated (Fallback for add-on version <= 1.3.1)
+        getHelloFlag() {
+          try {
+            return Services.prefs.getBoolPref('spamscores.hello')
+          } catch (err) {
+            return false
+          }
+        },
         repaint(windowId) {
           // Get a real window from a window ID:
           const windowObject = context.extension.windowManager.get(windowId)

@@ -147,12 +147,19 @@ const init = async () => {
 
   // Hello Message
   if (!storage.hello) {
-    messenger.windows.create({
-      height: 680,
-      width: 488,
-      url: '/src/static/hello.html',
-      type: 'popup'
-    })
+    /**
+     * Additional condition deprecated (Fallback for add-on version <= 1.3.1)
+     * Prevents displaying the message on subsequent installations.
+     * Should be removed when majority has updated!
+     */
+    if (!(await spamScores.getHelloFlag())) {
+      messenger.windows.create({
+        height: 680,
+        width: 488,
+        url: '/src/static/hello.html',
+        type: 'popup'
+      })
+    }
     localStorage.set({ hello: true })
   }
 

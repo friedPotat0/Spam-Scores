@@ -39,6 +39,13 @@
         ]
       },
       {
+        "name": "getHelloFlag",
+        "type": "function",
+        "description": "",
+        "async": true,
+        "parameters": []
+      },
+      {
         "name": "setCustomMailscannerHeaders",
         "type": "function",
         "description": "",
