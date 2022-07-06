@@ -14,9 +14,9 @@ If you have mails with the header "X-MYCOMPANY-MailScanner-SpamCheck", you have 
 
 The total score of each mail with an existing spam header will be displayed along with a red, yellow or green icon depending on the score. The colours are by default calculated as follows:
 
-- ![Negative Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_negative.png) Score greater than 2
+- ![Positive Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_positive.png) Score greater than 2
 - ![Neutral Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_neutral.png) Score between -2 and 2 (both inclusive)
-- ![Positive Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_positive.png) Score less than -2
+- ![Negative Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_negative.png) Score less than -2
 
 The icon score ranges can be changed in the [add-on options](#options).
 
