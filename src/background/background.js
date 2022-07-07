@@ -167,6 +167,9 @@ const init = async () => {
   messenger.messageDisplay.onMessageDisplayed.addListener(onMessageDisplayed)
   messenger.mailTabs.onDisplayedFolderChanged.addListener(onDisplayedFolderChanged)
 
+  const win = await messenger.windows.getCurrent()
+  spamScores.repaint(win.id)
+
   // Init Data
   const [lowerBounds, upperBounds] = getBounds(storage)
   spamScores.setScoreBounds(lowerBounds, upperBounds)
