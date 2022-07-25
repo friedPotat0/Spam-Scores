@@ -9,7 +9,7 @@
     "gecko": {
       "id": "spamscores@czaenker",
       "strict_min_version": "91.0a1",
-      "strict_max_version": "*"
+      "strict_max_version": "102.*"
     }
   },
   "icons": {
