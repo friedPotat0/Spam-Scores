@@ -51,6 +51,7 @@ function getScores(headers) {
  * @returns {string} Path of Image
  */
 async function getImageSrc(score) {
+  if (score === null) return 'images/score_no.svg'
   const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   const [lowerBounds, upperBounds] = getBounds(storage)
   if (score > upperBounds) return '/images/score_positive.svg'
@@ -77,6 +78,8 @@ async function onMessageDisplayed(tab, message) {
   // Message Score Button
   if (score === null) {
     messageButton.disable(idTab)
+    messageButton.setTitle({ tabId: idTab, title: 'No Spam Score'})
+    messageButton.setIcon({ path: await getImageSrc(null) })
   } else {
     messageButton.enable(idTab)
     messageButton.setTitle({ tabId: idTab, title: 'Spam Score: ' + score })
