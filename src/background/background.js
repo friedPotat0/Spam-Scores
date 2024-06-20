@@ -51,7 +51,7 @@ function getScores(headers) {
  * @returns {string} Path of Image
  */
 async function getImageSrc(score) {
-  if (score === null) return 'images/score_no.svg'
+  if (score === null) return '/images/score_no.svg'
   const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
   const [lowerBounds, upperBounds] = getBounds(storage)
   if (score > upperBounds) return '/images/score_positive.svg'
