@@ -11,7 +11,8 @@ messenger.tabs
     const tabId = tabs[0].id
     messenger.messageDisplay.getDisplayedMessage(tabId).then(async message => {
       const fullMessage = await messenger.messages.getFull(message.id)
-      const parsedDetailScores = await getParsedDetailScores(fullMessage.headers)
+      const allDetailScores = await getParsedDetailScores(fullMessage.headers)
+      const parsedDetailScores = await deduplicateValues(allDetailScores)
       if (parsedDetailScores.length !== 0) {
         const groupedDetailScores = {
           positive: parsedDetailScores.filter(el => el.score > 0).sort((a, b) => b.score - a.score),
@@ -101,6 +102,58 @@ async function getParsedDetailScores(headers) {
     }
   }
   return parsedDetailScores
+}
+
+/**
+ * Removes duplicate spam scores from the parsed details
+ * @param {array} scores
+ * @returns {array}
+ */
+async function deduplicateValues(scores) {
+  // Some spam filters (like spamassassin) do add two distinct headers
+  // with similar information to an email:
+  // X-Spam-Status and X-Spam-Report where the first only contains a
+  // list of checks that match an email whereas the latter contains
+  // the corresponding scores and description as well. This leads to
+  // double reporting of spam scores with different scores because
+  // the parsing routine uses 0 to provide scores for tests where it
+  // cannot find them.
+  // See also https://github.com/friedPotat0/Spam-Scores/issues/48
+  // To get rid of these duplicates, we use a two step approach:
+  // 1. For all checks with a score of 0 the array is being examined
+  //    for another check of the same name that has a value being different
+  //    to 0 that can be used to update the score. (We do also add
+  //    descriptions provided by spamassassin in that step)
+  // 2. Remove all duplicate checks from the array.
+  // Unfortunately both passes do have a runtime of n^2.
+
+  // 1. update all scores
+  for (const el in scores) {
+    for (const el2 in scores) {
+      if (scores[el].name === scores[el2].name && scores[el2].score === 0) {
+        if (scores[el].score > scores[el2].score ||
+            scores[el].score < scores[el2].score) {
+          scores[el2].score = scores[el].score
+        } else {
+          scores[el].score = scores[el2].score
+        }
+        // while we're at it, update the description as well in
+        // case it is missing
+        if (!scores[el].description) {
+          scores[el].description = scores[el2].description
+        } else {
+          scores[el2].description = scores[el].description
+        }
+      }
+    }
+  }
+  // 2. remove duplicate checks -- https://stackoverflow.com/a/36744732
+  const deduplicatedScores = scores.filter((el, index, self) =>
+    self.findIndex(el2 =>
+      (el.name === el2.name)
+    ) === index
+  )
+  return deduplicatedScores
 }
 
 /**
