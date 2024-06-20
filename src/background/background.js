@@ -78,7 +78,7 @@ async function onMessageDisplayed(tab, message) {
   // Message Score Button
   if (score === null) {
     messageButton.disable(idTab)
-    messageButton.setTitle({ tabId: idTab, title: 'No Spam Score'})
+    messageButton.setTitle({ tabId: idTab, title: 'No Spam Score' })
     messageButton.setIcon({ path: await getImageSrc(null) })
   } else {
     messageButton.enable(idTab)
