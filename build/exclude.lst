@@ -4,3 +4,4 @@ build/*
 .prettierignore
 .prettierrc
 *.xpi
+.gitignore
