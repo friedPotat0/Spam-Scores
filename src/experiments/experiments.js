@@ -16,7 +16,7 @@ const SCORE_REGEX = {
   'x-vr-spamscore': /([0-9]+)/
 }
 
-function importThreadPaneModule() {
+function importThreadPaneColumnsModule() {
   try {
     // TB115
     return ChromeUtils.importESModule("chrome://messenger/content/thread-pane-columns.mjs");
@@ -26,7 +26,7 @@ function importThreadPaneModule() {
   }
 }
 
-var { ThreadPaneColumns } = importThreadPaneModule();
+var { ThreadPaneColumns } = importThreadPaneColumnsModule();
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
