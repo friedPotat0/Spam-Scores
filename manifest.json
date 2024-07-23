@@ -2,14 +2,14 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "author": "Christian Zaenker",
   "default_locale": "en",
   "applications": {
     "gecko": {
       "id": "spamscores@czaenker",
-      "strict_min_version": "91.0a1",
-      "strict_max_version": "115.*"
+      "strict_min_version": "115.0",
+      "strict_max_version": "128.*"
     }
   },
   "icons": {
@@ -23,7 +23,7 @@
   "permissions": ["messagesRead", "accountsRead", "storage"],
   "experiment_apis": {
     "SpamScores": {
-      "schema": "schema.json",
+      "schema": "src/experiments/schema.json",
       "parent": {
         "scopes": ["addon_parent"],
         "paths": [["SpamScores"]],

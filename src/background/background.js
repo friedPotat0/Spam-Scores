@@ -117,33 +117,6 @@ async function onMessageDisplayed(tab, message) {
 }
 
 /**
- * Fired when the selected messages change in any mail tab.
- * @param {Tab} tab
- * @param {MessageList} selectedMessages
- */
-async function onSelectedMessagesChanged(tab, selectedMessages) {
-  const spamScores = messenger.SpamScores
-  const win = await messenger.windows.getCurrent()
-  spamScores.repaint(win.id)
-}
-
-/**
- * Fired when the displayed folder changes in any mail tab
- * @param {Tab} tab
- * @param {MailFolder} displayedFolder
- */
-async function onDisplayedFolderChanged(tab, displayedFolder) {
-  const spamScores = messenger.SpamScores
-  // Disable addon on root folder
-  if (displayedFolder.path !== '/') {
-    const win = await messenger.windows.getCurrent()
-    spamScores.repaint(win.id)
-  } else {
-    // Cleans in case we go to root
-    spamScores.clear()
-  }
-}
-/**
  * Main
  */
 const init = async () => {
@@ -179,11 +152,6 @@ const init = async () => {
 
   // Add Listeners
   messenger.messageDisplay.onMessageDisplayed.addListener(onMessageDisplayed)
-  messenger.mailTabs.onDisplayedFolderChanged.addListener(onDisplayedFolderChanged)
-  messenger.mailTabs.onSelectedMessagesChanged.addListener(onSelectedMessagesChanged)
-
-  const win = await messenger.windows.getCurrent()
-  spamScores.repaint(win.id)
 
   // Init Data
   const [lowerBounds, upperBounds] = getBounds(storage)
@@ -197,5 +165,6 @@ const init = async () => {
     storage.hideIconScoreNeutral || false,
     storage.hideIconScoreNegative || false
   )
+  spamScores.addColumns("SpamScore", "SpamScore (Icon)");
 }
 init()

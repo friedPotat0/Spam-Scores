@@ -1,34 +1,70 @@
 'use strict'
-const EXTENSION_NAME = 'spamscores@czaenker'
-const extension = WebExtensionPolicy.getByID(EXTENSION_NAME).extension
+
+// Copy of constants.js until Experiments API supports ES6 modules
+const CUSTOM_SCORE_REGEX = {
+  'mailscanner-spamcheck':
+    /(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),/
+}
+
+// Copy of constants.js until Experiments API supports ES6 modules
+const SCORE_REGEX = {
+  'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
+  'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
+  'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-vr-spamscore': /([0-9]+)/
+}
+
+function importThreadPaneModule() {
+  try {
+    // TB115
+    return ChromeUtils.importESModule("chrome://messenger/content/thread-pane-columns.mjs");
+  } catch (err) {
+    // TB128
+    return ChromeUtils.importESModule("chrome://messenger/content/ThreadPaneColumns.mjs");
+  }
+}
+
+var { ThreadPaneColumns } = importThreadPaneModule();
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
+
 let scoreHdrViewParams = {
   lowerScoreBounds: DEFAULT_SCORE_LOWER_BOUNDS,
   upperScoreBounds: DEFAULT_SCORE_UPPER_BOUNDS
 }
 
+function getScore(hdr) {
+  for (const regExName in SCORE_REGEX) {
+    const headerValue = hdr.getStringProperty(regExName)
+    if (headerValue === '') continue
+    const scoreField = headerValue.match(SCORE_REGEX[regExName])
+    if (!scoreField) continue // If no match iterate - Note: This shouldn't be needed
+    const score = parseFloat(scoreField[1])
+    if (!isNaN(score)) return score
+  }
+
+  if (scoreHdrViewParams.customMailscannerHeaders) {
+    for (const headerName of scoreHdrViewParams.customMailscannerHeaders) {
+      for (const regExName in CUSTOM_SCORE_REGEX) {
+        if (headerName.endsWith(regExName)) {
+          const headerValue = hdr.getStringProperty(headerName)
+          const scoreField = headerValue.match(CUSTOM_SCORE_REGEX[regExName])
+          if (!scoreField) continue // If no match iterate
+          const score = parseFloat(scoreField[1])
+          if (!isNaN(score)) return score
+        }
+      }
+    }
+  }
+  return null
+}
+
 /**
  * For debugging Experiments.js, press CTRL + SHIFT + U/I
  */
-
-const experiments = {
-  hdrView: {}
-}
-// Load the custom script
-// https://developer.thunderbird.net/add-ons/mailextensions/experiments#structuring-experiment-code
-Services.scriptloader.loadSubScript(
-  extension.rootURI.resolve('src/experiments/custom_score_column.js'),
-  experiments.hdrView
-)
-
-// Load the custom stylesheet
-const styleSheetService = Components.classes['@mozilla.org/content/style-sheet-service;1'].getService(
-  Components.interfaces.nsIStyleSheetService
-)
-const uri = Services.io.newURI(extension.getURL('src/experiments/custom_score_column.css'), null, null)
-styleSheetService.loadAndRegisterSheet(uri, styleSheetService.USER_SHEET)
 
 /**
  * Do not change var because it's a global class
@@ -93,36 +129,83 @@ var SpamScores = class extends ExtensionAPI {
             return false
           }
         },
-        repaint(windowId) {
-          // Get a real window from a window ID:
-          const windowObject = context.extension.windowManager.get(windowId)
-          unpaint()
-          paint(windowObject.window)
+
+        async addColumns(nameSpamScoreValue, nameSpamScoreIcon) {
+          function getExtensionUrl(url) {
+            if (url) {
+              return context.extension.baseURI.resolve(url);
+            }
+            return null;
+          }
+          function scoreCallback(msgHdr) {
+            let score = getScore(msgHdr);
+            if (score === null) return null;
+            if (score > scoreHdrViewParams.upperScoreBounds && scoreHdrViewParams.hideIconScorePositive) return null;
+            if (score <= scoreHdrViewParams.upperScoreBounds && score >= scoreHdrViewParams.lowerScoreBounds && scoreHdrViewParams.hideIconScoreNeutral) return null
+            if (score < scoreHdrViewParams.lowerScoreBounds && scoreHdrViewParams.hideIconScoreNegative) return null;
+            return score;
+          }
+          
+          ThreadPaneColumns.addCustomColumn("spam-score-value", {
+            name: nameSpamScoreValue,
+            hidden: true,
+            icon: false,
+            resizable: true,
+            sortable: true,
+            textCallback: scoreCallback,
+          });
+
+          ThreadPaneColumns.addCustomColumn("spam-score-icon", {
+            name: nameSpamScoreIcon,
+            hidden: true,
+            icon: true,
+            iconHeaderUrl: getExtensionUrl("/images/icon-16px.png"),
+            iconCellDefinitions: [
+              {
+                id: "positive",
+                alt: "+",
+                title: "Positive Spam Score",
+                url: getExtensionUrl("/images/score_positive.png"),
+              },
+              {
+                id: "negative",
+                alt: "-",
+                title: "Negative Spam Score",
+                url: getExtensionUrl("/images/score_negative.png"),
+              },
+              {
+                id: "neutral",
+                alt: "0",
+                title: "Neutral Spam Score",
+                url: getExtensionUrl("/images/score_neutral.png"),
+              }
+            ],
+            iconCallback: msgHdr => {
+              let score = getScore(msgHdr);
+              if (score === null) return ""
+              if (!scoreHdrViewParams.hideIconScorePositive && score > scoreHdrViewParams.upperScoreBounds) return 'positive'
+              if (!scoreHdrViewParams.hideIconScoreNeutral && score <= scoreHdrViewParams.upperScoreBounds && score >= scoreHdrViewParams.lowerScoreBounds) return 'neutral'
+              if (!scoreHdrViewParams.hideIconScoreNegative && score < scoreHdrViewParams.lowerScoreBounds) return 'negative'
+              return ""
+            },
+            resizable: false,
+            sortable: true,
+            textCallback: scoreCallback,
+          });
         },
-        clear() {
-          unpaint()
+
+        async removeColumns(id) {
+          ThreadPaneColumns.removeCustomColumn("spam-score-value");
+          ThreadPaneColumns.removeCustomColumn("spam-score-icon");
         }
       }
     }
   }
 
-  close() {}
-}
-
-/**
- * Paint
- * @param {Window} win Literally Window
- */
-function paint(win) {
-  experiments.hdrView.init(win.gDBView, win.document, scoreHdrViewParams)
-}
-
-/**
- * Unpaint
- * @param {Window} win
- */
-function unpaint() {
-  if (experiments.hdrView) experiments.hdrView.destroy()
+  close() {
+    ThreadPaneColumns.removeCustomColumn("spam-score-value");
+    ThreadPaneColumns.removeCustomColumn("spam-score-icon");
+  }
 }
 
 /**
