@@ -77,22 +77,26 @@
         ]
       },
       {
-        "name": "repaint",
+        "name": "addColumns",
         "type": "function",
         "description": "",
-        "async": false,
+        "async": true,
         "parameters": [
           {
-            "name": "windowId",
-            "type": "number"
+            "name": "nameSpamCoreValue",
+            "type": "string"
+          },
+          {
+            "name": "nameSpamCoreIcon",
+            "type": "string"
           }
         ]
       },
       {
-        "name": "clear",
+        "name": "removeColumns",
         "type": "function",
         "description": "",
-        "async": false,
+        "async": true,
         "parameters": []
       }
     ]
