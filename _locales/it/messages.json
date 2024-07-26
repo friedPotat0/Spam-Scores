@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "Punteggi Spam",
+    "message": "Spam Scores",
     "description": "Name of the add-on"
   },
   "extensionDescription": {
@@ -23,10 +23,10 @@
     "message": "Nascondi icona e punteggio nella colonna"
   },
   "helloPopupTitle": {
-    "message": "Punteggi Spam - Grazie!"
+    "message": "Spam Scores - Grazie!"
   },
   "helloHeadline": {
-    "message": "Grazie per aver installato Punteggi Spam!"
+    "message": "Grazie per aver installato Spam Scores!"
   },
   "helloParagraph1": {
     "message": "Per visualizzare la colonna del punteggio spam:"
@@ -47,7 +47,7 @@
     "message": "Ripara tutte le cartelle in cui desideri visualizzare la colonna spam in questo modo."
   },
   "helloParagraph4": {
-    "message": "Infine, puoi abilitare la colonna \"Punteggio spam\" nella visualizzazione elenco della cartella riparata."
+    "message": "Infine, puoi abilitare la colonna \"Spam Scores\" nella visualizzazione elenco della cartella riparata."
   },
   "helloFooterParagraph1": {
     "message": "Se hai domande o riscontri errori durante l'utilizzo di questo componente aggiuntivo, non esitare a creare una issue su GitHub (https://github.com/friedPotat0/Spam-Scores)."
