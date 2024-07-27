@@ -1,0 +1,58 @@
+{
+  "extensionName": {
+    "message": "Spam Scores",
+    "description": "Name of the add-on"
+  },
+  "extensionDescription": {
+    "message": "Visualizza i punteggi spam in base alle intestazioni delle email.",
+    "description": "Description of the add-on"
+  },
+  "optionsIconRanges": {
+    "message": "Intervalli delle icone di punteggio"
+  },
+  "optionsScoreGreater": {
+    "message": "Punteggio maggiore di"
+  },
+  "optionsScoreBetween": {
+    "message": "Punteggio tra $1 e $2 (inclusi entrambi)"
+  },
+  "optionsScoreLess": {
+    "message": "Punteggio inferiore a"
+  },
+  "optionsHideIconAndScore": {
+    "message": "Nascondi icona e punteggio nella colonna"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - Grazie!"
+  },
+  "helloHeadline": {
+    "message": "Grazie per aver installato Spam Scores!"
+  },
+  "helloParagraph1": {
+    "message": "Per visualizzare la colonna del punteggio spam:"
+  },
+  "helloInstruction_1": {
+    "message": "Riavvia Thunderbird."
+  },
+  "helloInstruction_2": {
+    "message": "Fai clic destro su una cartella e seleziona \"Proprietà\"."
+  },
+  "helloInstruction_3": {
+    "message": "Clicca su \"Ripara cartella\"."
+  },
+  "helloParagraph2": {
+    "message": "Questo scansionerà le intestazioni delle email in questa cartella in modo che la colonna del punteggio spam possa essere visualizzata correttamente."
+  },
+  "helloParagraph3": {
+    "message": "Ripara tutte le cartelle in cui desideri visualizzare la colonna spam in questo modo."
+  },
+  "helloParagraph4": {
+    "message": "Infine, puoi abilitare la colonna \"Spam Scores\" nella visualizzazione elenco della cartella riparata."
+  },
+  "helloFooterParagraph1": {
+    "message": "Se hai domande o riscontri errori durante l'utilizzo di questo componente aggiuntivo, non esitare a creare una issue su GitHub (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "Lascia una recensione se ti piace questo componente aggiuntivo. &#x1F60A;"
+  }
+}
