@@ -152,6 +152,7 @@ var SpamScores = class extends ExtensionAPI {
             icon: false,
             resizable: true,
             sortable: true,
+            sortCallback: getScore,
             textCallback: scoreCallback,
           });
 
@@ -190,6 +191,7 @@ var SpamScores = class extends ExtensionAPI {
             },
             resizable: false,
             sortable: true,
+            sortCallback: getScore,
             textCallback: scoreCallback,
           });
         },
