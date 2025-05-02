@@ -69,6 +69,7 @@ export const SPAM_HEADER_REGEX =
  */
 export const SCORE_DETAILS_ARRAY = [
   'x-spamd-result',
+  'x-spam-result',
   'x-spam-report',
   'x-spamcheck',
   'x-spam-status',
