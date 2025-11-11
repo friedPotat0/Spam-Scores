@@ -62,6 +62,14 @@ function getScore(hdr) {
   return null
 }
 
+function getSortScore(hdr) {
+  const score = getScore(hdr)
+  if (score === null) return null
+  // Multiply by 100000 for decimal precision, then add offset of 1 billion to handle negative numbers
+  // This ensures both negative and positive scores sort correctly
+  return Math.round(score * 100000) + 1000000000
+}
+
 /**
  * For debugging Experiments.js, press CTRL + SHIFT + U/I
  */
@@ -152,6 +160,7 @@ var SpamScores = class extends ExtensionAPI {
             icon: false,
             resizable: true,
             sortable: true,
+            sortCallback: getSortScore,
             textCallback: scoreCallback,
           });
 
@@ -190,6 +199,7 @@ var SpamScores = class extends ExtensionAPI {
             },
             resizable: false,
             sortable: true,
+            sortCallback: getSortScore,
             textCallback: scoreCallback,
           });
         },
