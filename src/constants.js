@@ -74,6 +74,7 @@ export const HMAILSERVER_REASON_REGEX = /^x-hmailserver-reason-\d+$/
  */
 export const SCORE_DETAILS_ARRAY = [
   'x-spamd-result',
+  'x-spam-result',
   'x-spam-report',
   'x-ham-report',
   'x-spamcheck',
