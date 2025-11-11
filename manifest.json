@@ -2,14 +2,14 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "author": "Christian Zaenker",
   "default_locale": "en",
   "applications": {
     "gecko": {
       "id": "spamscores@czaenker",
       "strict_min_version": "115.0",
-      "strict_max_version": "128.*"
+      "strict_max_version": "144.*"
     }
   },
   "icons": {
