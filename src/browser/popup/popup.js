@@ -70,7 +70,7 @@ async function getParsedDetailScores(headers) {
   for (const headerName in headers) {
     if (SCORE_DETAILS_ARRAY.includes(headerName) || customHeaders.includes(headerName)) {
       let headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
-      if (headerName === 'x-spam-report') {
+      if (headerName === 'x-spam-report' || headerName === 'x-ham-report') {
         const reportSplitted = headerValue.split('Content analysis details:')
         if (reportSplitted.length > 1) {
           headerValue = reportSplitted[1]
@@ -131,8 +131,7 @@ async function deduplicateValues(scores) {
   for (const el in scores) {
     for (const el2 in scores) {
       if (scores[el].name === scores[el2].name && scores[el2].score === 0) {
-        if (scores[el].score > scores[el2].score ||
-            scores[el].score < scores[el2].score) {
+        if (scores[el].score > scores[el2].score || scores[el].score < scores[el2].score) {
           scores[el2].score = scores[el].score
         } else {
           scores[el].score = scores[el2].score
@@ -148,11 +147,7 @@ async function deduplicateValues(scores) {
     }
   }
   // 2. remove duplicate checks -- https://stackoverflow.com/a/36744732
-  const deduplicatedScores = scores.filter((el, index, self) =>
-    self.findIndex(el2 =>
-      (el.name === el2.name)
-    ) === index
-  )
+  const deduplicatedScores = scores.filter((el, index, self) => self.findIndex(el2 => el.name === el2.name) === index)
   return deduplicatedScores
 }
 

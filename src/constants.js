@@ -46,6 +46,7 @@ export const SCORE_REGEX = {
   'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
+  'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-vr-spamscore': /([0-9]+)/
 }
@@ -61,7 +62,7 @@ export const CUSTOM_SCORE_REGEX = {
 
 /** @constant {RegExp} */
 export const SPAM_HEADER_REGEX =
-  /(X-.*?(?:Spamd-Result|Spam-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
+  /(X-.*?(?:Spamd-Result|Spam-Report|Ham-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
 
 /**
  * Headers that contain the score details
@@ -70,6 +71,7 @@ export const SPAM_HEADER_REGEX =
 export const SCORE_DETAILS_ARRAY = [
   'x-spamd-result',
   'x-spam-report',
+  'x-ham-report',
   'x-spamcheck',
   'x-spam-status',
   'x-rspamd-report'
