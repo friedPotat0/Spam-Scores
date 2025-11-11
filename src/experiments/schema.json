@@ -61,6 +61,36 @@
         ]
       },
       {
+        "name": "setScoreHeaderOrder",
+        "type": "function",
+        "description": "Set the order in which score headers are parsed",
+        "async": false,
+        "parameters": [
+          {
+            "name": "scoreHeaderOrder",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      {
+        "name": "setScoreDetailsHeaderOrder",
+        "type": "function",
+        "description": "Set the order in which score details headers are parsed",
+        "async": false,
+        "parameters": [
+          {
+            "name": "scoreDetailsHeaderOrder",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      {
         "name": "addHeadersToPrefs",
         "type": "function",
         "description": "",

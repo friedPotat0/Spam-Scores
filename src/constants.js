@@ -82,6 +82,35 @@ export const SCORE_DETAILS_ARRAY = [
   'x-hmailserver-reason-score'
 ]
 
+/**
+ * Default order for parsing score headers (first match is used)
+ * @constant {String[]}
+ */
+export const DEFAULT_SCORE_HEADER_ORDER = [
+  'x-spamd-result',
+  'x-spam-status',
+  'x-rspam-status',
+  'x-spam-score',
+  'x-spam-report',
+  'x-ham-report',
+  'x-rspamd-score',
+  'x-vr-spamscore',
+  'x-hmailserver-reason-score'
+]
+
+/**
+ * Default order for parsing score details headers (first match is used)
+ * @constant {String[]}
+ */
+export const DEFAULT_SCORE_DETAILS_ORDER = [
+  'x-spamd-result',
+  'x-spam-report',
+  'x-ham-report',
+  'x-spam-status',
+  'x-rspamd-report',
+  'x-hmailserver-reason-score'
+]
+
 /** @constant {Object<RegExp>} */
 export const SYMBOL_REGEX = {
   prefix: /\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) .*?(?=\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) |$)/gs,

@@ -22,6 +22,21 @@
   "optionsHideIconAndScore": {
     "message": "Nascondi icona e punteggio nella colonna"
   },
+  "optionsHeaderPriority": {
+    "message": "Priorità di analisi degli header"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Imposta l'ordine in cui vengono analizzati gli header spam. Verrà utilizzato il primo header corrispondente. Trascina per riordinare."
+  },
+  "optionsScoreHeaders": {
+    "message": "Header di punteggio (utilizzati per il valore del punteggio)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Header di dettagli del punteggio (utilizzati per la suddivisione)"
+  },
+  "optionsResetToDefault": {
+    "message": "Ripristina l'ordine predefinito"
+  },
   "helloPopupTitle": {
     "message": "Spam Scores - Grazie!"
   },

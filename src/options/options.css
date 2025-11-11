@@ -17,6 +17,61 @@
   vertical-align: middle;
 }
 
+.sortable-list {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  max-width: 400px;
+  min-height: 50px;
+}
+
+.sortable-item {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 3px;
+  cursor: move;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.sortable-item:hover {
+  background: #e8e8e8;
+}
+
+.sortable-item.dragging {
+  opacity: 0.5;
+}
+
+.sortable-item::before {
+  content: '⋮⋮';
+  margin-right: 10px;
+  color: #999;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.reset-button {
+  padding: 6px 12px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.reset-button:hover {
+  background: #e0e0e0;
+}
+
+.reset-button:active {
+  background: #d0d0d0;
+}
+
 /* COLOR SETTINGS FOR DARK/LIGHT THEME */
 @media (prefers-color-scheme: light) {
   body {
@@ -29,5 +84,33 @@
   body {
     color: white;
     background: #23222b;
+  }
+
+  .sortable-list {
+    border-color: #555;
+  }
+
+  .sortable-item {
+    background: #333;
+    border-color: #555;
+    color: white;
+  }
+
+  .sortable-item:hover {
+    background: #444;
+  }
+
+  .reset-button {
+    background: #333;
+    border-color: #555;
+    color: white;
+  }
+
+  .reset-button:hover {
+    background: #444;
+  }
+
+  .reset-button:active {
+    background: #555;
   }
 }

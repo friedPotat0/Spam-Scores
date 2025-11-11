@@ -1,5 +1,10 @@
 import { SCORE_SYMBOLS } from './score_symbols.js'
-import { SCORE_DETAILS_ARRAY, SYMBOL_REGEX, HMAILSERVER_REASON_REGEX } from '../../constants.js'
+import {
+  SCORE_DETAILS_ARRAY,
+  SYMBOL_REGEX,
+  HMAILSERVER_REASON_REGEX,
+  DEFAULT_SCORE_DETAILS_ORDER
+} from '../../constants.js'
 
 messenger.tabs
   .query({
@@ -63,12 +68,47 @@ messenger.tabs
  * @returns {parsedDetailScores[]}
  */
 async function getParsedDetailScores(headers) {
-  const storage = await messenger.storage.local.get(['customMailscannerHeaders'])
-  const customHeaders = Object.values(storage).map(value => value[0])
+  const storage = await messenger.storage.local.get(['customMailscannerHeaders', 'scoreDetailsHeaderOrder'])
+  const customHeaders = storage.customMailscannerHeaders || []
+  const scoreDetailsOrder = storage.scoreDetailsHeaderOrder || DEFAULT_SCORE_DETAILS_ORDER
+
   /** @type {parsedDetailScores[]} */
   let parsedDetailScores = []
-  for (const headerName in headers) {
-    if (SCORE_DETAILS_ARRAY.includes(headerName) || customHeaders.includes(headerName)) {
+
+  // Use custom order for score details headers
+  const headersToCheck = [...scoreDetailsOrder, ...customHeaders.filter(h => !scoreDetailsOrder.includes(h))]
+
+  for (const headerName of headersToCheck) {
+    if (headers[headerName]) {
+      // Special handling for x-hmailserver-reason-score
+      if (headerName === 'x-hmailserver-reason-score') {
+        // Parse hMailServer reason headers
+        for (const hdrName in headers) {
+          if (HMAILSERVER_REASON_REGEX.test(hdrName)) {
+            const headerValue = headers[hdrName][0]
+            // Format: "Description - (Score: X)"
+            const match = headerValue.match(/^(.+?)\s*-\s*\(Score:\s*([-+]?[0-9]+\.?[0-9]*)\)/)
+            if (match) {
+              const description = match[1].trim()
+              const score = parseFloat(match[2])
+              // Create a simplified name from the description
+              const name = hdrName.toUpperCase().replace('X-HMAILSERVER-REASON-', 'REASON_')
+              parsedDetailScores.push({
+                name: name,
+                score: score,
+                info: '',
+                description: description
+              })
+            }
+          }
+        }
+        if (parsedDetailScores.length > 0) {
+          break // Found details, stop looking
+        }
+        continue
+      }
+
+      // Regular header parsing
       let headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
       if (headerName === 'x-spam-report' || headerName === 'x-ham-report') {
         const reportSplitted = headerValue.split('Content analysis details:')
@@ -86,7 +126,8 @@ async function getParsedDetailScores(headers) {
           description: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$3')) || ''
         }))
         parsedDetailScores = [...parsedDetailScores, ...detailScore]
-        continue
+        // Use first matching header only (like for score headers)
+        break
       }
 
       symbolMatch = headerValue.match(SYMBOL_REGEX.suffix)
@@ -97,28 +138,8 @@ async function getParsedDetailScores(headers) {
           info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$3')) || ''
         }))
         parsedDetailScores = [...parsedDetailScores, ...detailScore]
-        continue
-      }
-    }
-  }
-
-  // Parse hMailServer reason headers
-  for (const headerName in headers) {
-    if (HMAILSERVER_REASON_REGEX.test(headerName)) {
-      const headerValue = headers[headerName][0]
-      // Format: "Description - (Score: X)"
-      const match = headerValue.match(/^(.+?)\s*-\s*\(Score:\s*([-+]?[0-9]+\.?[0-9]*)\)/)
-      if (match) {
-        const description = match[1].trim()
-        const score = parseFloat(match[2])
-        // Create a simplified name from the description
-        const name = headerName.toUpperCase().replace('X-HMAILSERVER-REASON-', 'REASON_')
-        parsedDetailScores.push({
-          name: name,
-          score: score,
-          info: '',
-          description: description
-        })
+        // Use first matching header only (like for score headers)
+        break
       }
     }
   }

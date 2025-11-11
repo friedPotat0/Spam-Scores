@@ -22,6 +22,21 @@
   "optionsHideIconAndScore": {
     "message": "Symbol und Punktzahl in der Spalte nicht anzeigen"
   },
+  "optionsHeaderPriority": {
+    "message": "Header-Parsing-Priorität"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Legen Sie die Reihenfolge fest, in der Spam-Header analysiert werden. Der erste übereinstimmende Header wird verwendet. Ziehen Sie zum Neuordnen."
+  },
+  "optionsScoreHeaders": {
+    "message": "Score-Header (für Gesamtpunktzahl verwendet)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Score-Details-Header (für Spam-Details verwendet)"
+  },
+  "optionsResetToDefault": {
+    "message": "Auf Standardreihenfolge zurücksetzen"
+  },
   "helloPopupTitle": {
     "message": "Spam Scores - Danke!"
   },

@@ -20,7 +20,22 @@
     "message": "Puntuación menor que"
   },
   "optionsHideIconAndScore": {
-    "message": "Esconder el icono y la puntuación en la columna"
+    "message": "Ocultar icono y puntuación en la columna"
+  },
+  "optionsHeaderPriority": {
+    "message": "Prioridad de análisis de encabezados"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Establezca el orden en que se analizan los encabezados de spam. Se utilizará el primer encabezado coincidente. Arrastre para reordenar."
+  },
+  "optionsScoreHeaders": {
+    "message": "Encabezados de puntuación (usados para valor de puntuación)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Encabezados de detalles de puntuación (usados para desglose)"
+  },
+  "optionsResetToDefault": {
+    "message": "Restablecer al orden predeterminado"
   },
   "helloPopupTitle": {
     "message": "Spam Scores - ¡Gracias!"

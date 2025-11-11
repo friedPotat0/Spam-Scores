@@ -22,6 +22,21 @@
   "optionsHideIconAndScore": {
     "message": "Hide icon and score in column"
   },
+  "optionsHeaderPriority": {
+    "message": "Header parsing priority"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Set the order in which spam headers are parsed. The first matching header will be used. Drag to reorder."
+  },
+  "optionsScoreHeaders": {
+    "message": "Score headers (used for score value)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Score details headers (used for score breakdown)"
+  },
+  "optionsResetToDefault": {
+    "message": "Reset to default order"
+  },
   "helloPopupTitle": {
     "message": "Spam Scores - Thank you!"
   },

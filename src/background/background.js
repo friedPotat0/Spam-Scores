@@ -1,5 +1,5 @@
 'use strict'
-import { SCORE_REGEX, CUSTOM_SCORE_REGEX } from '../constants.js'
+import { SCORE_REGEX, CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER } from '../constants.js'
 import { getBounds /* , scoreInterpolation */ } from '../functions.js'
 
 /**
@@ -13,24 +13,35 @@ const localStorage = messenger.storage.local
 
 /**
  * @param {object} headers
+ * @param {string[]} headerOrder - Custom order for parsing headers
  * @returns {string[]} Score value
  */
-function getScores(headers) {
+function getScores(headers, headerOrder = null) {
   const scores = []
   // Get Custom Mail Headers
   const auxHeaders = Object.entries(headers).filter(([key, value]) => key.startsWith('x-'))
   // Remove Mozilla Headers
   const auxHeadersNoMozilla = auxHeaders.filter(([key, value]) => !key.startsWith('x-mozilla'))
   const customHeaders = Object.fromEntries(auxHeadersNoMozilla)
-  const scoreHeaders = Object.keys(SCORE_REGEX)
-  for (const headerName in customHeaders) {
-    if (scoreHeaders.includes(headerName)) {
-      const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
-      if (!scoreField) continue // If no match iterate
-      // const score = scoreInterpolation(headerName, scoreField[1])
-      const score = scoreField[1]
-      scores.push(score)
-    } else {
+
+  // Use custom order if provided, otherwise use default order
+  const scoreHeaders = headerOrder || DEFAULT_SCORE_HEADER_ORDER
+
+  for (const headerName of scoreHeaders) {
+    if (customHeaders[headerName]) {
+      if (SCORE_REGEX[headerName]) {
+        const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
+        if (!scoreField) continue // If no match iterate
+        // const score = scoreInterpolation(headerName, scoreField[1])
+        const score = scoreField[1]
+        scores.push(score)
+      }
+    }
+  }
+
+  // Check custom headers (e.g., mailscanner) if no score found yet
+  if (scores.length === 0) {
+    for (const headerName in customHeaders) {
       for (const regExName in CUSTOM_SCORE_REGEX) {
         if (headerName.endsWith(regExName)) {
           const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
@@ -42,6 +53,7 @@ function getScores(headers) {
       }
     }
   }
+
   return scores
 }
 
@@ -71,8 +83,12 @@ async function onMessageDisplayed(tab, message) {
   const fullMessage = await messenger.messages.getFull(message.id)
   const messageButton = messenger.messageDisplayAction
 
+  // Get custom header order
+  const storage = await localStorage.get(['scoreHeaderOrder'])
+  const headerOrder = storage.scoreHeaderOrder || DEFAULT_SCORE_HEADER_ORDER
+
   // Get Score
-  const scores = getScores(fullMessage.headers) // Get Scores
+  const scores = getScores(fullMessage.headers, headerOrder) // Get Scores
   const score = isNaN(scores[0]) ? null : scores[0]
 
   // Message Score Button
@@ -129,6 +145,8 @@ const init = async () => {
     'hideIconScorePositive',
     'hideIconScoreNeutral',
     'hideIconScoreNegative',
+    'scoreHeaderOrder',
+    'scoreDetailsHeaderOrder',
     'hello'
   ])
 
@@ -160,6 +178,15 @@ const init = async () => {
   if (storage.customMailscannerHeaders) {
     spamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
   }
+
+  // Set header order preferences
+  if (storage.scoreHeaderOrder) {
+    spamScores.setScoreHeaderOrder(storage.scoreHeaderOrder)
+  }
+  if (storage.scoreDetailsHeaderOrder) {
+    spamScores.setScoreDetailsHeaderOrder(storage.scoreDetailsHeaderOrder)
+  }
+
   spamScores.setHideIconScoreOptions(
     storage.hideIconScorePositive || false,
     storage.hideIconScoreNeutral || false,

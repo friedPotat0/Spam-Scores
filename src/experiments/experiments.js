@@ -19,6 +19,19 @@ const SCORE_REGEX = {
   'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/
 }
 
+// Default order for parsing score headers
+const DEFAULT_SCORE_HEADER_ORDER = [
+  'x-spamd-result',
+  'x-spam-status',
+  'x-rspam-status',
+  'x-spam-score',
+  'x-spam-report',
+  'x-ham-report',
+  'x-rspamd-score',
+  'x-vr-spamscore',
+  'x-hmailserver-reason-score'
+]
+
 function importThreadPaneColumnsModule() {
   try {
     // TB115
@@ -36,11 +49,16 @@ const DEFAULT_SCORE_UPPER_BOUNDS = 2
 
 let scoreHdrViewParams = {
   lowerScoreBounds: DEFAULT_SCORE_LOWER_BOUNDS,
-  upperScoreBounds: DEFAULT_SCORE_UPPER_BOUNDS
+  upperScoreBounds: DEFAULT_SCORE_UPPER_BOUNDS,
+  scoreHeaderOrder: DEFAULT_SCORE_HEADER_ORDER
 }
 
 function getScore(hdr) {
-  for (const regExName in SCORE_REGEX) {
+  // Use custom order if available, otherwise use default
+  const headerOrder = scoreHdrViewParams.scoreHeaderOrder || DEFAULT_SCORE_HEADER_ORDER
+
+  for (const regExName of headerOrder) {
+    if (!SCORE_REGEX[regExName]) continue // Skip if regex not defined
     const headerValue = hdr.getStringProperty(regExName)
     if (headerValue === '') continue
     const scoreField = headerValue.match(SCORE_REGEX[regExName])
@@ -128,6 +146,12 @@ var SpamScores = class extends ExtensionAPI {
         },
         setCustomMailscannerHeaders(customMailscannerHeaders) {
           scoreHdrViewParams.customMailscannerHeaders = customMailscannerHeaders
+        },
+        setScoreHeaderOrder(scoreHeaderOrder) {
+          scoreHdrViewParams.scoreHeaderOrder = scoreHeaderOrder
+        },
+        setScoreDetailsHeaderOrder(scoreDetailsHeaderOrder) {
+          scoreHdrViewParams.scoreDetailsHeaderOrder = scoreDetailsHeaderOrder
         },
         addHeadersToPrefs(dynamicHeaders) {
           updatePrefs(dynamicHeaders)
