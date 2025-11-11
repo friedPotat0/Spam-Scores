@@ -253,19 +253,42 @@ function updatePrefs(dynamicHeaders = []) {
 
   // customDBHeaders: String in the form of "header1 header2 header3"
   // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
-  const existingCustomDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders')
-  let newCustomDBHeaders = headers.filter(el => !existingCustomDBHeaders.includes(el))
+  const existingCustomDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders').trim()
+  // Split existing headers and filter out new ones that already exist
+  const existingDBHeadersArray = existingCustomDBHeaders ? existingCustomDBHeaders.split(/\s+/) : []
+  let newCustomDBHeaders = headers.filter(el => !existingDBHeadersArray.includes(el))
   if (newCustomDBHeaders.length > 0) {
-    newCustomDBHeaders = `${existingCustomDBHeaders} ${newCustomDBHeaders.join(' ')}`
+    const separator = existingCustomDBHeaders ? ' ' : ''
+    newCustomDBHeaders = `${existingCustomDBHeaders}${separator}${newCustomDBHeaders.join(' ')}`
     mailnews.setCharPref('.customDBHeaders', newCustomDBHeaders)
   }
 
   // customHeaders: String in the form of "header1: header2: header3:"
   // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
-  const existingCustomHeaders = Services.prefs.getCharPref('mailnews.customHeaders')
-  let newCustomHeaders = headers.filter(el => !existingCustomHeaders.includes(`${el}:`))
+  const existingCustomHeaders = Services.prefs.getCharPref('mailnews.customHeaders').trim()
+  // Split existing headers by ": " and filter out new ones that already exist
+  const existingHeadersArray = existingCustomHeaders
+    ? existingCustomHeaders
+        .split(/:\s*/)
+        .filter(h => h)
+        .map(h => h.trim())
+    : []
+  let newCustomHeaders = headers.filter(el => !existingHeadersArray.includes(el))
   if (newCustomHeaders.length > 0) {
-    newCustomHeaders = `${existingCustomHeaders} ${newCustomHeaders.join(': ')}:` // trailing colon for the last header in the list!
+    // Ensure proper format: existing headers should end with ":" and new headers should be separated by ": "
+    // If existing headers exist and don't end with ":", add ": " before new headers
+    // If existing headers end with ":", add " " before new headers
+    let prefix = existingCustomHeaders
+    if (existingCustomHeaders) {
+      if (existingCustomHeaders.endsWith(':')) {
+        prefix = existingCustomHeaders + ' '
+      } else if (existingCustomHeaders.endsWith(': ')) {
+        prefix = existingCustomHeaders
+      } else {
+        prefix = existingCustomHeaders + ': '
+      }
+    }
+    newCustomHeaders = `${prefix}${newCustomHeaders.join(': ')}:`
     mailnews.setCharPref('.customHeaders', newCustomHeaders)
   }
 
