@@ -60,10 +60,6 @@ export const CUSTOM_SCORE_REGEX = {
     /(?:score|punteggio|puntuació|sgor\/score|skore|Wertung|bedømmelse|puntaje|pont|escore|resultat|skore)=([-+]?[0-9]+\.?[0-9]*),/
 }
 
-/** @constant {RegExp} */
-export const SPAM_HEADER_REGEX =
-  /(X-.*?(?:Spamd-Result|Spam-Report|Ham-Report|SpamCheck|Spam-Status|Rspamd-Report):.*(?:\r?\n(?:\t+ *| +).*)*)/g
-
 /**
  * Headers that contain the score details
  * @constant {String[]}
