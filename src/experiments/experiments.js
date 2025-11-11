@@ -19,14 +19,14 @@ const SCORE_REGEX = {
 function importThreadPaneColumnsModule() {
   try {
     // TB115
-    return ChromeUtils.importESModule("chrome://messenger/content/thread-pane-columns.mjs");
+    return ChromeUtils.importESModule('chrome://messenger/content/thread-pane-columns.mjs')
   } catch (err) {
     // TB128
-    return ChromeUtils.importESModule("chrome://messenger/content/ThreadPaneColumns.mjs");
+    return ChromeUtils.importESModule('chrome://messenger/content/ThreadPaneColumns.mjs')
   }
 }
 
-var { ThreadPaneColumns } = importThreadPaneColumnsModule();
+var { ThreadPaneColumns } = importThreadPaneColumnsModule()
 
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
@@ -141,80 +141,92 @@ var SpamScores = class extends ExtensionAPI {
         async addColumns(nameSpamScoreValue, nameSpamScoreIcon) {
           function getExtensionUrl(url) {
             if (url) {
-              return context.extension.baseURI.resolve(url);
+              return context.extension.baseURI.resolve(url)
             }
-            return null;
+            return null
           }
           function scoreCallback(msgHdr) {
-            let score = getScore(msgHdr);
-            if (score === null) return null;
-            if (score > scoreHdrViewParams.upperScoreBounds && scoreHdrViewParams.hideIconScorePositive) return null;
-            if (score <= scoreHdrViewParams.upperScoreBounds && score >= scoreHdrViewParams.lowerScoreBounds && scoreHdrViewParams.hideIconScoreNeutral) return null
-            if (score < scoreHdrViewParams.lowerScoreBounds && scoreHdrViewParams.hideIconScoreNegative) return null;
-            return score;
+            let score = getScore(msgHdr)
+            if (score === null) return null
+            if (score > scoreHdrViewParams.upperScoreBounds && scoreHdrViewParams.hideIconScorePositive) return null
+            if (
+              score <= scoreHdrViewParams.upperScoreBounds &&
+              score >= scoreHdrViewParams.lowerScoreBounds &&
+              scoreHdrViewParams.hideIconScoreNeutral
+            )
+              return null
+            if (score < scoreHdrViewParams.lowerScoreBounds && scoreHdrViewParams.hideIconScoreNegative) return null
+            return score
           }
-          
-          ThreadPaneColumns.addCustomColumn("spam-score-value", {
+
+          ThreadPaneColumns.addCustomColumn('spam-score-value', {
             name: nameSpamScoreValue,
             hidden: true,
             icon: false,
             resizable: true,
             sortable: true,
             sortCallback: getSortScore,
-            textCallback: scoreCallback,
-          });
+            textCallback: scoreCallback
+          })
 
-          ThreadPaneColumns.addCustomColumn("spam-score-icon", {
+          ThreadPaneColumns.addCustomColumn('spam-score-icon', {
             name: nameSpamScoreIcon,
             hidden: true,
             icon: true,
-            iconHeaderUrl: getExtensionUrl("/images/icon-16px.png"),
+            iconHeaderUrl: getExtensionUrl('/images/icon-16px.png'),
             iconCellDefinitions: [
               {
-                id: "positive",
-                alt: "+",
-                title: "Positive Spam Score",
-                url: getExtensionUrl("/images/score_positive.png"),
+                id: 'positive',
+                alt: '+',
+                title: 'Positive Spam Score',
+                url: getExtensionUrl('/images/score_positive.png')
               },
               {
-                id: "negative",
-                alt: "-",
-                title: "Negative Spam Score",
-                url: getExtensionUrl("/images/score_negative.png"),
+                id: 'negative',
+                alt: '-',
+                title: 'Negative Spam Score',
+                url: getExtensionUrl('/images/score_negative.png')
               },
               {
-                id: "neutral",
-                alt: "0",
-                title: "Neutral Spam Score",
-                url: getExtensionUrl("/images/score_neutral.png"),
+                id: 'neutral',
+                alt: '0',
+                title: 'Neutral Spam Score',
+                url: getExtensionUrl('/images/score_neutral.png')
               }
             ],
             iconCallback: msgHdr => {
-              let score = getScore(msgHdr);
-              if (score === null) return ""
-              if (!scoreHdrViewParams.hideIconScorePositive && score > scoreHdrViewParams.upperScoreBounds) return 'positive'
-              if (!scoreHdrViewParams.hideIconScoreNeutral && score <= scoreHdrViewParams.upperScoreBounds && score >= scoreHdrViewParams.lowerScoreBounds) return 'neutral'
-              if (!scoreHdrViewParams.hideIconScoreNegative && score < scoreHdrViewParams.lowerScoreBounds) return 'negative'
-              return ""
+              let score = getScore(msgHdr)
+              if (score === null) return ''
+              if (!scoreHdrViewParams.hideIconScorePositive && score > scoreHdrViewParams.upperScoreBounds)
+                return 'positive'
+              if (
+                !scoreHdrViewParams.hideIconScoreNeutral &&
+                score <= scoreHdrViewParams.upperScoreBounds &&
+                score >= scoreHdrViewParams.lowerScoreBounds
+              )
+                return 'neutral'
+              if (!scoreHdrViewParams.hideIconScoreNegative && score < scoreHdrViewParams.lowerScoreBounds)
+                return 'negative'
+              return ''
             },
             resizable: false,
             sortable: true,
             sortCallback: getSortScore,
-            textCallback: scoreCallback,
-          });
+            textCallback: scoreCallback
+          })
         },
 
         async removeColumns(id) {
-          ThreadPaneColumns.removeCustomColumn("spam-score-value");
-          ThreadPaneColumns.removeCustomColumn("spam-score-icon");
+          ThreadPaneColumns.removeCustomColumn('spam-score-value')
+          ThreadPaneColumns.removeCustomColumn('spam-score-icon')
         }
       }
     }
   }
 
   close() {
-    ThreadPaneColumns.removeCustomColumn("spam-score-value");
-    ThreadPaneColumns.removeCustomColumn("spam-score-icon");
+    ThreadPaneColumns.removeCustomColumn('spam-score-value')
+    ThreadPaneColumns.removeCustomColumn('spam-score-icon')
   }
 }
 
