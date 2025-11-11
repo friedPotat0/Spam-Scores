@@ -44,6 +44,7 @@ export const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
 export const SCORE_REGEX = {
   'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
   'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-rspam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,

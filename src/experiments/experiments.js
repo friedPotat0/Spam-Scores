@@ -10,6 +10,7 @@ const CUSTOM_SCORE_REGEX = {
 const SCORE_REGEX = {
   'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
   'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-rspam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
@@ -248,6 +249,7 @@ function updatePrefs(dynamicHeaders = []) {
     'x-vr-spamscore',
     'x-spamd-result',
     'x-spam-status',
+    'x-rspam-status',
     'x-spam-report',
     'x-ham-report'
   ]
