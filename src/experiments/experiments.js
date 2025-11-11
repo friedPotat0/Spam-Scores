@@ -15,7 +15,8 @@ const SCORE_REGEX = {
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
-  'x-vr-spamscore': /([0-9]+)/
+  'x-vr-spamscore': /([0-9]+)/,
+  'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/
 }
 
 function importThreadPaneColumnsModule() {
@@ -251,7 +252,8 @@ function updatePrefs(dynamicHeaders = []) {
     'x-spam-status',
     'x-rspam-status',
     'x-spam-report',
-    'x-ham-report'
+    'x-ham-report',
+    'x-hmailserver-reason-score'
   ]
   const headers = [...staticHeaders, ...dynamicHeaders]
 

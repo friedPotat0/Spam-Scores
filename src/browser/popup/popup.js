@@ -1,5 +1,5 @@
 import { SCORE_SYMBOLS } from './score_symbols.js'
-import { SCORE_DETAILS_ARRAY, SYMBOL_REGEX } from '../../constants.js'
+import { SCORE_DETAILS_ARRAY, SYMBOL_REGEX, HMAILSERVER_REASON_REGEX } from '../../constants.js'
 
 messenger.tabs
   .query({
@@ -101,6 +101,28 @@ async function getParsedDetailScores(headers) {
       }
     }
   }
+
+  // Parse hMailServer reason headers
+  for (const headerName in headers) {
+    if (HMAILSERVER_REASON_REGEX.test(headerName)) {
+      const headerValue = headers[headerName][0]
+      // Format: "Description - (Score: X)"
+      const match = headerValue.match(/^(.+?)\s*-\s*\(Score:\s*([-+]?[0-9]+\.?[0-9]*)\)/)
+      if (match) {
+        const description = match[1].trim()
+        const score = parseFloat(match[2])
+        // Create a simplified name from the description
+        const name = headerName.toUpperCase().replace('X-HMAILSERVER-REASON-', 'REASON_')
+        parsedDetailScores.push({
+          name: name,
+          score: score,
+          info: '',
+          description: description
+        })
+      }
+    }
+  }
+
   return parsedDetailScores
 }
 

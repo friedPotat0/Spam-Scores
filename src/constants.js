@@ -49,7 +49,8 @@ export const SCORE_REGEX = {
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
-  'x-vr-spamscore': /([0-9]+)/
+  'x-vr-spamscore': /([0-9]+)/,
+  'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/
 }
 
 /**
@@ -62,6 +63,12 @@ export const CUSTOM_SCORE_REGEX = {
 }
 
 /**
+ * Regex for hMailServer reason headers
+ * @constant {RegExp}
+ */
+export const HMAILSERVER_REASON_REGEX = /^x-hmailserver-reason-\d+$/
+
+/**
  * Headers that contain the score details
  * @constant {String[]}
  */
@@ -71,7 +78,8 @@ export const SCORE_DETAILS_ARRAY = [
   'x-ham-report',
   'x-spamcheck',
   'x-spam-status',
-  'x-rspamd-report'
+  'x-rspamd-report',
+  'x-hmailserver-reason-score'
 ]
 
 /** @constant {Object<RegExp>} */
