@@ -121,7 +121,7 @@ async function saveScoreLower() {
     try {
       if (newLowerBounds > newUpperBounds) throw Error('Upper score cannot be lower than lower bounds')
       if (newLowerBounds < -10000) throw Error('Wrong score lower bounds')
-      localStorage.set({ scoreIconLowerBounds: newLowerBounds })
+      localStorage.set({ scoreIconLowerBounds: String(newLowerBounds) })
       saveScores(newLowerBounds, newUpperBounds)
     } catch (error) {
       // Restore previously saved bounds or fallback to defaults
@@ -141,7 +141,7 @@ async function saveScoreUpper() {
     try {
       if (newLowerBounds > newUpperBounds) throw Error('Upper score cannot be lower than lower bounds')
       if (newUpperBounds > 10000) throw Error('Wrong score upper bounds')
-      localStorage.set({ scoreIconUpperBounds: newUpperBounds })
+      localStorage.set({ scoreIconUpperBounds: String(newUpperBounds) })
       saveScores(newLowerBounds, newUpperBounds)
     } catch (error) {
       // Restore previously saved bounds or fallback to defaults
