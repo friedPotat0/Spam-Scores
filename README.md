@@ -7,7 +7,7 @@
 **See the spam score your mail server already gave each message, right inside Thunderbird.**
 
 [![Thunderbird 115+](https://img.shields.io/badge/Thunderbird-115%2B-informational?logo=thunderbird&logoColor=white)](https://addons.thunderbird.net/thunderbird/addon/spam-scores/)
-[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![License: Apache-2.0 with Commons Clause](https://img.shields.io/badge/License-Apache--2.0%20%2B%20Commons%20Clause-lightgrey)](LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-Ko--fi-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/friedpotat0)
 
 </div>
@@ -90,4 +90,4 @@ Found a bug? Please open an issue and include the relevant `X-...` spam headers 
 
 ## License
 
-Released under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
+Released under the Apache License 2.0 with the [Commons Clause](https://commonsclause.com/) condition. You are free to use, modify and share Spam Scores, including inside a company, but you may not sell it or sell a product or service whose value derives substantially from it. See [LICENSE](LICENSE) for the full text.
