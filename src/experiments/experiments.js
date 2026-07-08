@@ -242,19 +242,19 @@ var SpamScores = class extends ExtensionAPI {
                 id: 'positive',
                 alt: '+',
                 title: 'Positive Spam Score',
-                url: getExtensionUrl('/images/score_positive.png')
+                url: getExtensionUrl('/images/score_positive.svg')
               },
               {
                 id: 'negative',
                 alt: '-',
                 title: 'Negative Spam Score',
-                url: getExtensionUrl('/images/score_negative.png')
+                url: getExtensionUrl('/images/score_negative.svg')
               },
               {
                 id: 'neutral',
                 alt: '0',
                 title: 'Neutral Spam Score',
-                url: getExtensionUrl('/images/score_neutral.png')
+                url: getExtensionUrl('/images/score_neutral.svg')
               }
             ],
             iconCallback: msgHdr => {
