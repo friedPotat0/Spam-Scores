@@ -5,3 +5,5 @@ build/*
 .prettierrc
 *.xpi
 .gitignore
+package.json
+node_modules/*
