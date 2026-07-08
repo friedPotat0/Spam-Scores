@@ -104,6 +104,7 @@ export const DEFAULT_SCORE_HEADER_ORDER = [
  */
 export const DEFAULT_SCORE_DETAILS_ORDER = [
   'x-spamd-result',
+  'x-spam-result',
   'x-spam-report',
   'x-ham-report',
   'x-spam-status',
@@ -115,5 +116,5 @@ export const DEFAULT_SCORE_DETAILS_ORDER = [
 export const SYMBOL_REGEX = {
   prefix: /\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) .*?(?=\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) |$)/gs,
   prefixSingle: /(?:\* +)?(-?[\d.]+)[ \)=]+(?:([A-Z][A-Z0-9_]+)|--) ([\s\S]*?)(?:\[(.*)\])?$/,
-  suffix: /([A-Z][A-Z0-9_]+)(?:(?:[ \(=](-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
+  suffix: /([A-Z][A-Z0-9_]+)(?:(?:[ \(=]+(-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
 }

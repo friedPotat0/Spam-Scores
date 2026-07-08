@@ -21,7 +21,8 @@ const expected = {
   'spam-status-7.eml': '-42.42',
   'spam-status-8.eml': '-42.42',
   'spamd-result-1.eml': '-42.42',
-  'vr-spamscore-1.eml': '420'
+  'vr-spamscore-1.eml': '420',
+  'x-spam-result-1.eml': '-42.42'
 }
 
 test('each mail example resolves to its expected score', () => {
