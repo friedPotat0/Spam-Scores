@@ -69,5 +69,56 @@
   },
   "helloFooterParagraph2": {
     "message": "Por favor deja una reseña si te gusta esta extensión. &#x1F60A;"
+  },
+  "optionsMoreFilters": {
+    "message": "Rangos de iconos para otros filtros de spam"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (probabilidad %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Umbrales para el icono de color en la columna de puntuación de spam (escala de SpamAssassin)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Los filtros detectados en tu correo aparecen aquí automáticamente."
+  },
+  "popupTotalScore": {
+    "message": "Puntuación de spam"
+  },
+  "popupTotalProbability": {
+    "message": "Probabilidad de spam"
+  },
+  "buttonNoScore": {
+    "message": "Sin puntuación de spam"
+  },
+  "columnScore": {
+    "message": "Puntuación de spam"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
+  "popupRulesRaised": {
+    "message": "Aumentan la puntuación"
+  },
+  "popupRulesLowered": {
+    "message": "Reducen la puntuación"
+  },
+  "popupRulesNeutral": {
+    "message": "Sin efecto"
+  },
+  "popupNoDetails": {
+    "message": "No se encontraron detalles de puntuación en este mensaje."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutral"
+  },
+  "popupVerdictHam": {
+    "message": "No es spam"
   }
 }

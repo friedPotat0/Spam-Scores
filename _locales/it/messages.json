@@ -69,5 +69,56 @@
   },
   "helloFooterParagraph2": {
     "message": "Lascia una recensione se ti piace questo componente aggiuntivo. &#x1F60A;"
+  },
+  "optionsMoreFilters": {
+    "message": "Intervalli delle icone per altri filtri spam"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (probabilità %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Soglie per l'icona colorata nella colonna del punteggio spam (scala SpamAssassin)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "I filtri rilevati nelle tue email appaiono qui automaticamente."
+  },
+  "popupTotalScore": {
+    "message": "Punteggio spam"
+  },
+  "popupTotalProbability": {
+    "message": "Probabilità spam"
+  },
+  "buttonNoScore": {
+    "message": "Nessun punteggio spam"
+  },
+  "columnScore": {
+    "message": "Punteggio spam"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
+  "popupRulesRaised": {
+    "message": "Aumentano il punteggio"
+  },
+  "popupRulesLowered": {
+    "message": "Riducono il punteggio"
+  },
+  "popupRulesNeutral": {
+    "message": "Nessun effetto"
+  },
+  "popupNoDetails": {
+    "message": "Nessun dettaglio del punteggio trovato in questo messaggio."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutrale"
+  },
+  "popupVerdictHam": {
+    "message": "Non spam"
   }
 }
