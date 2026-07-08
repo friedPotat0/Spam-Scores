@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "Spam Scores"
+  },
+  "extensionDescription": {
+    "message": "メールヘッダーに基づいてスパムスコアを表示します。"
+  },
+  "optionsIconRanges": {
+    "message": "スコアアイコンの範囲"
+  },
+  "optionsScoreGreater": {
+    "message": "スコアが次より大きい"
+  },
+  "optionsScoreBetween": {
+    "message": "スコアが $1 から $2 の間（両端を含む）"
+  },
+  "optionsScoreLess": {
+    "message": "スコアが次より小さい"
+  },
+  "optionsHideIconAndScore": {
+    "message": "列にアイコンとスコアを表示しない"
+  },
+  "optionsHeaderPriority": {
+    "message": "ヘッダー解析の優先順位"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "スパムヘッダーを解析する順序を設定します。最初に一致したヘッダーが使用されます。ドラッグして並べ替えます。"
+  },
+  "optionsScoreHeaders": {
+    "message": "スコアヘッダー（スコア値に使用）"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "スコア詳細ヘッダー（スコアの内訳に使用）"
+  },
+  "optionsResetToDefault": {
+    "message": "既定の順序にリセット"
+  },
+  "optionsMoreFilters": {
+    "message": "他のスパムフィルターのアイコン範囲"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage（確率 %）"
+  },
+  "optionsIconRangesHint": {
+    "message": "スパムスコア列の色付きアイコンのしきい値（SpamAssassin スケール）。"
+  },
+  "optionsMoreFiltersHint": {
+    "message": "メールで検出されたフィルターがここに自動的に表示されます。"
+  },
+  "popupTotalScore": {
+    "message": "スパムスコア"
+  },
+  "popupTotalProbability": {
+    "message": "スパムの確率"
+  },
+  "popupOverallScore": {
+    "message": "総合スコア"
+  },
+  "popupOverallProbability": {
+    "message": "総合確率"
+  },
+  "buttonNoScore": {
+    "message": "スパムスコアなし"
+  },
+  "columnScore": {
+    "message": "スパムスコア"
+  },
+  "columnIcon": {
+    "message": "スパム"
+  },
+  "popupRulesRaised": {
+    "message": "スコアを上げた要因"
+  },
+  "popupRulesLowered": {
+    "message": "スコアを下げた要因"
+  },
+  "popupRulesNeutral": {
+    "message": "影響なし"
+  },
+  "popupNoDetails": {
+    "message": "このメッセージにスコアの詳細が見つかりませんでした。"
+  },
+  "popupVerdictSpam": {
+    "message": "スパム"
+  },
+  "popupVerdictNeutral": {
+    "message": "中立"
+  },
+  "popupVerdictHam": {
+    "message": "スパムではない"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - ありがとうございます！"
+  },
+  "helloHeadline": {
+    "message": "Spam Scores をインストールいただきありがとうございます！"
+  },
+  "helloParagraph1": {
+    "message": "スパムスコア列を表示するには："
+  },
+  "helloInstruction_1": {
+    "message": "Thunderbird を再起動します。"
+  },
+  "helloInstruction_2": {
+    "message": "フォルダーを右クリックして「プロパティ」を選択します。"
+  },
+  "helloInstruction_3": {
+    "message": "「フォルダーを修復」をクリックします。"
+  },
+  "helloParagraph2": {
+    "message": "これにより、このフォルダー内のすべてのメールのヘッダーがスキャンされ、スパムスコア列が正しく表示されるようになります。"
+  },
+  "helloParagraph3": {
+    "message": "列を表示したいすべてのフォルダーを同様に修復してください。"
+  },
+  "helloParagraph4": {
+    "message": "最後に、修復したフォルダーのリスト表示で「スパムスコア」列を有効にできます。"
+  },
+  "helloFooterParagraph1": {
+    "message": "この拡張機能の使用中に質問や不具合がありましたら、GitHub で issue を作成してください (https://github.com/friedPotat0/Spam-Scores)。"
+  },
+  "helloFooterParagraph2": {
+    "message": "この拡張機能が気に入ったら、ぜひレビューを残してください。 &#x1F60A;"
+  }
+}

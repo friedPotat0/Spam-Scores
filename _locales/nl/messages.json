@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "Spam Scores"
+  },
+  "extensionDescription": {
+    "message": "Toont spamscores op basis van e-mailheaders."
+  },
+  "optionsIconRanges": {
+    "message": "Bereiken van het scorepictogram"
+  },
+  "optionsScoreGreater": {
+    "message": "Score groter dan"
+  },
+  "optionsScoreBetween": {
+    "message": "Score tussen $1 en $2 (beide inclusief)"
+  },
+  "optionsScoreLess": {
+    "message": "Score kleiner dan"
+  },
+  "optionsHideIconAndScore": {
+    "message": "Pictogram en score in kolom verbergen"
+  },
+  "optionsHeaderPriority": {
+    "message": "Prioriteit voor headerverwerking"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Stel de volgorde in waarin spamheaders worden verwerkt. De eerste overeenkomende header wordt gebruikt. Sleep om te herordenen."
+  },
+  "optionsScoreHeaders": {
+    "message": "Score-headers (gebruikt voor de scorewaarde)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Score-detailheaders (gebruikt voor de uitsplitsing)"
+  },
+  "optionsResetToDefault": {
+    "message": "Standaardvolgorde herstellen"
+  },
+  "optionsMoreFilters": {
+    "message": "Pictogrambereiken voor andere spamfilters"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (waarschijnlijkheid in %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Drempelwaarden voor het gekleurde pictogram in de spamscorekolom (SpamAssassin-schaal)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Gedetecteerde filters in uw e-mail verschijnen hier automatisch."
+  },
+  "popupTotalScore": {
+    "message": "Spamscore"
+  },
+  "popupTotalProbability": {
+    "message": "Spamwaarschijnlijkheid"
+  },
+  "popupOverallScore": {
+    "message": "Totale score"
+  },
+  "popupOverallProbability": {
+    "message": "Totale waarschijnlijkheid"
+  },
+  "buttonNoScore": {
+    "message": "Geen spamscore"
+  },
+  "columnScore": {
+    "message": "Spamscore"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
+  "popupRulesRaised": {
+    "message": "Verhoogden de score"
+  },
+  "popupRulesLowered": {
+    "message": "Verlaagden de score"
+  },
+  "popupRulesNeutral": {
+    "message": "Geen effect"
+  },
+  "popupNoDetails": {
+    "message": "Geen scoredetails gevonden in dit bericht."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutraal"
+  },
+  "popupVerdictHam": {
+    "message": "Geen spam"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - Bedankt!"
+  },
+  "helloHeadline": {
+    "message": "Bedankt voor het installeren van Spam Scores!"
+  },
+  "helloParagraph1": {
+    "message": "Om de spamscorekolom weer te geven:"
+  },
+  "helloInstruction_1": {
+    "message": "Start Thunderbird opnieuw op."
+  },
+  "helloInstruction_2": {
+    "message": "Klik met de rechtermuisknop op een map en selecteer \"Eigenschappen\"."
+  },
+  "helloInstruction_3": {
+    "message": "Klik op \"Map repareren\"."
+  },
+  "helloParagraph2": {
+    "message": "Hiermee worden de headers van alle berichten in deze map gescand, zodat de spamscorekolom correct kan worden weergegeven."
+  },
+  "helloParagraph3": {
+    "message": "Repareer op deze manier alle mappen waarin u de kolom wilt weergeven."
+  },
+  "helloParagraph4": {
+    "message": "Ten slotte kunt u de kolom \"Spamscore\" inschakelen in de lijstweergave van de gerepareerde map."
+  },
+  "helloFooterParagraph1": {
+    "message": "Als u vragen hebt of fouten tegenkomt bij het gebruik van deze add-on, aarzel dan niet om een issue aan te maken op GitHub (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "Laat een beoordeling achter als u deze add-on waardeert. &#x1F60A;"
+  }
+}

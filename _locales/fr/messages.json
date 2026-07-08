@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "Spam Scores"
+  },
+  "extensionDescription": {
+    "message": "Affiche les scores de spam à partir des en-têtes des e-mails."
+  },
+  "optionsIconRanges": {
+    "message": "Plages des icônes de score"
+  },
+  "optionsScoreGreater": {
+    "message": "Score supérieur à"
+  },
+  "optionsScoreBetween": {
+    "message": "Score entre $1 et $2 (inclus)"
+  },
+  "optionsScoreLess": {
+    "message": "Score inférieur à"
+  },
+  "optionsHideIconAndScore": {
+    "message": "Masquer l'icône et le score dans la colonne"
+  },
+  "optionsHeaderPriority": {
+    "message": "Priorité d'analyse des en-têtes"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Définissez l'ordre dans lequel les en-têtes de spam sont analysés. Le premier en-tête correspondant sera utilisé. Faites glisser pour réorganiser."
+  },
+  "optionsScoreHeaders": {
+    "message": "En-têtes de score (utilisés pour la valeur du score)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "En-têtes de détails du score (utilisés pour le détail)"
+  },
+  "optionsResetToDefault": {
+    "message": "Réinitialiser à l'ordre par défaut"
+  },
+  "optionsMoreFilters": {
+    "message": "Plages d'icônes pour d'autres filtres antispam"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (probabilité en %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Seuils pour l'icône colorée dans la colonne du score de spam (échelle SpamAssassin)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Les filtres détectés dans vos e-mails apparaissent ici automatiquement."
+  },
+  "popupTotalScore": {
+    "message": "Score de spam"
+  },
+  "popupTotalProbability": {
+    "message": "Probabilité de spam"
+  },
+  "popupOverallScore": {
+    "message": "Score total"
+  },
+  "popupOverallProbability": {
+    "message": "Probabilité totale"
+  },
+  "buttonNoScore": {
+    "message": "Aucun score de spam"
+  },
+  "columnScore": {
+    "message": "Score de spam"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
+  "popupRulesRaised": {
+    "message": "Ont augmenté le score"
+  },
+  "popupRulesLowered": {
+    "message": "Ont diminué le score"
+  },
+  "popupRulesNeutral": {
+    "message": "Sans effet"
+  },
+  "popupNoDetails": {
+    "message": "Aucun détail de score trouvé dans ce message."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutre"
+  },
+  "popupVerdictHam": {
+    "message": "Non spam"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - Merci !"
+  },
+  "helloHeadline": {
+    "message": "Merci d'avoir installé Spam Scores !"
+  },
+  "helloParagraph1": {
+    "message": "Pour afficher la colonne du score de spam :"
+  },
+  "helloInstruction_1": {
+    "message": "Redémarrez Thunderbird."
+  },
+  "helloInstruction_2": {
+    "message": "Faites un clic droit sur un dossier et sélectionnez « Propriétés »."
+  },
+  "helloInstruction_3": {
+    "message": "Cliquez sur « Réparer le dossier »."
+  },
+  "helloParagraph2": {
+    "message": "Cela analysera les en-têtes de tous les messages de ce dossier afin que la colonne du score de spam puisse s'afficher correctement."
+  },
+  "helloParagraph3": {
+    "message": "Réparez ainsi tous les dossiers dans lesquels vous souhaitez afficher la colonne."
+  },
+  "helloParagraph4": {
+    "message": "Enfin, vous pouvez activer la colonne « Score de spam » dans la vue en liste du dossier réparé."
+  },
+  "helloFooterParagraph1": {
+    "message": "Si vous avez des questions ou rencontrez des bugs en utilisant ce module, n'hésitez pas à créer un ticket sur GitHub (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "N'hésitez pas à laisser un avis si vous aimez ce module. &#x1F60A;"
+  }
+}

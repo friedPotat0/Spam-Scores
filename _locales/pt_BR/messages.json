@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "Spam Scores"
+  },
+  "extensionDescription": {
+    "message": "Exibe as pontuações de spam com base nos cabeçalhos dos e-mails."
+  },
+  "optionsIconRanges": {
+    "message": "Faixas do ícone de pontuação"
+  },
+  "optionsScoreGreater": {
+    "message": "Pontuação maior que"
+  },
+  "optionsScoreBetween": {
+    "message": "Pontuação entre $1 e $2 (ambos inclusive)"
+  },
+  "optionsScoreLess": {
+    "message": "Pontuação menor que"
+  },
+  "optionsHideIconAndScore": {
+    "message": "Ocultar ícone e pontuação na coluna"
+  },
+  "optionsHeaderPriority": {
+    "message": "Prioridade de análise dos cabeçalhos"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Defina a ordem em que os cabeçalhos de spam são analisados. O primeiro cabeçalho correspondente será usado. Arraste para reordenar."
+  },
+  "optionsScoreHeaders": {
+    "message": "Cabeçalhos de pontuação (usados para o valor da pontuação)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Cabeçalhos de detalhes da pontuação (usados para o detalhamento)"
+  },
+  "optionsResetToDefault": {
+    "message": "Restaurar a ordem padrão"
+  },
+  "optionsMoreFilters": {
+    "message": "Faixas de ícones para outros filtros de spam"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (probabilidade em %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Limites para o ícone colorido na coluna de pontuação de spam (escala do SpamAssassin)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Os filtros detectados nos seus e-mails aparecem aqui automaticamente."
+  },
+  "popupTotalScore": {
+    "message": "Pontuação de spam"
+  },
+  "popupTotalProbability": {
+    "message": "Probabilidade de spam"
+  },
+  "popupOverallScore": {
+    "message": "Pontuação total"
+  },
+  "popupOverallProbability": {
+    "message": "Probabilidade total"
+  },
+  "buttonNoScore": {
+    "message": "Sem pontuação de spam"
+  },
+  "columnScore": {
+    "message": "Pontuação de spam"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
+  "popupRulesRaised": {
+    "message": "Aumentaram a pontuação"
+  },
+  "popupRulesLowered": {
+    "message": "Reduziram a pontuação"
+  },
+  "popupRulesNeutral": {
+    "message": "Sem efeito"
+  },
+  "popupNoDetails": {
+    "message": "Nenhum detalhe de pontuação encontrado nesta mensagem."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutro"
+  },
+  "popupVerdictHam": {
+    "message": "Não é spam"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - Obrigado!"
+  },
+  "helloHeadline": {
+    "message": "Obrigado por instalar o Spam Scores!"
+  },
+  "helloParagraph1": {
+    "message": "Para exibir a coluna de pontuação de spam:"
+  },
+  "helloInstruction_1": {
+    "message": "Reinicie o Thunderbird."
+  },
+  "helloInstruction_2": {
+    "message": "Clique com o botão direito em uma pasta e selecione \"Propriedades\"."
+  },
+  "helloInstruction_3": {
+    "message": "Clique em \"Reparar pasta\"."
+  },
+  "helloParagraph2": {
+    "message": "Isso analisará os cabeçalhos de todas as mensagens desta pasta para que a coluna de pontuação de spam seja exibida corretamente."
+  },
+  "helloParagraph3": {
+    "message": "Repare assim todas as pastas nas quais você deseja exibir a coluna."
+  },
+  "helloParagraph4": {
+    "message": "Por fim, você pode ativar a coluna \"Pontuação de spam\" na visualização em lista da pasta reparada."
+  },
+  "helloFooterParagraph1": {
+    "message": "Se você tiver dúvidas ou encontrar erros ao usar este complemento, não hesite em criar uma issue no GitHub (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "Por favor, deixe uma avaliação se você gostar deste complemento. &#x1F60A;"
+  }
+}

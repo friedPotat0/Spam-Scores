@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "Spam Scores"
+  },
+  "extensionDescription": {
+    "message": "根据邮件头显示垃圾邮件评分。"
+  },
+  "optionsIconRanges": {
+    "message": "评分图标范围"
+  },
+  "optionsScoreGreater": {
+    "message": "评分大于"
+  },
+  "optionsScoreBetween": {
+    "message": "评分介于 $1 和 $2 之间（含两端）"
+  },
+  "optionsScoreLess": {
+    "message": "评分小于"
+  },
+  "optionsHideIconAndScore": {
+    "message": "在列中隐藏图标和评分"
+  },
+  "optionsHeaderPriority": {
+    "message": "邮件头解析优先级"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "设置解析垃圾邮件头的顺序。将使用第一个匹配的邮件头。拖动可重新排序。"
+  },
+  "optionsScoreHeaders": {
+    "message": "评分邮件头（用于评分值）"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "评分详情邮件头（用于评分明细）"
+  },
+  "optionsResetToDefault": {
+    "message": "重置为默认顺序"
+  },
+  "optionsMoreFilters": {
+    "message": "其他垃圾邮件过滤器的图标范围"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage（概率 %）"
+  },
+  "optionsIconRangesHint": {
+    "message": "垃圾邮件评分列中彩色图标的阈值（SpamAssassin 标度）。"
+  },
+  "optionsMoreFiltersHint": {
+    "message": "在您的邮件中检测到的过滤器会自动显示在此处。"
+  },
+  "popupTotalScore": {
+    "message": "垃圾邮件评分"
+  },
+  "popupTotalProbability": {
+    "message": "垃圾邮件概率"
+  },
+  "popupOverallScore": {
+    "message": "总评分"
+  },
+  "popupOverallProbability": {
+    "message": "总概率"
+  },
+  "buttonNoScore": {
+    "message": "无垃圾邮件评分"
+  },
+  "columnScore": {
+    "message": "垃圾邮件评分"
+  },
+  "columnIcon": {
+    "message": "垃圾邮件"
+  },
+  "popupRulesRaised": {
+    "message": "提高了评分"
+  },
+  "popupRulesLowered": {
+    "message": "降低了评分"
+  },
+  "popupRulesNeutral": {
+    "message": "无影响"
+  },
+  "popupNoDetails": {
+    "message": "在此邮件中未找到评分详情。"
+  },
+  "popupVerdictSpam": {
+    "message": "垃圾邮件"
+  },
+  "popupVerdictNeutral": {
+    "message": "中性"
+  },
+  "popupVerdictHam": {
+    "message": "非垃圾邮件"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - 谢谢！"
+  },
+  "helloHeadline": {
+    "message": "感谢您安装 Spam Scores！"
+  },
+  "helloParagraph1": {
+    "message": "要显示垃圾邮件评分列："
+  },
+  "helloInstruction_1": {
+    "message": "重启 Thunderbird。"
+  },
+  "helloInstruction_2": {
+    "message": "右键单击文件夹并选择“属性”。"
+  },
+  "helloInstruction_3": {
+    "message": "单击“修复文件夹”。"
+  },
+  "helloParagraph2": {
+    "message": "这将扫描此文件夹中所有邮件的邮件头，以便正确显示垃圾邮件评分列。"
+  },
+  "helloParagraph3": {
+    "message": "以此方式修复所有您希望显示该列的文件夹。"
+  },
+  "helloParagraph4": {
+    "message": "最后，您可以在已修复文件夹的列表视图中启用“垃圾邮件评分”列。"
+  },
+  "helloFooterParagraph1": {
+    "message": "如果您在使用此附加组件时有疑问或遇到错误，请随时在 GitHub 上创建 issue (https://github.com/friedPotat0/Spam-Scores)。"
+  },
+  "helloFooterParagraph2": {
+    "message": "如果您喜欢这个附加组件，请留下评价。 &#x1F60A;"
+  }
+}

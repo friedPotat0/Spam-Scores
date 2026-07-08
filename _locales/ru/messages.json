@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "Spam Scores"
+  },
+  "extensionDescription": {
+    "message": "Показывает спам-оценки на основе заголовков писем."
+  },
+  "optionsIconRanges": {
+    "message": "Диапазоны значка оценки"
+  },
+  "optionsScoreGreater": {
+    "message": "Оценка больше чем"
+  },
+  "optionsScoreBetween": {
+    "message": "Оценка от $1 до $2 (включительно)"
+  },
+  "optionsScoreLess": {
+    "message": "Оценка меньше чем"
+  },
+  "optionsHideIconAndScore": {
+    "message": "Скрывать значок и оценку в столбце"
+  },
+  "optionsHeaderPriority": {
+    "message": "Приоритет разбора заголовков"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Задайте порядок, в котором разбираются спам-заголовки. Будет использован первый подходящий заголовок. Перетащите для изменения порядка."
+  },
+  "optionsScoreHeaders": {
+    "message": "Заголовки оценки (используются для значения оценки)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Заголовки деталей оценки (используются для разбивки)"
+  },
+  "optionsResetToDefault": {
+    "message": "Сбросить к порядку по умолчанию"
+  },
+  "optionsMoreFilters": {
+    "message": "Диапазоны значков для других спам-фильтров"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (вероятность в %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Пороговые значения для цветного значка в столбце спам-оценки (шкала SpamAssassin)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Обнаруженные в вашей почте фильтры появляются здесь автоматически."
+  },
+  "popupTotalScore": {
+    "message": "Спам-оценка"
+  },
+  "popupTotalProbability": {
+    "message": "Вероятность спама"
+  },
+  "popupOverallScore": {
+    "message": "Общая оценка"
+  },
+  "popupOverallProbability": {
+    "message": "Общая вероятность"
+  },
+  "buttonNoScore": {
+    "message": "Нет спам-оценки"
+  },
+  "columnScore": {
+    "message": "Спам-оценка"
+  },
+  "columnIcon": {
+    "message": "Спам"
+  },
+  "popupRulesRaised": {
+    "message": "Повысили оценку"
+  },
+  "popupRulesLowered": {
+    "message": "Понизили оценку"
+  },
+  "popupRulesNeutral": {
+    "message": "Без влияния"
+  },
+  "popupNoDetails": {
+    "message": "В этом сообщении не найдены детали оценки."
+  },
+  "popupVerdictSpam": {
+    "message": "Спам"
+  },
+  "popupVerdictNeutral": {
+    "message": "Нейтрально"
+  },
+  "popupVerdictHam": {
+    "message": "Не спам"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - Спасибо!"
+  },
+  "helloHeadline": {
+    "message": "Спасибо за установку Spam Scores!"
+  },
+  "helloParagraph1": {
+    "message": "Чтобы отобразить столбец спам-оценки:"
+  },
+  "helloInstruction_1": {
+    "message": "Перезапустите Thunderbird."
+  },
+  "helloInstruction_2": {
+    "message": "Щёлкните правой кнопкой мыши по папке и выберите «Свойства»."
+  },
+  "helloInstruction_3": {
+    "message": "Нажмите «Восстановить папку»."
+  },
+  "helloParagraph2": {
+    "message": "Это просканирует заголовки всех писем в этой папке, чтобы столбец спам-оценки отображался правильно."
+  },
+  "helloParagraph3": {
+    "message": "Восстановите таким образом все папки, в которых вы хотите отображать столбец."
+  },
+  "helloParagraph4": {
+    "message": "Наконец, вы можете включить столбец «Спам-оценка» в режиме списка восстановленной папки."
+  },
+  "helloFooterParagraph1": {
+    "message": "Если у вас есть вопросы или вы столкнулись с ошибками при использовании этого дополнения, не стесняйтесь создать issue на GitHub (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "Пожалуйста, оставьте отзыв, если вам нравится это дополнение. &#x1F60A;"
+  }
+}

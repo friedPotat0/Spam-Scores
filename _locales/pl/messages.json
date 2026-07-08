@@ -1,0 +1,128 @@
+{
+  "extensionName": {
+    "message": "Spam Scores"
+  },
+  "extensionDescription": {
+    "message": "Wyświetla oceny spamu na podstawie nagłówków wiadomości."
+  },
+  "optionsIconRanges": {
+    "message": "Zakresy ikony oceny"
+  },
+  "optionsScoreGreater": {
+    "message": "Ocena większa niż"
+  },
+  "optionsScoreBetween": {
+    "message": "Ocena między $1 a $2 (włącznie)"
+  },
+  "optionsScoreLess": {
+    "message": "Ocena mniejsza niż"
+  },
+  "optionsHideIconAndScore": {
+    "message": "Ukryj ikonę i ocenę w kolumnie"
+  },
+  "optionsHeaderPriority": {
+    "message": "Priorytet analizy nagłówków"
+  },
+  "optionsHeaderPriorityDescription": {
+    "message": "Ustaw kolejność analizowania nagłówków spamu. Zostanie użyty pierwszy pasujący nagłówek. Przeciągnij, aby zmienić kolejność."
+  },
+  "optionsScoreHeaders": {
+    "message": "Nagłówki oceny (używane do wartości oceny)"
+  },
+  "optionsScoreDetailsHeaders": {
+    "message": "Nagłówki szczegółów oceny (używane do zestawienia)"
+  },
+  "optionsResetToDefault": {
+    "message": "Przywróć domyślną kolejność"
+  },
+  "optionsMoreFilters": {
+    "message": "Zakresy ikon dla innych filtrów spamu"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (prawdopodobieństwo w %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Progi dla kolorowej ikony w kolumnie oceny spamu (skala SpamAssassin)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Wykryte filtry w Twojej poczcie pojawiają się tutaj automatycznie."
+  },
+  "popupTotalScore": {
+    "message": "Ocena spamu"
+  },
+  "popupTotalProbability": {
+    "message": "Prawdopodobieństwo spamu"
+  },
+  "popupOverallScore": {
+    "message": "Ocena łączna"
+  },
+  "popupOverallProbability": {
+    "message": "Prawdopodobieństwo łączne"
+  },
+  "buttonNoScore": {
+    "message": "Brak oceny spamu"
+  },
+  "columnScore": {
+    "message": "Ocena spamu"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
+  "popupRulesRaised": {
+    "message": "Podniosły ocenę"
+  },
+  "popupRulesLowered": {
+    "message": "Obniżyły ocenę"
+  },
+  "popupRulesNeutral": {
+    "message": "Bez wpływu"
+  },
+  "popupNoDetails": {
+    "message": "Nie znaleziono szczegółów oceny w tej wiadomości."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutralny"
+  },
+  "popupVerdictHam": {
+    "message": "Nie spam"
+  },
+  "helloPopupTitle": {
+    "message": "Spam Scores - Dziękujemy!"
+  },
+  "helloHeadline": {
+    "message": "Dziękujemy za zainstalowanie Spam Scores!"
+  },
+  "helloParagraph1": {
+    "message": "Aby wyświetlić kolumnę oceny spamu:"
+  },
+  "helloInstruction_1": {
+    "message": "Uruchom ponownie Thunderbirda."
+  },
+  "helloInstruction_2": {
+    "message": "Kliknij prawym przyciskiem myszy folder i wybierz \"Właściwości\"."
+  },
+  "helloInstruction_3": {
+    "message": "Kliknij \"Napraw folder\"."
+  },
+  "helloParagraph2": {
+    "message": "Spowoduje to przeskanowanie nagłówków wszystkich wiadomości w tym folderze, aby kolumna oceny spamu mogła być wyświetlana poprawnie."
+  },
+  "helloParagraph3": {
+    "message": "W ten sposób napraw wszystkie foldery, w których chcesz wyświetlać kolumnę."
+  },
+  "helloParagraph4": {
+    "message": "Na koniec możesz włączyć kolumnę \"Ocena spamu\" w widoku listy naprawionego folderu."
+  },
+  "helloFooterParagraph1": {
+    "message": "Jeśli masz pytania lub napotkasz błędy podczas korzystania z tego dodatku, nie wahaj się utworzyć zgłoszenia na GitHubie (https://github.com/friedPotat0/Spam-Scores)."
+  },
+  "helloFooterParagraph2": {
+    "message": "Zostaw recenzję, jeśli podoba Ci się ten dodatek. &#x1F60A;"
+  }
+}
