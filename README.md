@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/icon-128px.png" alt="Spam Scores" width="88" height="88">
+<img src="images/icon-128px.png" alt="Spam Scores" width="88" height="88">
 
 # Spam Scores
 
@@ -14,7 +14,7 @@
 
 Spam Scores reads the spam and ham headers that common filters add to your mail, shows the total score with a colour-coded icon in a message-list column, and breaks that score down rule by rule in a popup. It does not classify mail itself; it surfaces the verdict your server already reached.
 
-![Spam Scores in the message list](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot.jpg)
+![Spam score breakdown for a spam, neutral and ham message](images/screenshot_popup.png)
 
 It runs on Thunderbird 115 and later, and on the matching Betterbird releases. On Thunderbird 78, use [version 1.3.1](https://github.com/friedPotat0/Spam-Scores/releases/tag/1.3.1); older releases are on the [Releases page](https://github.com/friedPotat0/Spam-Scores/releases).
 
@@ -40,13 +40,11 @@ If a message carries none of these headers, there is nothing to show. Most large
 
 Every message with a spam header gets a total score and a colour-coded icon:
 
-- ![Spam](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_positive.png) likely spam
-- ![Neutral](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_neutral.png) neutral
-- ![Ham](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_negative.png) likely ham
+- ![Spam](images/score_positive.png) likely spam
+- ![Neutral](images/score_neutral.png) neutral
+- ![Ham](images/score_negative.png) likely ham
 
 The score appears in the message-list column and, once you open a message, on a button in its toolbar. That button opens a popup that groups every matched rule by how it moved the score, each with its own partial score and, where the header provides one, a short description.
-
-![Score breakdown popup](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot_popup.png)
 
 The Spam and Spam score columns appear automatically in folders you have not customised. In folders where you have already changed the columns, right-click the column header to enable them. If a column stays empty, restart Thunderbird once, then right-click the folder, choose "Properties" and "Repair Folder": this re-reads the headers of the mails already in that folder. Messages that arrive afterwards are picked up automatically.
 
@@ -66,7 +64,7 @@ GMX is a special case: its number is a reason code, not a score, so a message co
 
 ## Options
 
-![Settings](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot_settings.jpg)
+![Settings](images/screenshot_settings.png)
 
 In the add-on settings you can adjust the icon range for each scale, and hide the icon and score for whole ranges, for example to flag only mail that is actually spam. The breakdown stays available in the popup regardless. You can also reorder the headers used for the score and for the breakdown, in case a message carries more than one.
 
