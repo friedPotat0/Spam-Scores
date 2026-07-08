@@ -58,6 +58,12 @@
   "popupTotalProbability": {
     "message": "Spam probability"
   },
+  "popupOverallScore": {
+    "message": "Overall score"
+  },
+  "popupOverallProbability": {
+    "message": "Overall probability"
+  },
   "buttonNoScore": {
     "message": "No spam score"
   },

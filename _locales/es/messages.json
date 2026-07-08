@@ -91,6 +91,12 @@
   "popupTotalProbability": {
     "message": "Probabilidad de spam"
   },
+  "popupOverallScore": {
+    "message": "Puntuación total"
+  },
+  "popupOverallProbability": {
+    "message": "Probabilidad total"
+  },
   "buttonNoScore": {
     "message": "Sin puntuación de spam"
   },

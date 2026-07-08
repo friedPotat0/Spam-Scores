@@ -65,7 +65,7 @@ function renderSummary(headers, storage) {
   summary.classList.add(classification)
   document.getElementById('total-score').textContent = formatTotal(top.score, familyKey) + unit
   document.querySelector('.total-label').textContent = i18n.getMessage(
-    SCORE_FAMILIES[familyKey].unit ? 'popupTotalProbability' : 'popupTotalScore'
+    SCORE_FAMILIES[familyKey].unit ? 'popupOverallProbability' : 'popupOverallScore'
   )
   document.getElementById('verdict-label').textContent = i18n.getMessage(VERDICT_LABEL[classification])
 

@@ -29,10 +29,10 @@
     "message": "Legen Sie die Reihenfolge fest, in der Spam-Header analysiert werden. Der erste übereinstimmende Header wird verwendet. Ziehen Sie zum Neuordnen."
   },
   "optionsScoreHeaders": {
-    "message": "Score-Header (für Gesamtpunktzahl verwendet)"
+    "message": "Punktzahl-Header (für Gesamtpunktzahl verwendet)"
   },
   "optionsScoreDetailsHeaders": {
-    "message": "Score-Details-Header (für Spam-Details verwendet)"
+    "message": "Punktzahl-Detail-Header (für die Aufschlüsselung verwendet)"
   },
   "optionsResetToDefault": {
     "message": "Auf Standardreihenfolge zurücksetzen"
@@ -44,25 +44,31 @@
     "message": "OVH (Vade Secure)"
   },
   "optionsFamilyPmx": {
-    "message": "Sophos PureMessage (Wahrscheinlichkeit %)"
+    "message": "Sophos PureMessage (Wahrscheinlichkeit in %)"
   },
   "optionsIconRangesHint": {
-    "message": "Schwellen für das farbige Symbol in der Spam-Score-Spalte (SpamAssassin-Skala)."
+    "message": "Schwellenwerte für das farbige Symbol in der Spam-Punktzahl-Spalte (SpamAssassin-Skala)."
   },
   "optionsMoreFiltersHint": {
     "message": "Erkannte Filter erscheinen hier automatisch."
   },
   "popupTotalScore": {
-    "message": "Spam-Score"
+    "message": "Spam-Punktzahl"
   },
   "popupTotalProbability": {
     "message": "Spam-Wahrscheinlichkeit"
   },
+  "popupOverallScore": {
+    "message": "Gesamtpunktzahl"
+  },
+  "popupOverallProbability": {
+    "message": "Gesamtwahrscheinlichkeit"
+  },
   "buttonNoScore": {
-    "message": "Kein Spam-Score"
+    "message": "Keine Spam-Punktzahl"
   },
   "columnScore": {
-    "message": "Spam-Score"
+    "message": "Spam-Punktzahl"
   },
   "columnIcon": {
     "message": "Spam"
@@ -77,7 +83,7 @@
     "message": "Keine Auswirkung"
   },
   "popupNoDetails": {
-    "message": "Keine Score-Details in dieser Nachricht gefunden."
+    "message": "Keine Punktzahl-Details in dieser Nachricht gefunden."
   },
   "popupVerdictSpam": {
     "message": "Spam"
@@ -95,7 +101,7 @@
     "message": "Vielen Dank, dass Sie Spam Scores installiert haben!"
   },
   "helloParagraph1": {
-    "message": "Um die Spam-Score-Spalte anzuzeigen:"
+    "message": "Um die Spam-Punktzahl-Spalte anzuzeigen:"
   },
   "helloInstruction_1": {
     "message": "Müssen Sie zunächst Thunderbird neu starten."
@@ -107,13 +113,13 @@
     "message": "Klicken Sie dann auf \"Reparieren\"."
   },
   "helloParagraph2": {
-    "message": "Dadurch werden die Mail-Header aller Mails in diesem Ordner gescannt, damit die Spam-Score-Spalte korrekt angezeigt werden kann."
+    "message": "Dadurch werden die Mail-Header aller Mails in diesem Ordner gescannt, damit die Spam-Punktzahl-Spalte korrekt angezeigt werden kann."
   },
   "helloParagraph3": {
     "message": "Reparieren Sie alle Ordner, in denen Sie die Spalte anzeigen möchten."
   },
   "helloParagraph4": {
-    "message": "Anschließend können Sie die Spalte \"Spam score\" in der Listenansicht des reparierten Ordners aktivieren."
+    "message": "Anschließend können Sie die Spalte \"Spam-Punktzahl\" in der Listenansicht des reparierten Ordners aktivieren."
   },
   "helloFooterParagraph1": {
     "message": "Bei Fragen oder Fehlern, zögern Sie bitte nicht, ein Issue dafür auf GitHub zu erstellen (https://github.com/friedPotat0/Spam-Scores)."
