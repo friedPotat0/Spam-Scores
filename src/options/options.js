@@ -114,7 +114,7 @@ function saveIcons() {
 async function saveScoreLower() {
   const scoreBoundsLower = inputScoreBoundsLower.value
   const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
-  const newUpperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
+  const newUpperBounds = parseFloat(storage.scoreIconUpperBounds ?? DEFAULT_SCORE_UPPER_BOUNDS)
 
   if (scoreBoundsLower !== '') {
     let newLowerBounds = parseFloat(scoreBoundsLower)
@@ -125,7 +125,7 @@ async function saveScoreLower() {
       saveScores(newLowerBounds, newUpperBounds)
     } catch (error) {
       // Restore previously saved bounds or fallback to defaults
-      newLowerBounds = parseFloat(storage.scoreIconLowerBounds || DEFAULT_SCORE_LOWER_BOUNDS)
+      newLowerBounds = parseFloat(storage.scoreIconLowerBounds ?? DEFAULT_SCORE_LOWER_BOUNDS)
     }
     inputScoreBoundsLower.value = newLowerBounds // number
   }
@@ -134,7 +134,7 @@ async function saveScoreLower() {
 async function saveScoreUpper() {
   const scoreBoundsUpper = inputScoreBoundsUpper.value
   const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
-  const newLowerBounds = parseFloat(storage.scoreIconLowerBounds || DEFAULT_SCORE_LOWER_BOUNDS)
+  const newLowerBounds = parseFloat(storage.scoreIconLowerBounds ?? DEFAULT_SCORE_LOWER_BOUNDS)
 
   if (scoreBoundsUpper !== '') {
     let newUpperBounds = parseFloat(scoreBoundsUpper)
@@ -145,7 +145,7 @@ async function saveScoreUpper() {
       saveScores(newLowerBounds, newUpperBounds)
     } catch (error) {
       // Restore previously saved bounds or fallback to defaults
-      newUpperBounds = parseFloat(storage.scoreIconUpperBounds || DEFAULT_SCORE_UPPER_BOUNDS)
+      newUpperBounds = parseFloat(storage.scoreIconUpperBounds ?? DEFAULT_SCORE_UPPER_BOUNDS)
     }
     inputScoreBoundsUpper.value = newUpperBounds // number
   }
