@@ -6,6 +6,7 @@ import { getScores, classifyScore, getFamilyBounds, scoreUnit } from '../functio
  * @type {StorageArea}
  */
 const localStorage = messenger.storage.local
+const i18n = messenger.i18n
 
 /**
  * Functions
@@ -57,11 +58,13 @@ async function onMessageDisplayed(tab, message) {
   // Message Score Button
   if (score === null) {
     messageButton.disable(idTab)
-    messageButton.setTitle({ tabId: idTab, title: 'No Spam Score' })
+    messageButton.setTitle({ tabId: idTab, title: i18n.getMessage('buttonNoScore') })
     messageButton.setIcon({ path: await getImageSrc(null) })
   } else {
     messageButton.enable(idTab)
-    messageButton.setTitle({ tabId: idTab, title: 'Spam Score: ' + score + scoreUnit(header) })
+    const unit = scoreUnit(header)
+    const label = i18n.getMessage(unit ? 'popupTotalProbability' : 'popupTotalScore')
+    messageButton.setTitle({ tabId: idTab, title: label + ': ' + score + unit })
     messageButton.setIcon({ path: await getImageSrc(score, header) })
   }
 

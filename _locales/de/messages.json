@@ -58,6 +58,9 @@
   "popupTotalProbability": {
     "message": "Spam-Wahrscheinlichkeit"
   },
+  "buttonNoScore": {
+    "message": "Kein Spam-Score"
+  },
   "popupRulesRaised": {
     "message": "Punktzahl erhöht"
   },
