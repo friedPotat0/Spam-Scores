@@ -1,51 +1,71 @@
-# Spam Scores (Thunderbird Add-on)
+# Spam Scores
 
-Spam Scores is an add-on for Thunderbird (Version 91.0a1 - \*). For Thunderbird 78.* the last working version of this add-on is [1.3.1](https://github.com/friedPotat0/Spam-Scores/releases/tag/1.3.1).
+Spam Scores is a Thunderbird add-on that surfaces the spam score your mail server has already assigned to a message. It reads the spam and ham headers written by common filters, shows the total score together with a coloured icon in a mail-list column, and breaks that score down rule by rule in a popup.
 
-The add-on can display spam scores according to mail headers. The add-on supports spam/ham score headers of Rspamd, SpamAssassin, MailScanner, hMailServer, Stalwart, OVH (Vade Secure), Sophos PureMessage, Fastmail and GMX. It adds a column with the overall spam score to the mail list view and shows details of any matched spam/ham rule.
+It runs on Thunderbird 115 and later, and on the matching Betterbird releases. If you are still on Thunderbird 78, use version [1.3.1](https://github.com/friedPotat0/Spam-Scores/releases/tag/1.3.1); older releases for other versions are on the [Releases page](https://github.com/friedPotat0/Spam-Scores/releases).
 
-> :warning: The add-on needs mails with headers like "X-Spamd-Result", "X-Spam-Report", "X-Ham-Report", "X-Rspamd-Report/-Score", "X-SpamCheck", "X-Spam-Status", "X-Rspam-Status", "X-Spam-Result", "X-hMailServer-Reason-Score", "X-VR-SPAMSCORE", "X-PMX-Spam" or "X-GMX-Antispam" to work. If a mail does not have one of these headers, it cannot display any spam score. Please make sure to check your mails for these headers before creating an issue.
+![Spam Scores in the message list](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot.jpg)
 
-![Add-on Screenshot](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot.jpg)
+## Supported filters
 
-To display the spam score column, right-click on the title bar of the columns in the list view and select "Spam score". If the column is empty, you must first restart Thunderbird and then right-click on any folder and select "Properties" and "Repair Folder". This will scan the mail headers of all mails in this folder so that the spam score column can be displayed correctly. Repair all folders like this in which you want to display this column.
+Spam Scores does not classify mail itself. It reads the headers your server writes, so it only works when one of the filters below has already tagged the message. It currently understands:
 
-If you have mails with the header "X-MYCOMPANY-MailScanner-SpamCheck", you have to open one of these mails first and then restart Thunderbird and repair the folder. Otherwise the spam score of the mails containing these headers will not be displayed.
+| Filter | Score is read from | Rule breakdown from |
+| --- | --- | --- |
+| SpamAssassin | `X-Spam-Status`, `X-Spam-Score` | `X-Spam-Report`, `X-Spam-hits` |
+| rspamd | `X-Spamd-Result`, `X-Rspamd-Score`, `X-Rspam-Status` | `X-Spamd-Result`, `X-Rspamd-Report` |
+| MailScanner | `X-<company>-MailScanner-SpamCheck` | same header |
+| hMailServer | `X-hMailServer-Reason-Score` | `X-hMailServer-Reason-*` |
+| Stalwart | `X-Spam-Score` | `X-Spam-Result` |
+| Fastmail | `X-Spam-score` | `X-Spam-hits` |
+| OVH (Vade Secure) | `X-VR-SPAMSCORE` | `X-VR-SPAMCAUSE` |
+| Sophos PureMessage | `X-PMX-Spam` | `X-PMX-Spam` report |
+| GMX | `X-GMX-Antispam` | - |
 
-The total score of each mail with an existing spam header will be displayed along with a red, yellow or green icon depending on the score. The colours are by default calculated as follows:
+If a message carries none of these headers, there is nothing to display. Most large webmail providers strip them or never add them in the first place; providers that run open-source filters underneath, such as Fastmail, do keep them.
 
-- ![Positive Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_positive.png) Score greater than 2
-- ![Neutral Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_neutral.png) Score between -2 and 2 (both inclusive)
-- ![Negative Score](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_negative.png) Score less than -2
+## What you see
 
-The icon score ranges can be changed in the [add-on options](#options).
+Every message that has a spam header gets a total score and a coloured icon:
 
-Some filters use a different score scale than SpamAssassin. Those are classified on their own thresholds instead of the ranges above: OVH (Vade Secure) and Sophos PureMessage have their own default ranges (also adjustable in the options), and GMX is shown as spam whenever its reason code is not zero. The raw score is always shown as reported by the filter.
+- ![Positive](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_positive.png) likely spam
+- ![Neutral](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_neutral.png) neutral
+- ![Negative](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/score_negative.png) likely ham
 
-Furthermore, a button is displayed in the action bar of any opened mail with the respective total score of the mail. Clicking on the button opens a popup with detailed information on all individual rules. In addition to the name and the partial score, a description and, if available in the mail header, the value on the basis of which the score was calculated is displayed.
+The score is also shown in the message-list column and, once you open a message, on a button in its toolbar. Clicking that button opens a popup that lists every rule the filter matched, each with its own partial score and, where the header provides it, a short description.
 
-## Installation
+The Spam icon and Spam score columns appear automatically in folders you have not customised; in folders where you have already changed the columns, right-click the column header to enable them. If a column stays empty, restart Thunderbird once, then right-click the folder, choose "Properties" and "Repair Folder": this re-reads the headers of the mails already in that folder. Repeat for any folder where the columns stay empty. Messages that arrive afterwards are picked up automatically.
 
-You can download the latested version reviewed by moz://a directly on the [Thunderbird Add-on page](https://addons.thunderbird.net/de/thunderbird/addon/spam-scores/) or through your installed Thunderbird client by clicking on the menu button followed by "Add-ons" and typing "Spam Scores" in the search bar.
+For custom MailScanner headers such as `X-MYCOMPANY-MailScanner-SpamCheck`, open one affected message once before you restart and repair, otherwise those mails will not fill the column.
 
-Additionally the latest reviewed version is available on the [Releases page](https://github.com/friedPotat0/Spam-Scores/releases) of this GitHub repository.
+## Score ranges and icon colours
 
-To test versions that have not yet been published, you can always download the files from any branch and create a new ZIP file containing all files in the "Spam-Scores-[BRANCH_NAME]" folder. Then you can add the file to thunderbird by drag & drop to install the new version. Please keep in mind that you might not receive future updates until you reinstall a reviewed version directly from Thunderbird's add-on page or through the releases page of this repository.
+Different filters use very different scales. SpamAssassin and rspamd count in small signed points, OVH runs into the hundreds, and Sophos reports a percentage. Spam Scores keeps the raw value the filter reported and classifies the icon on the scale of the filter it came from, so a low OVH or Sophos score is not mistaken for spam. Each scale has sensible defaults out of the box:
+
+| Scale | Default neutral range |
+| --- | --- |
+| SpamAssassin, rspamd, MailScanner, hMailServer, Stalwart, Fastmail | -2 to 2 |
+| OVH (Vade Secure) | 100 to 300 |
+| Sophos PureMessage (probability) | 20% to 50% |
+
+GMX is a special case: its number is a reason code, not a score, so a message counts as spam whenever the code is not zero.
 
 ## Options
 
-![Settings Screenshot](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot_settings.jpg)
+![Settings](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot_settings.jpg)
 
-The default icon ranges can be changed in the add-on settings in Thunderbird. Filters with a different scale (OVH, Sophos PureMessage) have their own icon ranges, which can be set separately under "Icon ranges for other spam filters". Furthermore individual score ranges can be completely hidden. For example, this can be used to show the icon and score only for mails that are spam. The detailed rules of any opened mail can still be accessed regardless of this setting.
+In the add-on settings you can change the icon range for each scale, and hide the icon and score for whole ranges, for example to only mark mail that is actually spam. The detailed rules stay available in the popup regardless of that setting. You can also reorder the headers that are used for the score and for the breakdown, in case a message carries more than one.
 
-## Translations
+## Installation
 
-At the moment the add-on is mostly written in English. Some parts like the settings and the description are also translated to German. Please refer to the section [Contributing](#contributing) if you would like to help by translating the add-on to different languages.
+The version reviewed by Mozilla is available on the [Thunderbird Add-on page](https://addons.thunderbird.net/thunderbird/addon/spam-scores/), or from inside Thunderbird under the menu button, "Add-ons", by searching for "Spam Scores". The same reviewed builds are attached to the [Releases page](https://github.com/friedPotat0/Spam-Scores/releases).
 
-## License
-
-The add-on is released under the CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike 4.0 International) license.
+To try a version that has not been published yet, download the files of any branch, zip the contents of the `Spam-Scores-[BRANCH_NAME]` folder, and drag the zip onto Thunderbird to install it. You may stop receiving updates until you reinstall a reviewed build from the add-on page.
 
 ## Contributing
 
-If you notice any bugs, do not hesitate to open an issue about it. Please understand that I develop the add-on in my spare time and may not be able to solve problems directly. If you want to contribute to the project by fixing bugs, implementing new features or translating the add-on, please feel free to open a pull request.
+If you run into a bug, please open an issue and include the relevant `X-...` spam headers of an affected mail (with any private parts redacted). I work on this in my spare time, so I cannot always fix things right away. Pull requests for bug fixes, new filters or translations are very welcome.
+
+## License
+
+Released under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
