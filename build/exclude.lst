@@ -7,3 +7,6 @@ build/*
 .gitignore
 package.json
 node_modules/*
+images/screenshot_*.png
+images/score_*.png
+images/icon.svg
