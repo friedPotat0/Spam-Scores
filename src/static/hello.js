@@ -11,6 +11,6 @@ for (const i18nKey of [
   'helloFooterParagraph1',
   'helloFooterParagraph2'
 ]) {
-  document.querySelector('*[data-i18n="' + i18nKey + '"]').innerHTML = i18n.getMessage(i18nKey)
+  document.querySelector('*[data-i18n="' + i18nKey + '"]').textContent = i18n.getMessage(i18nKey)
 }
 document.title = i18n.getMessage('helloPopupTitle')
