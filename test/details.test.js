@@ -46,3 +46,13 @@ test('x-pmx-spam-1.eml breaks down the Report rules', async () => {
     URI_WITH_PATH: 0
   })
 })
+
+test('x-vr-spamcause-1.eml decodes the OVH breakdown (scores exact, names best-effort)', async () => {
+  const headers = parseEml(join(examples, 'x-vr-spamcause-1.eml'))
+  const details = await deduplicateValues(parseDetailScores(headers, DEFAULT_SCORE_DETAILS_ORDER))
+  assert.deepEqual(
+    details.map(d => d.score).sort((a, b) => a - b),
+    [300, 500]
+  )
+  assert.ok(details.every(d => d.name.length > 0))
+})

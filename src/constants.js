@@ -102,7 +102,8 @@ export const DEFAULT_SCORE_DETAILS_ORDER = [
   'x-ham-report',
   'x-spam-status',
   'x-rspamd-report',
-  'x-hmailserver-reason-score'
+  'x-hmailserver-reason-score',
+  'x-vr-spamcause'
 ]
 
 /** @constant {Object<RegExp>} */

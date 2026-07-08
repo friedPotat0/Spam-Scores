@@ -125,6 +125,29 @@ export function sanitizeRegexResult(result) {
 }
 
 /**
+ * Decodes an OVH/Vade X-VR-SPAMCAUSE value. The value is obfuscated in character
+ * pairs; each byte is the sum of a pair minus a fixed key and a nibble offset.
+ * Rule names come out best-effort (a few characters can be off), the scores are exact.
+ * @param {string} encoded
+ * @returns {string}
+ */
+export function decodeSpamCause(encoded) {
+  const clean = encoded.replace(/\s+/g, '')
+  let out = ''
+  for (let i = 0; i + 1 < clean.length; i += 2) {
+    let offset = 0
+    for (const c of 'cdefgh') {
+      if (clean[i] === c || clean[i + 1] === c) {
+        offset = (103 - c.charCodeAt(0)) * 16
+        break
+      }
+    }
+    out += String.fromCharCode(clean.charCodeAt(i) + clean.charCodeAt(i + 1) - 120 - offset)
+  }
+  return out
+}
+
+/**
  * Parse the score detail headers into individual symbol scores
  * @param {Object<string, string[]>} headers
  * @param {string[]} scoreDetailsOrder
@@ -164,6 +187,18 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
         }
         if (parsedDetailScores.length > 0) {
           break // Found details, stop looking
+        }
+        continue
+      }
+
+      // OVH/Vade stores the breakdown obfuscated in x-vr-spamcause
+      if (headerName === 'x-vr-spamcause') {
+        const decoded = decodeSpamCause(headers[headerName][0])
+        for (const match of decoded.matchAll(/\^?([A-Za-z][\w.-]*)\s*\((-?\d+)\)/g)) {
+          parsedDetailScores.push({ name: match[1], score: parseFloat(match[2]), info: '', description: '' })
+        }
+        if (parsedDetailScores.length > 0) {
+          break
         }
         continue
       }
