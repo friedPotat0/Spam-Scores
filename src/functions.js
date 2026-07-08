@@ -10,9 +10,6 @@ import {
   DEFAULT_SCORE_HEADER_ORDER,
   SYMBOL_REGEX,
   HMAILSERVER_REASON_REGEX
-  // MAX_SCORE_SEEN,
-  // MIN_SCORE_SEEN,
-  // SCORE_INTERPOLATION
 } from './constants.js'
 
 /**
@@ -65,7 +62,6 @@ export function getScores(headers, headerOrder = null) {
         if (headerName.endsWith(regExName)) {
           const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
           if (!scoreField) continue // If no match iterate
-          // const score = scoreInterpolation(headerName, scoreField[1])
           const score = scoreField[1]
           scores.push(score)
         }
@@ -75,33 +71,6 @@ export function getScores(headers, headerOrder = null) {
 
   return scores
 }
-
-// /**
-//  *
-//  * @param {string} headername
-//  * @param {string} score
-//  * @returns {string} Interpolated score or the raw score
-//  */
-// export function scoreInterpolation(headername, score) {
-//   const scoreType = SCORE_INTERPOLATION[headername]
-//   if (scoreType) {
-//     let numerator = 1
-//     let denominator = 1
-//     if (score > scoreType.MAX_UPPER_BOUNDS) {
-//       numerator = MAX_SCORE_SEEN - DEFAULT_SCORE_UPPER_BOUNDS
-//       denominator = scoreType.MAX_VALUE - scoreType.UPPER_BOUNDS
-//     } else if (score < scoreType.MIN_LOWER_BOUNDS) {
-//       numerator = MIN_SCORE_SEEN - DEFAULT_SCORE_LOWER_BOUNDS
-//       denominator = scoreType.MIN_VALUE - scoreType.LOWER_BOUNDS
-//     } else {
-//       numerator = DEFAULT_SCORE_UPPER_BOUNDS - DEFAULT_SCORE_LOWER_BOUNDS
-//       denominator = scoreType.UPPER_BOUNDS - scoreType.LOWER_BOUNDS
-//     }
-//     const scale = numerator / denominator
-//     score *= scale
-//   }
-//   return score
-// }
 
 /**
  * Trims and removes double whitespaces

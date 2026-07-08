@@ -16,28 +16,6 @@ export const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
  */
 export const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
 
-// /**
-//  * Minimum score for SCORE_INTERPOLATION
-//  * @constant {number} Minimum score seen from the first Score Domain that was made for (Rspamd score)
-//  * @see module:functions.scoreInterpolation
-//  */
-// export const MIN_SCORE_SEEN = -40
-
-// /**
-//  * Maximum score for SCORE_INTERPOLATION
-//  * @constant {number} Maximum score seen from the first Score Domain that was made for (Rspamd score)
-//  * @see module:functions.scoreInterpolation
-//  */
-// export const MAX_SCORE_SEEN = 40
-
-// /**
-//  * @constant {Object<string, interpolationBounds>}
-//  * @type {Object<string, interpolationBounds>}
-//  */
-// export const SCORE_INTERPOLATION = {
-//   'x-vr-spamscore': { MIN_VALUE: 0, MAX_VALUE: 900, LOWER_BOUNDS: 100, UPPER_BOUNDS: 300 }
-// }
-
 /**
  * @constant {Object<RegExp>}
  */

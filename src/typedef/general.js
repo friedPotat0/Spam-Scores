@@ -1,16 +1,5 @@
 // For some reason it works for VSCode even if is not imported.
 
-// Constants
-
-/**
- * Defined Bounds for different scores
- * @typedef {object} interpolationBounds
- * @property {number} MIN_VALUE
- * @property {number} MAX_VALUE
- * @property {number} LOWER_BOUNDS
- * @property {number} UPPER_BOUNDS
- */
-
 // Program
 
 /**

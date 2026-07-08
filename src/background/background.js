@@ -1,6 +1,6 @@
 'use strict'
 import { CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER } from '../constants.js'
-import { getBounds, getScores /* , scoreInterpolation */ } from '../functions.js'
+import { getBounds, getScores } from '../functions.js'
 
 /**
  * @type {StorageArea}
