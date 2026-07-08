@@ -16,7 +16,9 @@ const SCORE_REGEX = {
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-vr-spamscore': /([0-9]+)/,
-  'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/
+  'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-pmx-spam': /Probability=([0-9]+)%/,
+  'x-gmx-antispam': /^([0-9]+)/
 }
 
 // Default order for parsing score headers
@@ -29,7 +31,9 @@ const DEFAULT_SCORE_HEADER_ORDER = [
   'x-ham-report',
   'x-rspamd-score',
   'x-vr-spamscore',
-  'x-hmailserver-reason-score'
+  'x-hmailserver-reason-score',
+  'x-pmx-spam',
+  'x-gmx-antispam'
 ]
 
 function importThreadPaneColumnsModule() {
@@ -47,9 +51,40 @@ var { ThreadPaneColumns } = importThreadPaneColumnsModule()
 const DEFAULT_SCORE_LOWER_BOUNDS = -2
 const DEFAULT_SCORE_UPPER_BOUNDS = 2
 
+// Copy of constants.js until Experiments API supports ES6 modules
+const SCORE_FAMILIES = {
+  spamassassin: { mode: 'threshold', defaultLowerBounds: DEFAULT_SCORE_LOWER_BOUNDS, defaultUpperBounds: DEFAULT_SCORE_UPPER_BOUNDS },
+  vade: { mode: 'threshold', defaultLowerBounds: 100, defaultUpperBounds: 300 },
+  pmx: { mode: 'threshold', defaultLowerBounds: 20, defaultUpperBounds: 50 },
+  gmx: { mode: 'flag' }
+}
+const SCORE_HEADER_FAMILY = {
+  'x-vr-spamscore': 'vade',
+  'x-pmx-spam': 'pmx',
+  'x-gmx-antispam': 'gmx'
+}
+
+function familyDefault(familyKey) {
+  const family = SCORE_FAMILIES[familyKey]
+  return [family.defaultLowerBounds, family.defaultUpperBounds]
+}
+
+function classify(score, header, familyBounds) {
+  const familyKey = SCORE_HEADER_FAMILY[header] || 'spamassassin'
+  if (SCORE_FAMILIES[familyKey].mode === 'flag') return parseFloat(score) === 0 ? 'negative' : 'positive'
+  const [lower, upper] = familyBounds[familyKey] || familyDefault(familyKey)
+  const value = parseFloat(score)
+  if (value > upper) return 'positive'
+  if (value < lower) return 'negative'
+  return 'neutral'
+}
+
 let scoreHdrViewParams = {
-  lowerScoreBounds: DEFAULT_SCORE_LOWER_BOUNDS,
-  upperScoreBounds: DEFAULT_SCORE_UPPER_BOUNDS,
+  familyBounds: {
+    spamassassin: familyDefault('spamassassin'),
+    vade: familyDefault('vade'),
+    pmx: familyDefault('pmx')
+  },
   scoreHeaderOrder: DEFAULT_SCORE_HEADER_ORDER
 }
 
@@ -67,7 +102,7 @@ function getScore(hdr) {
       const value = parseFloat(match[1])
       if (!isNaN(value) && (score === null || value > score)) score = value
     }
-    if (score !== null) return score
+    if (score !== null) return { score, header: regExName }
   }
 
   if (scoreHdrViewParams.customMailscannerHeaders) {
@@ -78,7 +113,7 @@ function getScore(hdr) {
           const scoreField = headerValue.match(CUSTOM_SCORE_REGEX[regExName])
           if (!scoreField) continue // If no match iterate
           const score = parseFloat(scoreField[1])
-          if (!isNaN(score)) return score
+          if (!isNaN(score)) return { score, header: headerName }
         }
       }
     }
@@ -87,11 +122,11 @@ function getScore(hdr) {
 }
 
 function getSortScore(hdr) {
-  const score = getScore(hdr)
-  if (score === null) return null
+  const result = getScore(hdr)
+  if (result === null) return null
   // Multiply by 100000 for decimal precision, then add offset of 1 billion to handle negative numbers
   // This ensures both negative and positive scores sort correctly
-  return Math.round(score * 100000) + 1000000000
+  return Math.round(result.score * 100000) + 1000000000
 }
 
 /**
@@ -139,8 +174,10 @@ var SpamScores = class extends ExtensionAPI {
     return {
       SpamScores: {
         setScoreBounds(lower, upper) {
-          scoreHdrViewParams.lowerScoreBounds = lower
-          scoreHdrViewParams.upperScoreBounds = upper
+          scoreHdrViewParams.familyBounds.spamassassin = [lower, upper]
+        },
+        setFamilyBounds(family, lower, upper) {
+          scoreHdrViewParams.familyBounds[family] = [lower, upper]
         },
         setHideIconScoreOptions(hidePositive, hideNeutral, hideNegative) {
           scoreHdrViewParams.hideIconScorePositive = hidePositive
@@ -176,17 +213,13 @@ var SpamScores = class extends ExtensionAPI {
             return null
           }
           function scoreCallback(msgHdr) {
-            let score = getScore(msgHdr)
-            if (score === null) return null
-            if (score > scoreHdrViewParams.upperScoreBounds && scoreHdrViewParams.hideIconScorePositive) return null
-            if (
-              score <= scoreHdrViewParams.upperScoreBounds &&
-              score >= scoreHdrViewParams.lowerScoreBounds &&
-              scoreHdrViewParams.hideIconScoreNeutral
-            )
-              return null
-            if (score < scoreHdrViewParams.lowerScoreBounds && scoreHdrViewParams.hideIconScoreNegative) return null
-            return score
+            const result = getScore(msgHdr)
+            if (result === null) return null
+            const classification = classify(result.score, result.header, scoreHdrViewParams.familyBounds)
+            if (classification === 'positive' && scoreHdrViewParams.hideIconScorePositive) return null
+            if (classification === 'neutral' && scoreHdrViewParams.hideIconScoreNeutral) return null
+            if (classification === 'negative' && scoreHdrViewParams.hideIconScoreNegative) return null
+            return result.score
           }
 
           ThreadPaneColumns.addCustomColumn('spam-score-value', {
@@ -225,18 +258,12 @@ var SpamScores = class extends ExtensionAPI {
               }
             ],
             iconCallback: msgHdr => {
-              let score = getScore(msgHdr)
-              if (score === null) return ''
-              if (!scoreHdrViewParams.hideIconScorePositive && score > scoreHdrViewParams.upperScoreBounds)
-                return 'positive'
-              if (
-                !scoreHdrViewParams.hideIconScoreNeutral &&
-                score <= scoreHdrViewParams.upperScoreBounds &&
-                score >= scoreHdrViewParams.lowerScoreBounds
-              )
-                return 'neutral'
-              if (!scoreHdrViewParams.hideIconScoreNegative && score < scoreHdrViewParams.lowerScoreBounds)
-                return 'negative'
+              const result = getScore(msgHdr)
+              if (result === null) return ''
+              const classification = classify(result.score, result.header, scoreHdrViewParams.familyBounds)
+              if (classification === 'positive' && !scoreHdrViewParams.hideIconScorePositive) return 'positive'
+              if (classification === 'neutral' && !scoreHdrViewParams.hideIconScoreNeutral) return 'neutral'
+              if (classification === 'negative' && !scoreHdrViewParams.hideIconScoreNegative) return 'negative'
               return ''
             },
             resizable: false,
@@ -280,7 +307,9 @@ function updatePrefs(dynamicHeaders = []) {
     'x-rspam-status',
     'x-spam-report',
     'x-ham-report',
-    'x-hmailserver-reason-score'
+    'x-hmailserver-reason-score',
+    'x-pmx-spam',
+    'x-gmx-antispam'
   ]
   const headers = [...staticHeaders, ...dynamicHeaders]
 

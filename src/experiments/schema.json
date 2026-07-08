@@ -19,6 +19,26 @@
         ]
       },
       {
+        "name": "setFamilyBounds",
+        "type": "function",
+        "description": "Set the icon bounds for a specific score family",
+        "async": false,
+        "parameters": [
+          {
+            "name": "family",
+            "type": "string"
+          },
+          {
+            "name": "lower",
+            "type": "number"
+          },
+          {
+            "name": "upper",
+            "type": "number"
+          }
+        ]
+      },
+      {
         "name": "setHideIconScoreOptions",
         "type": "function",
         "description": "",

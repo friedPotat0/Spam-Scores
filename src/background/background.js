@@ -1,6 +1,6 @@
 'use strict'
-import { CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER } from '../constants.js'
-import { getBounds, getScores, classifyScore } from '../functions.js'
+import { CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER, SCORE_FAMILIES } from '../constants.js'
+import { getScores, classifyScore, getFamilyBounds } from '../functions.js'
 
 /**
  * @type {StorageArea}
@@ -104,6 +104,10 @@ const init = async () => {
   const storage = await localStorage.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
+    'scoreIconLowerBounds_vade',
+    'scoreIconUpperBounds_vade',
+    'scoreIconLowerBounds_pmx',
+    'scoreIconUpperBounds_pmx',
     'customMailscannerHeaders',
     'hideIconScorePositive',
     'hideIconScoreNeutral',
@@ -134,9 +138,13 @@ const init = async () => {
   // Add Listeners
   messenger.messageDisplay.onMessageDisplayed.addListener(onMessageDisplayed)
 
-  // Init Data
-  const [lowerBounds, upperBounds] = getBounds(storage)
-  spamScores.setScoreBounds(lowerBounds, upperBounds)
+  // Init Data - push the icon bounds of every threshold family
+  for (const familyKey of Object.keys(SCORE_FAMILIES)) {
+    if (SCORE_FAMILIES[familyKey].mode !== 'threshold') continue
+    const [lower, upper] = getFamilyBounds(storage, familyKey)
+    if (familyKey === 'spamassassin') spamScores.setScoreBounds(lower, upper)
+    else spamScores.setFamilyBounds(familyKey, lower, upper)
+  }
 
   if (storage.customMailscannerHeaders) {
     spamScores.setCustomMailscannerHeaders(storage.customMailscannerHeaders)
