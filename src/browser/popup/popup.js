@@ -84,9 +84,10 @@ async function renderRules(headers, storage) {
   const customHeaders = storage.customMailscannerHeaders || []
   const scoreDetailsOrder = storage.scoreDetailsHeaderOrder || DEFAULT_SCORE_DETAILS_ORDER
   const rules = await deduplicateValues(parseDetailScores(headers, scoreDetailsOrder, customHeaders))
-  if (rules.length === 0) return
-
-  document.getElementById('no-details').style.display = 'none'
+  if (rules.length === 0) {
+    document.getElementById('no-details').style.display = ''
+    return
+  }
 
   const groups = {
     positive: rules.filter(el => el.score > 0).sort((a, b) => b.score - a.score),

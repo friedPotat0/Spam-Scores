@@ -340,7 +340,7 @@ a:hover {
 
 .score-detail-row {
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) auto;
+  grid-template-columns: 56px minmax(0, 1fr);
   gap: 3px 10px;
   align-items: start;
   padding: 5px 16px;
@@ -427,17 +427,17 @@ a:hover {
   font-size: 12px;
 }
 
-/* optional matched value */
+/* optional matched value — full width under the description, wraps instead of truncating */
 .score-detail-row .info {
-  justify-self: end;
-  padding-top: 2px;
+  margin-top: 1px;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-muted);
-  white-space: nowrap;
-  max-width: 14ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+.score-detail-row .info:empty {
+  display: none;
 }
 
 /* ============================================================

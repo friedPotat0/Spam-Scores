@@ -41,8 +41,8 @@
     <div class="rule-list"></div>
   </section>
 
-  <!-- Empty state: shown when a message has no rule breakdown. -->
-  <div id="no-details">
+  <!-- Empty state: shown by popup.js only when a message has no rule breakdown. -->
+  <div id="no-details" style="display: none">
     <img src="/images/score_no.svg" alt="" width="24" height="24">
     <p data-i18n="popupNoDetails"></p>
   </div>
@@ -57,8 +57,8 @@
       <span class="rule-main">
         <span class="name"></span>
         <span class="description"></span>
+        <span class="info"></span>
       </span>
-      <span class="info"></span>
     </div>
   </template>
 
