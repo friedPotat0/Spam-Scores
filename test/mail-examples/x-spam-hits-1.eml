@@ -1,0 +1,14 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Spam-hits] Spam Scores test mail (x-spam-hits-1.eml)
+X-Spam-known-sender: no
+X-Spam-sender-reputation: 500 (none)
+X-Spam-score: 0.0
+X-Spam-hits: DCC_REPUT_00_12 -0.8, HTML_IMAGE_ONLY_28 0.726, HTML_MESSAGE 0.001,
+  ME_SENDERREP_NEUTRAL 0.001, MIME_HTML_ONLY 0.1, RCVD_IN_MSPIKE_H2 -0.001,
+  SPF_HELO_NONE 0.001, SPF_PASS -0.001, T_SCC_BODY_TEXT_LINE -0.01,
+  UNPARSEABLE_RELAY 0.001, LANGUAGES nl, BAYES_USED none, SA_VERSION 3.4.2
+X-Spam-source: IP='0.0.0.0', Host='mail.example', Country='US'
+Message-ID: x-spam-hits-1
+
+This is a message to test the Spam Scores Thunderbird add-on.

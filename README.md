@@ -2,7 +2,7 @@
 
 Spam Scores is an add-on for Thunderbird (Version 91.0a1 - \*). For Thunderbird 78.* the last working version of this add-on is [1.3.1](https://github.com/friedPotat0/Spam-Scores/releases/tag/1.3.1).
 
-The add-on can display spam scores according to mail headers. The add-on supports spam/ham score headers of Rspamd, SpamAssassin, MailScanner, hMailServer, Stalwart, OVH (Vade Secure), Sophos PureMessage and GMX. It adds a column with the overall spam score to the mail list view and shows details of any matched spam/ham rule.
+The add-on can display spam scores according to mail headers. The add-on supports spam/ham score headers of Rspamd, SpamAssassin, MailScanner, hMailServer, Stalwart, OVH (Vade Secure), Sophos PureMessage, Fastmail and GMX. It adds a column with the overall spam score to the mail list view and shows details of any matched spam/ham rule.
 
 > :warning: The add-on needs mails with headers like "X-Spamd-Result", "X-Spam-Report", "X-Ham-Report", "X-Rspamd-Report/-Score", "X-SpamCheck", "X-Spam-Status", "X-Rspam-Status", "X-Spam-Result", "X-hMailServer-Reason-Score", "X-VR-SPAMSCORE", "X-PMX-Spam" or "X-GMX-Antispam" to work. If a mail does not have one of these headers, it cannot display any spam score. Please make sure to check your mails for these headers before creating an issue.
 

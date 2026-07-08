@@ -100,11 +100,19 @@ export const DEFAULT_SCORE_DETAILS_ORDER = [
   'x-pmx-spam',
   'x-spam-report',
   'x-ham-report',
+  'x-spam-hits',
   'x-spam-status',
   'x-rspamd-report',
   'x-hmailserver-reason-score',
   'x-vr-spamcause'
 ]
+
+/**
+ * SpamAssassin informational fields that show up next to the rules (e.g. in
+ * Fastmail's X-Spam-hits) without being an actual score. Kept out of the breakdown.
+ * @constant {String[]}
+ */
+export const IGNORED_DETAIL_RULES = ['SA_VERSION', 'LANGUAGES', 'BAYES_USED']
 
 /** @constant {Object<RegExp>} */
 export const SYMBOL_REGEX = {

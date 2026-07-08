@@ -11,7 +11,8 @@ import {
   SYMBOL_REGEX,
   HMAILSERVER_REASON_REGEX,
   SCORE_FAMILIES,
-  SCORE_HEADER_FAMILY
+  SCORE_HEADER_FAMILY,
+  IGNORED_DETAIL_RULES
 } from './constants.js'
 
 /**
@@ -237,7 +238,7 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
           score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$1')) || 0),
           info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$4')) || '',
           description: sanitizeRegexResult(el.replace(SYMBOL_REGEX.prefixSingle, '$3')) || ''
-        }))
+        })).filter(el => !IGNORED_DETAIL_RULES.includes(el.name))
         parsedDetailScores = [...parsedDetailScores, ...detailScore]
         // Use first matching header only (like for score headers)
         break
@@ -249,7 +250,7 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
           name: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$1')),
           score: parseFloat(sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$2')) || 0),
           info: sanitizeRegexResult(el.replace(SYMBOL_REGEX.suffix, '$3')) || ''
-        }))
+        })).filter(el => !IGNORED_DETAIL_RULES.includes(el.name))
         parsedDetailScores = [...parsedDetailScores, ...detailScore]
         // Use first matching header only (like for score headers)
         break

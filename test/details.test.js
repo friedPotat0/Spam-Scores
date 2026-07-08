@@ -65,3 +65,18 @@ test('with several scans the breakdown belongs to the highest-scoring one', asyn
     [300, 500]
   )
 })
+
+test('x-spam-hits-1.eml breaks down Fastmail rules without the informational tokens', async () => {
+  assert.deepEqual(await detailsByName('x-spam-hits-1.eml'), {
+    DCC_REPUT_00_12: -0.8,
+    HTML_IMAGE_ONLY_28: 0.726,
+    HTML_MESSAGE: 0.001,
+    ME_SENDERREP_NEUTRAL: 0.001,
+    MIME_HTML_ONLY: 0.1,
+    RCVD_IN_MSPIKE_H2: -0.001,
+    SPF_HELO_NONE: 0.001,
+    SPF_PASS: -0.001,
+    T_SCC_BODY_TEXT_LINE: -0.01,
+    UNPARSEABLE_RELAY: 0.001
+  })
+})
