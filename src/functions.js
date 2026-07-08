@@ -45,10 +45,14 @@ export function getScores(headers, headerOrder = null) {
   for (const headerName of scoreHeaders) {
     if (customHeaders[headerName]) {
       if (SCORE_REGEX[headerName]) {
-        const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
-        if (!scoreField) continue // If no match iterate
-        // const score = scoreInterpolation(headerName, scoreField[1])
-        const score = scoreField[1]
+        // A header can occur more than once (e.g. OVH adds one X-VR-SPAMSCORE per scan) - keep the highest
+        let score = null
+        for (const value of customHeaders[headerName]) {
+          const scoreField = value.match(SCORE_REGEX[headerName])
+          if (!scoreField) continue
+          if (score === null || parseFloat(scoreField[1]) > parseFloat(score)) score = scoreField[1]
+        }
+        if (score === null) continue // If no match iterate
         scores.push(score)
       }
     }

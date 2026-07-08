@@ -1,0 +1,22 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-VR-SPAMSCORE] Spam Scores test mail (vr-spamscore-2.eml)
+X-VR-SPAMSTATE: ACCOUNT
+X-VR-SPAMSCORE: 20
+X-VR-SPAMCAUSE: [...]
+X-VR-SPAMSTATE: PHISHING
+X-VR-SPAMSCORE: 607
+X-VR-SPAMCAUSE: [...]
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+--
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-VR-SPAMSCORE] Spam Scores test mail (vr-spamscore-2.eml)
+X-VR-SPAMSTATE: ACCOUNT
+X-VR-SPAMSCORE: 20
+X-VR-SPAMCAUSE: [...]
+X-VR-SPAMSTATE: PHISHING
+X-VR-SPAMSCORE: 607
+X-VR-SPAMCAUSE: [...]

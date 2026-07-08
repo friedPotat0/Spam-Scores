@@ -61,10 +61,13 @@ function getScore(hdr) {
     if (!SCORE_REGEX[regExName]) continue // Skip if regex not defined
     const headerValue = hdr.getStringProperty(regExName)
     if (headerValue === '') continue
-    const scoreField = headerValue.match(SCORE_REGEX[regExName])
-    if (!scoreField) continue // If no match iterate - Note: This shouldn't be needed
-    const score = parseFloat(scoreField[1])
-    if (!isNaN(score)) return score
+    // Thunderbird stores duplicate headers as one string - keep the highest score it contains
+    let score = null
+    for (const match of headerValue.matchAll(new RegExp(SCORE_REGEX[regExName], 'g'))) {
+      const value = parseFloat(match[1])
+      if (!isNaN(value) && (score === null || value > score)) score = value
+    }
+    if (score !== null) return score
   }
 
   if (scoreHdrViewParams.customMailscannerHeaders) {
