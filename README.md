@@ -2,9 +2,9 @@
 
 Spam Scores is an add-on for Thunderbird (Version 91.0a1 - \*). For Thunderbird 78.* the last working version of this add-on is [1.3.1](https://github.com/friedPotat0/Spam-Scores/releases/tag/1.3.1).
 
-The add-on can display spam scores according to mail headers. The add-on supports spam/ham score headers of Rspamd, SpamAssassin, MailScanner and hMailServer. It adds a column with the overall spam score to the mail list view and shows details of any matched spam/ham rule.
+The add-on can display spam scores according to mail headers. The add-on supports spam/ham score headers of Rspamd, SpamAssassin, MailScanner, hMailServer, Stalwart, OVH (Vade Secure), Sophos PureMessage and GMX. It adds a column with the overall spam score to the mail list view and shows details of any matched spam/ham rule.
 
-> :warning: The add-on needs mails with headers like "X-Spamd-Result", "X-Spam-Report", "X-Ham-Report", "X-Rspamd-Report/-Score", "X-SpamCheck", "X-Spam-Status", "X-Rspam-Status", "X-hMailServer-Reason-Score" or "X-VR-SPAMSCORE" to work. If a mail does not have one of these headers, it cannot display any spam score. Please make sure to check your mails for these headers before creating an issue. The add-on does not currently support spam headers from GMX, as these have a different score scale.
+> :warning: The add-on needs mails with headers like "X-Spamd-Result", "X-Spam-Report", "X-Ham-Report", "X-Rspamd-Report/-Score", "X-SpamCheck", "X-Spam-Status", "X-Rspam-Status", "X-Spam-Result", "X-hMailServer-Reason-Score", "X-VR-SPAMSCORE", "X-PMX-Spam" or "X-GMX-Antispam" to work. If a mail does not have one of these headers, it cannot display any spam score. Please make sure to check your mails for these headers before creating an issue.
 
 ![Add-on Screenshot](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot.jpg)
 
@@ -20,6 +20,8 @@ The total score of each mail with an existing spam header will be displayed alon
 
 The icon score ranges can be changed in the [add-on options](#options).
 
+Some filters use a different score scale than SpamAssassin. Those are classified on their own thresholds instead of the ranges above: OVH (Vade Secure) and Sophos PureMessage have their own default ranges (also adjustable in the options), and GMX is shown as spam whenever its reason code is not zero. The raw score is always shown as reported by the filter.
+
 Furthermore, a button is displayed in the action bar of any opened mail with the respective total score of the mail. Clicking on the button opens a popup with detailed information on all individual rules. In addition to the name and the partial score, a description and, if available in the mail header, the value on the basis of which the score was calculated is displayed.
 
 ## Installation
@@ -34,7 +36,7 @@ To test versions that have not yet been published, you can always download the f
 
 ![Settings Screenshot](https://raw.githubusercontent.com/friedPotat0/Spam-Scores/master/images/screenshot_settings.jpg)
 
-The default icon ranges can be changed in the add-on settings in Thunderbird. Furthermore individual score ranges can be completely hidden. For example, this can be used to show the icon and score only for mails that are spam. The detailed rules of any opened mail can still be accessed regardless of this setting.
+The default icon ranges can be changed in the add-on settings in Thunderbird. Filters with a different scale (OVH, Sophos PureMessage) have their own icon ranges, which can be set separately under "Icon ranges for other spam filters". Furthermore individual score ranges can be completely hidden. For example, this can be used to show the icon and score only for mails that are spam. The detailed rules of any opened mail can still be accessed regardless of this setting.
 
 ## Translations
 
