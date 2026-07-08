@@ -44,6 +44,8 @@ Every message with a spam header gets a total score and a colour-coded icon:
 - ![Neutral](images/score_neutral.png) neutral
 - ![Ham](images/score_negative.png) likely ham
 
+![The Spam score column in the message list](images/screenshot_column.png)
+
 The score appears in the message-list column and, once you open a message, on a button in its toolbar. That button opens a popup that groups every matched rule by how it moved the score, each with its own partial score and, where the header provides one, a short description.
 
 The Spam and Spam score columns appear automatically in folders you have not customised. In folders where you have already changed the columns, right-click the column header to enable them. If a column stays empty, restart Thunderbird once, then right-click the folder, choose "Properties" and "Repair Folder": this re-reads the headers of the mails already in that folder. Messages that arrive afterwards are picked up automatically.
