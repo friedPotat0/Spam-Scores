@@ -53,7 +53,10 @@
     "message": "Erkannte Filter erscheinen hier automatisch."
   },
   "popupTotalScore": {
-    "message": "Gesamtpunktzahl"
+    "message": "Spam-Score"
+  },
+  "popupTotalProbability": {
+    "message": "Spam-Wahrscheinlichkeit"
   },
   "popupRulesRaised": {
     "message": "Punktzahl erhöht"

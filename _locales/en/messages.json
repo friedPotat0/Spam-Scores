@@ -53,7 +53,10 @@
     "message": "Filters detected in your mail appear here automatically."
   },
   "popupTotalScore": {
-    "message": "Total score"
+    "message": "Spam score"
+  },
+  "popupTotalProbability": {
+    "message": "Spam probability"
   },
   "popupRulesRaised": {
     "message": "Raised the score"
