@@ -69,20 +69,6 @@ export const CUSTOM_SCORE_REGEX = {
 export const HMAILSERVER_REASON_REGEX = /^x-hmailserver-reason-\d+$/
 
 /**
- * Headers that contain the score details
- * @constant {String[]}
- */
-export const SCORE_DETAILS_ARRAY = [
-  'x-spamd-result',
-  'x-spam-report',
-  'x-ham-report',
-  'x-spamcheck',
-  'x-spam-status',
-  'x-rspamd-report',
-  'x-hmailserver-reason-score'
-]
-
-/**
  * Default order for parsing score headers (first match is used)
  * @constant {String[]}
  */
