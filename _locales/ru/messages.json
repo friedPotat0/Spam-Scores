@@ -72,10 +72,10 @@
     "message": "Спам"
   },
   "popupRulesRaised": {
-    "message": "Повысили оценку"
+    "message": "Повысил оценку"
   },
   "popupRulesLowered": {
-    "message": "Понизили оценку"
+    "message": "Понизил оценку"
   },
   "popupRulesNeutral": {
     "message": "Без влияния"

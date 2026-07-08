@@ -72,10 +72,10 @@
     "message": "Spam"
   },
   "popupRulesRaised": {
-    "message": "Podniosły ocenę"
+    "message": "Podniósł ocenę"
   },
   "popupRulesLowered": {
-    "message": "Obniżyły ocenę"
+    "message": "Obniżył ocenę"
   },
   "popupRulesNeutral": {
     "message": "Bez wpływu"

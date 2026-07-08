@@ -72,10 +72,10 @@
     "message": "Spam"
   },
   "popupRulesRaised": {
-    "message": "Verhoogden de score"
+    "message": "Score verhoogd"
   },
   "popupRulesLowered": {
-    "message": "Verlaagden de score"
+    "message": "Score verlaagd"
   },
   "popupRulesNeutral": {
     "message": "Geen effect"

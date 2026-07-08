@@ -41,7 +41,7 @@
     "message": "Spam Scores - ¡Gracias!"
   },
   "helloHeadline": {
-    "message": "¡Gracias por instalar <br/>Spam Scores!"
+    "message": "¡Gracias por instalar Spam Scores!"
   },
   "helloParagraph1": {
     "message": "Para mostrar la columna de Spam:"
@@ -62,7 +62,7 @@
     "message": "Repara las carpetas en los que te interese tener el \"Spam Score\"."
   },
   "helloParagraph4": {
-    "message": "Finalmente, habilita la columna \"Spam score\" en la vista de la carpeta reparada."
+    "message": "Finalmente, habilita la columna \"Puntuación de spam\" en la vista de la carpeta reparada."
   },
   "helloFooterParagraph1": {
     "message": "Si tienes dudas o encuentras algun fallo, por favor crea un issue en GitHub (https://github.com/friedPotat0/Spam-Scores)."
@@ -107,10 +107,10 @@
     "message": "Spam"
   },
   "popupRulesRaised": {
-    "message": "Aumentan la puntuación"
+    "message": "Aumentó la puntuación"
   },
   "popupRulesLowered": {
-    "message": "Reducen la puntuación"
+    "message": "Redujo la puntuación"
   },
   "popupRulesNeutral": {
     "message": "Sin efecto"

@@ -102,13 +102,13 @@
     "message": "スパムスコア列を表示するには："
   },
   "helloInstruction_1": {
-    "message": "Thunderbird を再起動します。"
+    "message": "Thunderbird を再起動してください。"
   },
   "helloInstruction_2": {
-    "message": "フォルダーを右クリックして「プロパティ」を選択します。"
+    "message": "フォルダーを右クリックして「プロパティ」を選択してください。"
   },
   "helloInstruction_3": {
-    "message": "「フォルダーを修復」をクリックします。"
+    "message": "「フォルダーを修復」をクリックしてください。"
   },
   "helloParagraph2": {
     "message": "これにより、このフォルダー内のすべてのメールのヘッダーがスキャンされ、スパムスコア列が正しく表示されるようになります。"

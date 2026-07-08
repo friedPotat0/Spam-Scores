@@ -72,10 +72,10 @@
     "message": "Spam"
   },
   "popupRulesRaised": {
-    "message": "Ont augmenté le score"
+    "message": "A augmenté le score"
   },
   "popupRulesLowered": {
-    "message": "Ont diminué le score"
+    "message": "A diminué le score"
   },
   "popupRulesNeutral": {
     "message": "Sans effet"

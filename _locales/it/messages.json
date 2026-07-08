@@ -62,7 +62,7 @@
     "message": "Ripara tutte le cartelle in cui desideri visualizzare la colonna spam in questo modo."
   },
   "helloParagraph4": {
-    "message": "Infine, puoi abilitare la colonna \"Spam Scores\" nella visualizzazione elenco della cartella riparata."
+    "message": "Infine, puoi abilitare la colonna \"Punteggio spam\" nella visualizzazione elenco della cartella riparata."
   },
   "helloFooterParagraph1": {
     "message": "Se hai domande o riscontri errori durante l'utilizzo di questo componente aggiuntivo, non esitare a creare una issue su GitHub (https://github.com/friedPotat0/Spam-Scores)."
@@ -107,10 +107,10 @@
     "message": "Spam"
   },
   "popupRulesRaised": {
-    "message": "Aumentano il punteggio"
+    "message": "Ha aumentato il punteggio"
   },
   "popupRulesLowered": {
-    "message": "Riducono il punteggio"
+    "message": "Ha ridotto il punteggio"
   },
   "popupRulesNeutral": {
     "message": "Nessun effetto"

@@ -72,10 +72,10 @@
     "message": "Spam"
   },
   "popupRulesRaised": {
-    "message": "Aumentaram a pontuação"
+    "message": "Aumentou a pontuação"
   },
   "popupRulesLowered": {
-    "message": "Reduziram a pontuação"
+    "message": "Reduziu a pontuação"
   },
   "popupRulesNeutral": {
     "message": "Sem efeito"

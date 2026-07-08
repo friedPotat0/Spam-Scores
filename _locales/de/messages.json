@@ -29,10 +29,10 @@
     "message": "Legen Sie die Reihenfolge fest, in der Spam-Header analysiert werden. Der erste übereinstimmende Header wird verwendet. Ziehen Sie zum Neuordnen."
   },
   "optionsScoreHeaders": {
-    "message": "Punktzahl-Header (für Gesamtpunktzahl verwendet)"
+    "message": "Score-Header (für Gesamtpunktzahl verwendet)"
   },
   "optionsScoreDetailsHeaders": {
-    "message": "Punktzahl-Detail-Header (für die Aufschlüsselung verwendet)"
+    "message": "Score-Details-Header (für die Aufschlüsselung verwendet)"
   },
   "optionsResetToDefault": {
     "message": "Auf Standardreihenfolge zurücksetzen"
@@ -104,7 +104,7 @@
     "message": "Um die Spam-Punktzahl-Spalte anzuzeigen:"
   },
   "helloInstruction_1": {
-    "message": "Müssen Sie zunächst Thunderbird neu starten."
+    "message": "Starten Sie zunächst Thunderbird neu."
   },
   "helloInstruction_2": {
     "message": "Klicken Sie anschließend mit der rechten Maustaste auf einen Ordner und wählen Sie \"Eigenschaften\"."
