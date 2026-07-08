@@ -99,8 +99,10 @@
 
 body {
   margin: 0;
-  min-width: 340px;
-  max-width: 520px;
+  /* fixed width + a small min-height so the popup opens at a stable size
+     instead of a thin sliver that jumps once the async content loads */
+  width: 400px;
+  min-height: 88px;
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-ui);

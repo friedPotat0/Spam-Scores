@@ -23,6 +23,10 @@ for (const element of document.querySelectorAll('[data-i18n]')) {
   if (message) element.textContent = message
 }
 
+// Cap the height up front (see issue #33) so the popup opens at a stable size
+// rather than resizing once the async content is in.
+document.body.style.maxHeight = `${window.screen.height / 2 - 60}px`
+
 messenger.tabs.query({ active: true, currentWindow: true }).then(async tabs => {
   const message = await messenger.messageDisplay.getDisplayedMessage(tabs[0].id)
   const headers = (await messenger.messages.getFull(message.id)).headers
@@ -41,9 +45,6 @@ messenger.tabs.query({ active: true, currentWindow: true }).then(async tabs => {
 
   renderSummary(headers, storage)
   await renderRules(headers, storage)
-
-  // Workaround for a bug where Thunderbird does not correctly calculate the popup window height in Wide View layout (see issue #33)
-  document.body.style.maxHeight = `${window.screen.height / 2 - 60}px`
 })
 
 /**
