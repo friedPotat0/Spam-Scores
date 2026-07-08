@@ -1,6 +1,6 @@
 'use strict'
 import { CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER, SCORE_FAMILIES } from '../constants.js'
-import { getScores, classifyScore, getFamilyBounds } from '../functions.js'
+import { getScores, classifyScore, getFamilyBounds, scoreUnit } from '../functions.js'
 
 /**
  * @type {StorageArea}
@@ -61,7 +61,7 @@ async function onMessageDisplayed(tab, message) {
     messageButton.setIcon({ path: await getImageSrc(null) })
   } else {
     messageButton.enable(idTab)
-    messageButton.setTitle({ tabId: idTab, title: 'Spam Score: ' + score })
+    messageButton.setTitle({ tabId: idTab, title: 'Spam Score: ' + score + scoreUnit(header) })
     messageButton.setIcon({ path: await getImageSrc(score, header) })
   }
 
