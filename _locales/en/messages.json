@@ -11,7 +11,7 @@
     "message": "Score icon ranges"
   },
   "optionsScoreGreater": {
-    "message": "Score geater than"
+    "message": "Score greater than"
   },
   "optionsScoreBetween": {
     "message": "Score between $1 and $2 (both inclusive)"
