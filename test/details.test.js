@@ -35,3 +35,14 @@ for (const file of [
     assert.deepEqual(await detailsByName(file), sentinel)
   })
 }
+
+test('x-pmx-spam-1.eml breaks down the Report rules', async () => {
+  assert.deepEqual(await detailsByName('x-pmx-spam-1.eml'), {
+    CTYPE_JUST_HTML: 0.848,
+    HTML_MIME_NO_HTML_TAG: 0.8,
+    HTML_70_90: 0.1,
+    MIME_LOWER_CASE: 0.05,
+    BODYTEXTH_SIZE_10000_LESS: 0,
+    URI_WITH_PATH: 0
+  })
+})

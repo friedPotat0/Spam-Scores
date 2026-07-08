@@ -1,0 +1,16 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-GMX-Antispam] Spam Scores test mail (x-gmx-antispam-1.eml)
+X-GMX-Antispam: 6 (nemesis text pattern profiler); Detail=V3;
+X-Spam-Flag: YES
+Message-ID: x-gmx-antispam-1
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+--
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-GMX-Antispam] Spam Scores test mail (x-gmx-antispam-1.eml)
+X-GMX-Antispam: 6 (nemesis text pattern profiler); Detail=V3;
+X-Spam-Flag: YES
+Message-ID: x-gmx-antispam-1

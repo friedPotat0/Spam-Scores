@@ -9,7 +9,9 @@ import {
   CUSTOM_SCORE_REGEX,
   DEFAULT_SCORE_HEADER_ORDER,
   SYMBOL_REGEX,
-  HMAILSERVER_REASON_REGEX
+  HMAILSERVER_REASON_REGEX,
+  SCORE_FAMILIES,
+  SCORE_HEADER_FAMILY
 } from './constants.js'
 
 /**
@@ -26,7 +28,7 @@ export function getBounds(storage) {
 /**
  * @param {object} headers
  * @param {string[]} headerOrder - Custom order for parsing headers
- * @returns {string[]} Score value
+ * @returns {{score: string, header: string}[]} Score value and the header it came from
  */
 export function getScores(headers, headerOrder = null) {
   const scores = []
@@ -50,7 +52,7 @@ export function getScores(headers, headerOrder = null) {
           if (score === null || parseFloat(scoreField[1]) > parseFloat(score)) score = scoreField[1]
         }
         if (score === null) continue // If no match iterate
-        scores.push(score)
+        scores.push({ score, header: headerName })
       }
     }
   }
@@ -62,14 +64,55 @@ export function getScores(headers, headerOrder = null) {
         if (headerName.endsWith(regExName)) {
           const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
           if (!scoreField) continue // If no match iterate
-          const score = scoreField[1]
-          scores.push(score)
+          scores.push({ score: scoreField[1], header: headerName })
         }
       }
     }
   }
 
   return scores
+}
+
+/**
+ * @param {string} header
+ * @returns {string} Family key the header belongs to
+ */
+export function getScoreFamily(header) {
+  return SCORE_HEADER_FAMILY[header] || 'spamassassin'
+}
+
+/**
+ * Resolves the lower & upper bounds for a family, using stored overrides or the
+ * family default. Spamassassin keeps the original keys for backwards compatibility.
+ * @param {Object<string, string>} storage
+ * @param {string} familyKey
+ * @returns {number[]} Lower & upper bounds
+ */
+export function getFamilyBounds(storage, familyKey) {
+  const family = SCORE_FAMILIES[familyKey]
+  const suffix = familyKey === 'spamassassin' ? '' : '_' + familyKey
+  const lower = parseFloat(storage['scoreIconLowerBounds' + suffix] ?? family.defaultLowerBounds)
+  const upper = parseFloat(storage['scoreIconUpperBounds' + suffix] ?? family.defaultUpperBounds)
+  return [lower, upper]
+}
+
+/**
+ * Classifies a raw score into 'positive' (spam), 'neutral' or 'negative' (ham)
+ * on the scale of the header's family.
+ * @param {string|number} score
+ * @param {string} header
+ * @param {Object<string, string>} storage
+ * @returns {string}
+ */
+export function classifyScore(score, header, storage = {}) {
+  const familyKey = getScoreFamily(header)
+  const family = SCORE_FAMILIES[familyKey]
+  if (family.mode === 'flag') return parseFloat(score) === 0 ? 'negative' : 'positive'
+  const value = parseFloat(score)
+  const [lower, upper] = getFamilyBounds(storage, familyKey)
+  if (value > upper) return 'positive'
+  if (value < lower) return 'negative'
+  return 'neutral'
 }
 
 /**
@@ -132,6 +175,11 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
         if (reportSplitted.length > 1) {
           headerValue = reportSplitted[1]
         }
+      }
+      if (headerName === 'x-pmx-spam') {
+        // Only the Report='...' part holds the rules; drop Gauge / Probability
+        const report = headerValue.match(/Report='([\s\S]*)/)
+        if (report) headerValue = report[1]
       }
       headerValue = headerValue.trim().replace(/\r?\n/g, ' ')
       let symbolMatch = headerValue.match(SYMBOL_REGEX.prefix)

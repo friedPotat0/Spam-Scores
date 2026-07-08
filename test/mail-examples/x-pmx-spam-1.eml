@@ -1,0 +1,18 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-PMX-Spam] Spam Scores test mail (x-pmx-spam-1.eml)
+X-PMX-Version: 6.4.9.2830568
+X-PMX-Spam: Gauge=XIIIIII, Probability=16%, Report='
+ CTYPE_JUST_HTML 0.848, HTML_MIME_NO_HTML_TAG 0.8, HTML_70_90 0.1, MIME_LOWER_CASE 0.05, BODYTEXTH_SIZE_10000_LESS 0, __URI_WITH_PATH 0'
+Message-ID: x-pmx-spam-1
+
+This is a message to test the Spam Scores Thunderbird add-on.
+
+--
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-PMX-Spam] Spam Scores test mail (x-pmx-spam-1.eml)
+X-PMX-Version: 6.4.9.2830568
+X-PMX-Spam: Gauge=XIIIIII, Probability=16%, Report='
+ CTYPE_JUST_HTML 0.848, HTML_MIME_NO_HTML_TAG 0.8, HTML_70_90 0.1, MIME_LOWER_CASE 0.05, BODYTEXTH_SIZE_10000_LESS 0, __URI_WITH_PATH 0'
+Message-ID: x-pmx-spam-1

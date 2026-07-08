@@ -17,6 +17,30 @@ export const DEFAULT_SCORE_LOWER_BOUNDS = -2.0
 export const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
 
 /**
+ * Score families group headers that share a scale. The icon is classified on
+ * each family's own scale so raw values from different filters stay comparable.
+ * Mode 'threshold' uses lower/upper bounds; 'flag' treats 0 as ham and anything
+ * else as spam (e.g. GMX reason codes).
+ * @constant
+ */
+export const SCORE_FAMILIES = {
+  spamassassin: { mode: 'threshold', defaultLowerBounds: DEFAULT_SCORE_LOWER_BOUNDS, defaultUpperBounds: DEFAULT_SCORE_UPPER_BOUNDS },
+  vade: { mode: 'threshold', defaultLowerBounds: 100, defaultUpperBounds: 300 },
+  pmx: { mode: 'threshold', defaultLowerBounds: 20, defaultUpperBounds: 50 },
+  gmx: { mode: 'flag' }
+}
+
+/**
+ * Maps a score header to its family. Headers not listed belong to spamassassin.
+ * @constant {Object<string, string>}
+ */
+export const SCORE_HEADER_FAMILY = {
+  'x-vr-spamscore': 'vade',
+  'x-pmx-spam': 'pmx',
+  'x-gmx-antispam': 'gmx'
+}
+
+/**
  * @constant {Object<RegExp>}
  */
 export const SCORE_REGEX = {
@@ -28,7 +52,9 @@ export const SCORE_REGEX = {
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-vr-spamscore': /([0-9]+)/,
-  'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/
+  'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-pmx-spam': /Probability=([0-9]+)%/,
+  'x-gmx-antispam': /^([0-9]+)/
 }
 
 /**
@@ -59,7 +85,9 @@ export const DEFAULT_SCORE_HEADER_ORDER = [
   'x-ham-report',
   'x-rspamd-score',
   'x-vr-spamscore',
-  'x-hmailserver-reason-score'
+  'x-hmailserver-reason-score',
+  'x-pmx-spam',
+  'x-gmx-antispam'
 ]
 
 /**
@@ -69,6 +97,7 @@ export const DEFAULT_SCORE_HEADER_ORDER = [
 export const DEFAULT_SCORE_DETAILS_ORDER = [
   'x-spamd-result',
   'x-spam-result',
+  'x-pmx-spam',
   'x-spam-report',
   'x-ham-report',
   'x-spam-status',

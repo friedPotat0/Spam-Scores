@@ -1,6 +1,6 @@
 'use strict'
 import { CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER } from '../constants.js'
-import { getBounds, getScores } from '../functions.js'
+import { getBounds, getScores, classifyScore } from '../functions.js'
 
 /**
  * @type {StorageArea}
@@ -14,15 +14,22 @@ const localStorage = messenger.storage.local
 /**
  * Returns the path of the image
  * @param {string} score
+ * @param {string} [header] Header the score came from, used to pick the family
  * @returns {string} Path of Image
  */
-async function getImageSrc(score) {
+async function getImageSrc(score, header) {
   if (score === null) return '/images/score_no.svg'
-  const storage = await localStorage.get(['scoreIconLowerBounds', 'scoreIconUpperBounds'])
-  const [lowerBounds, upperBounds] = getBounds(storage)
-  if (score > upperBounds) return '/images/score_positive.svg'
-  if (score <= upperBounds && score >= lowerBounds) return '/images/score_neutral.svg'
-  if (score < lowerBounds) return '/images/score_negative.svg'
+  const storage = await localStorage.get([
+    'scoreIconLowerBounds',
+    'scoreIconUpperBounds',
+    'scoreIconLowerBounds_vade',
+    'scoreIconUpperBounds_vade',
+    'scoreIconLowerBounds_pmx',
+    'scoreIconUpperBounds_pmx'
+  ])
+  const classification = classifyScore(score, header, storage)
+  if (classification === 'positive') return '/images/score_positive.svg'
+  if (classification === 'negative') return '/images/score_negative.svg'
   return '/images/score_neutral.svg'
 }
 
@@ -43,7 +50,9 @@ async function onMessageDisplayed(tab, message) {
 
   // Get Score
   const scores = getScores(fullMessage.headers, headerOrder) // Get Scores
-  const score = isNaN(scores[0]) ? null : scores[0]
+  const topScore = scores[0]
+  const score = topScore && !isNaN(topScore.score) ? topScore.score : null
+  const header = topScore ? topScore.header : null
 
   // Message Score Button
   if (score === null) {
@@ -53,7 +62,7 @@ async function onMessageDisplayed(tab, message) {
   } else {
     messageButton.enable(idTab)
     messageButton.setTitle({ tabId: idTab, title: 'Spam Score: ' + score })
-    messageButton.setIcon({ path: await getImageSrc(score) })
+    messageButton.setIcon({ path: await getImageSrc(score, header) })
   }
 
   /**

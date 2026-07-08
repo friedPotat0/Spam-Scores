@@ -23,13 +23,15 @@ const expected = {
   'spamd-result-1.eml': '-42.42',
   'vr-spamscore-1.eml': '420',
   'vr-spamscore-2.eml': '607',
-  'x-spam-result-1.eml': '-42.42'
+  'x-spam-result-1.eml': '-42.42',
+  'x-pmx-spam-1.eml': '16',
+  'x-gmx-antispam-1.eml': '6'
 }
 
 test('each mail example resolves to its expected score', () => {
   for (const [file, score] of Object.entries(expected)) {
     const scores = getScores(parseEml(join(examples, file)))
-    assert.equal(scores[0], score, file)
+    assert.equal(scores[0].score, score, file)
   }
 })
 
@@ -40,10 +42,10 @@ test('every mail example is covered by an expectation', () => {
 
 test('a custom header order changes which header wins', () => {
   const headers = parseEml(join(examples, 'spam-report-1.eml'))
-  assert.equal(getScores(headers, ['x-spam-score', 'x-spam-status'])[0], '-4242')
+  assert.equal(getScores(headers, ['x-spam-score', 'x-spam-status'])[0].score, '-4242')
 })
 
 test('the highest score wins when a header appears more than once', () => {
   const headers = parseEml(join(examples, 'vr-spamscore-2.eml'))
-  assert.equal(getScores(headers)[0], '607')
+  assert.equal(getScores(headers)[0].score, '607')
 })
