@@ -1,6 +1,6 @@
 'use strict'
-import { SCORE_REGEX, CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER } from '../constants.js'
-import { getBounds /* , scoreInterpolation */ } from '../functions.js'
+import { CUSTOM_SCORE_REGEX, DEFAULT_SCORE_HEADER_ORDER } from '../constants.js'
+import { getBounds, getScores /* , scoreInterpolation */ } from '../functions.js'
 
 /**
  * @type {StorageArea}
@@ -10,52 +10,6 @@ const localStorage = messenger.storage.local
 /**
  * Functions
  */
-
-/**
- * @param {object} headers
- * @param {string[]} headerOrder - Custom order for parsing headers
- * @returns {string[]} Score value
- */
-function getScores(headers, headerOrder = null) {
-  const scores = []
-  // Get Custom Mail Headers
-  const auxHeaders = Object.entries(headers).filter(([key, value]) => key.startsWith('x-'))
-  // Remove Mozilla Headers
-  const auxHeadersNoMozilla = auxHeaders.filter(([key, value]) => !key.startsWith('x-mozilla'))
-  const customHeaders = Object.fromEntries(auxHeadersNoMozilla)
-
-  // Use custom order if provided, otherwise use default order
-  const scoreHeaders = headerOrder || DEFAULT_SCORE_HEADER_ORDER
-
-  for (const headerName of scoreHeaders) {
-    if (customHeaders[headerName]) {
-      if (SCORE_REGEX[headerName]) {
-        const scoreField = customHeaders[headerName][0].match(SCORE_REGEX[headerName])
-        if (!scoreField) continue // If no match iterate
-        // const score = scoreInterpolation(headerName, scoreField[1])
-        const score = scoreField[1]
-        scores.push(score)
-      }
-    }
-  }
-
-  // Check custom headers (e.g., mailscanner) if no score found yet
-  if (scores.length === 0) {
-    for (const headerName in customHeaders) {
-      for (const regExName in CUSTOM_SCORE_REGEX) {
-        if (headerName.endsWith(regExName)) {
-          const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
-          if (!scoreField) continue // If no match iterate
-          // const score = scoreInterpolation(headerName, scoreField[1])
-          const score = scoreField[1]
-          scores.push(score)
-        }
-      }
-    }
-  }
-
-  return scores
-}
 
 /**
  * Returns the path of the image
