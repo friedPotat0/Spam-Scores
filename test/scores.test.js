@@ -26,7 +26,8 @@ const expected = {
   'x-spam-result-1.eml': '-42.42',
   'x-pmx-spam-1.eml': '16',
   'x-gmx-antispam-1.eml': '6',
-  'x-vr-spamcause-1.eml': '800'
+  'x-vr-spamcause-1.eml': '800',
+  'x-vr-spamcause-2.eml': '800'
 }
 
 test('each mail example resolves to its expected score', () => {

@@ -56,3 +56,12 @@ test('x-vr-spamcause-1.eml decodes the OVH breakdown (scores exact, names best-e
   )
   assert.ok(details.every(d => d.name.length > 0))
 })
+
+test('with several scans the breakdown belongs to the highest-scoring one', async () => {
+  const headers = parseEml(join(examples, 'x-vr-spamcause-2.eml'))
+  const details = await deduplicateValues(parseDetailScores(headers, DEFAULT_SCORE_DETAILS_ORDER))
+  assert.deepEqual(
+    details.map(d => d.score).sort((a, b) => a - b),
+    [300, 500]
+  )
+})

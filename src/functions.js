@@ -191,9 +191,22 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
         continue
       }
 
-      // OVH/Vade stores the breakdown obfuscated in x-vr-spamcause
+      // OVH/Vade stores the breakdown obfuscated in x-vr-spamcause. A mail can be
+      // scanned more than once, so decode the cause of the highest-scoring scan to
+      // match the score shown in the column and button.
       if (headerName === 'x-vr-spamcause') {
-        const decoded = decodeSpamCause(headers[headerName][0])
+        const causes = headers['x-vr-spamcause']
+        const causeScores = headers['x-vr-spamscore'] || []
+        let index = 0
+        let highest = -Infinity
+        for (let i = 0; i < causeScores.length; i++) {
+          const value = parseFloat(causeScores[i])
+          if (!isNaN(value) && value > highest) {
+            highest = value
+            index = i
+          }
+        }
+        const decoded = decodeSpamCause(causes[index] || causes[0])
         for (const match of decoded.matchAll(/\^?([A-Za-z][\w.-]*)\s*\((-?\d+)\)/g)) {
           parsedDetailScores.push({ name: match[1], score: parseFloat(match[2]), info: '', description: '' })
         }
