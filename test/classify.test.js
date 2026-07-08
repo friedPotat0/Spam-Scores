@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { classifyScore, getFamilyBounds, getScoreFamily } from '../src/functions.js'
+import { classifyScore, getFamilyBounds, getScoreFamily, scoreUnit } from '../src/functions.js'
 
 test('spamassassin uses the default bounds', () => {
   assert.equal(classifyScore('5', 'x-spam-status'), 'positive')
@@ -33,4 +33,11 @@ test('stored overrides replace the family default', () => {
   assert.deepEqual(getFamilyBounds({ scoreIconLowerBounds_pmx: '40', scoreIconUpperBounds_pmx: '70' }, 'pmx'), [40, 70])
   assert.deepEqual(getFamilyBounds({}, 'pmx'), [20, 50])
   assert.deepEqual(getFamilyBounds({ scoreIconLowerBounds: '-3', scoreIconUpperBounds: '4' }, 'spamassassin'), [-3, 4])
+})
+
+test('only the probability family carries a percent unit', () => {
+  assert.equal(scoreUnit('x-pmx-spam'), '%')
+  assert.equal(scoreUnit('x-spam-status'), '')
+  assert.equal(scoreUnit('x-vr-spamscore'), '')
+  assert.equal(scoreUnit('x-gmx-antispam'), '')
 })

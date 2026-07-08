@@ -6,7 +6,8 @@ import {
   getScores,
   getScoreFamily,
   getFamilyBounds,
-  classifyScore
+  classifyScore,
+  scoreUnit
 } from '../../functions.js'
 
 const localStorage = messenger.storage.local
@@ -57,19 +58,20 @@ function renderSummary(headers, storage) {
   if (!top || isNaN(top.score)) return
 
   const familyKey = getScoreFamily(top.header)
+  const unit = scoreUnit(top.header)
   const classification = classifyScore(top.score, top.header, storage)
 
   const summary = document.getElementById('score-summary')
   summary.classList.add(classification)
-  document.getElementById('total-score').textContent = formatTotal(top.score, familyKey)
+  document.getElementById('total-score').textContent = formatTotal(top.score, familyKey) + unit
   document.getElementById('verdict-label').textContent = i18n.getMessage(VERDICT_LABEL[classification])
 
   if (SCORE_FAMILIES[familyKey].mode === 'flag') {
     summary.classList.add('no-scale')
   } else {
     const [lower, upper] = getFamilyBounds(storage, familyKey)
-    document.getElementById('gauge-lower').textContent = lower
-    document.getElementById('gauge-upper').textContent = upper
+    document.getElementById('gauge-lower').textContent = lower + unit
+    document.getElementById('gauge-upper').textContent = upper + unit
     document.getElementById('score-gauge-marker').style.left = gaugePos(parseFloat(top.score), lower, upper)
   }
 

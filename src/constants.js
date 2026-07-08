@@ -26,7 +26,7 @@ export const DEFAULT_SCORE_UPPER_BOUNDS = 2.0
 export const SCORE_FAMILIES = {
   spamassassin: { mode: 'threshold', defaultLowerBounds: DEFAULT_SCORE_LOWER_BOUNDS, defaultUpperBounds: DEFAULT_SCORE_UPPER_BOUNDS },
   vade: { mode: 'threshold', defaultLowerBounds: 100, defaultUpperBounds: 300 },
-  pmx: { mode: 'threshold', defaultLowerBounds: 20, defaultUpperBounds: 50 },
+  pmx: { mode: 'threshold', defaultLowerBounds: 20, defaultUpperBounds: 50, unit: '%' },
   gmx: { mode: 'flag' }
 }
 

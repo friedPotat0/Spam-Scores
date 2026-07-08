@@ -83,6 +83,16 @@ export function getScoreFamily(header) {
 }
 
 /**
+ * Display unit for a header's family, appended to the shown score (e.g. "%" for
+ * probability scales). Empty string when the score is a plain number.
+ * @param {string} header
+ * @returns {string}
+ */
+export function scoreUnit(header) {
+  return SCORE_FAMILIES[getScoreFamily(header)].unit || ''
+}
+
+/**
  * Resolves the lower & upper bounds for a family, using stored overrides or the
  * family default. Spamassassin keeps the original keys for backwards compatibility.
  * @param {Object<string, string>} storage

@@ -55,7 +55,7 @@ const DEFAULT_SCORE_UPPER_BOUNDS = 2
 const SCORE_FAMILIES = {
   spamassassin: { mode: 'threshold', defaultLowerBounds: DEFAULT_SCORE_LOWER_BOUNDS, defaultUpperBounds: DEFAULT_SCORE_UPPER_BOUNDS },
   vade: { mode: 'threshold', defaultLowerBounds: 100, defaultUpperBounds: 300 },
-  pmx: { mode: 'threshold', defaultLowerBounds: 20, defaultUpperBounds: 50 },
+  pmx: { mode: 'threshold', defaultLowerBounds: 20, defaultUpperBounds: 50, unit: '%' },
   gmx: { mode: 'flag' }
 }
 const SCORE_HEADER_FAMILY = {
@@ -77,6 +77,10 @@ function classify(score, header, familyBounds) {
   if (value > upper) return 'positive'
   if (value < lower) return 'negative'
   return 'neutral'
+}
+
+function unitFor(header) {
+  return SCORE_FAMILIES[SCORE_HEADER_FAMILY[header] || 'spamassassin'].unit || ''
 }
 
 let scoreHdrViewParams = {
@@ -219,7 +223,7 @@ var SpamScores = class extends ExtensionAPI {
             if (classification === 'positive' && scoreHdrViewParams.hideIconScorePositive) return null
             if (classification === 'neutral' && scoreHdrViewParams.hideIconScoreNeutral) return null
             if (classification === 'negative' && scoreHdrViewParams.hideIconScoreNegative) return null
-            return result.score
+            return result.score + unitFor(result.header)
           }
 
           ThreadPaneColumns.addCustomColumn('spam-score-value', {
