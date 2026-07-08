@@ -166,6 +166,6 @@ const init = async () => {
     storage.hideIconScoreNeutral || false,
     storage.hideIconScoreNegative || false
   )
-  spamScores.addColumns('SpamScore', 'SpamScore (Icon)')
+  spamScores.addColumns(i18n.getMessage('columnScore'), i18n.getMessage('columnIcon'))
 }
 init()

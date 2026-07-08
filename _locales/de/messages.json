@@ -61,6 +61,12 @@
   "buttonNoScore": {
     "message": "Kein Spam-Score"
   },
+  "columnScore": {
+    "message": "Spam-Score"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
   "popupRulesRaised": {
     "message": "Punktzahl erhöht"
   },

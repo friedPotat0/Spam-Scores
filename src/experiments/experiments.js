@@ -226,19 +226,10 @@ var SpamScores = class extends ExtensionAPI {
             return result.score + unitFor(result.header)
           }
 
-          ThreadPaneColumns.addCustomColumn('spam-score-value', {
-            name: nameSpamScoreValue,
-            hidden: true,
-            icon: false,
-            resizable: true,
-            sortable: true,
-            sortCallback: getSortScore,
-            textCallback: scoreCallback
-          })
-
+          // Register the icon column first so it sits left of the score column.
           ThreadPaneColumns.addCustomColumn('spam-score-icon', {
             name: nameSpamScoreIcon,
-            hidden: true,
+            hidden: false,
             icon: true,
             iconHeaderUrl: getExtensionUrl('/images/icon-16px.png'),
             iconCellDefinitions: [
@@ -271,6 +262,16 @@ var SpamScores = class extends ExtensionAPI {
               return ''
             },
             resizable: false,
+            sortable: true,
+            sortCallback: getSortScore,
+            textCallback: scoreCallback
+          })
+
+          ThreadPaneColumns.addCustomColumn('spam-score-value', {
+            name: nameSpamScoreValue,
+            hidden: false,
+            icon: false,
+            resizable: true,
             sortable: true,
             sortCallback: getSortScore,
             textCallback: scoreCallback

@@ -61,6 +61,12 @@
   "buttonNoScore": {
     "message": "No spam score"
   },
+  "columnScore": {
+    "message": "Spam score"
+  },
+  "columnIcon": {
+    "message": "Spam"
+  },
   "popupRulesRaised": {
     "message": "Raised the score"
   },
