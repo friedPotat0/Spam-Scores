@@ -1,116 +1,359 @@
-.input-line * {
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: 10px;
-  font-size: 14px;
-}
-.input-line img {
-  margin-right: 5px;
-}
-.checkbox-wrapper {
-  line-height: 40px;
-  font-size: 14px;
-  margin-left: 30px;
-}
-.checkbox-wrapper * {
-  display: inline-block;
-  vertical-align: middle;
-}
+/* ============================================================
+   Spam Scores — Options page
+   Complete, self-contained styling.
+   Requires "browser_style": false in options_ui.
+   Theme-aware via prefers-color-scheme; can be forced with
+   <html data-theme="light"> or <html data-theme="dark">.
+   ============================================================ */
 
-.sortable-list {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px;
-  max-width: 400px;
-  min-height: 50px;
-}
+:root {
+  color-scheme: light dark;
 
-.sortable-item {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  margin: 5px 0;
-  border-radius: 3px;
-  cursor: move;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  font-family: monospace;
-  font-size: 13px;
-}
+  /* ---- light theme tokens ---- */
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --inset: #eef0f3;
+  --text: #15181c;
+  --text-muted: #59616c;
+  --border: #c9cfd6;
+  --border-subtle: #e3e7eb;
+  --accent: #0060df;
+  --grip: #a6adb6;
+  --shadow: 0 1px 2px rgba(16, 20, 24, 0.06);
+  --shadow-drag: 0 6px 16px rgba(16, 20, 24, 0.22);
 
-.sortable-item:hover {
-  background: #e8e8e8;
-}
+  --score-spam: #bc3220;
+  --score-neutral: #b26205;
+  --score-ham: #217a3c;
 
-.sortable-item.dragging {
-  opacity: 0.5;
-}
-
-.sortable-item::before {
-  content: '⋮⋮';
-  margin-right: 10px;
-  color: #999;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.reset-button {
-  padding: 6px 12px;
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.reset-button:hover {
-  background: #e0e0e0;
-}
-
-.reset-button:active {
-  background: #d0d0d0;
-}
-
-/* COLOR SETTINGS FOR DARK/LIGHT THEME */
-@media (prefers-color-scheme: light) {
-  body {
-    color: black;
-    background: white;
-  }
+  /* ---- shared metrics ---- */
+  --radius: 6px;
+  --radius-lg: 8px;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
-    color: white;
-    background: #23222b;
-  }
+  :root:not([data-theme="light"]) {
+    --bg: #1e2124;
+    --surface: #26292e;
+    --inset: #2c3036;
+    --text: #e7eaee;
+    --text-muted: #9aa3ad;
+    --border: #464d55;
+    --border-subtle: #343a41;
+    --accent: #4cb1ff;
+    --grip: #6b7480;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-drag: 0 6px 16px rgba(0, 0, 0, 0.5);
 
-  .sortable-list {
-    border-color: #555;
+    --score-spam: #f6897b;
+    --score-neutral: #f2b04b;
+    --score-ham: #6dcb8b;
   }
+}
 
-  .sortable-item {
-    background: #333;
-    border-color: #555;
-    color: white;
-  }
+/* manual override hook (used by previews / future theme setting) */
+:root[data-theme="dark"] {
+  --bg: #1e2124;
+  --surface: #26292e;
+  --inset: #2c3036;
+  --text: #e7eaee;
+  --text-muted: #9aa3ad;
+  --border: #464d55;
+  --border-subtle: #343a41;
+  --accent: #4cb1ff;
+  --grip: #6b7480;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-drag: 0 6px 16px rgba(0, 0, 0, 0.5);
 
-  .sortable-item:hover {
-    background: #444;
-  }
+  --score-spam: #f6897b;
+  --score-neutral: #f2b04b;
+  --score-ham: #6dcb8b;
+}
 
-  .reset-button {
-    background: #333;
-    border-color: #555;
-    color: white;
-  }
+/* ---- base ---- */
 
-  .reset-button:hover {
-    background: #444;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  .reset-button:active {
-    background: #555;
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+a {
+  color: var(--accent);
+}
+a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.options {
+  max-width: 720px;
+  padding: 6px 16px 24px;
+}
+
+/* ---- sections ---- */
+
+.section {
+  padding: 16px 0;
+}
+
+.section + .section {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.section-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.section-hint {
+  margin: 2px 0 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.section-hint:empty {
+  margin-bottom: 8px;
+}
+
+/* ---- icon range rows (default / SpamAssassin) ---- */
+
+.range-row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+}
+
+.range-row + .range-row {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.range-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.range-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.range-label {
+  min-width: 0;
+}
+
+/* on narrow panes let the checkbox drop under the control */
+@media (max-width: 460px) {
+  .range-row {
+    grid-template-columns: 18px minmax(0, 1fr);
   }
+  .range-row .check {
+    grid-column: 2;
+  }
+}
+
+/* ---- inputs ---- */
+
+input[type="number"] {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3px 4px 3px 8px;
+  width: 5.5em;
+}
+
+input[type="number"]:hover {
+  border-color: var(--grip);
+}
+
+input[type="number"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: transparent;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.check:hover {
+  color: var(--text);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  flex: none;
+}
+
+/* ---- ranges for other filters (#family-bounds is filled by JS) ---- */
+
+#family-bounds {
+  display: block;
+}
+
+#family-bounds h3 {
+  margin: 14px 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#family-bounds h3:first-child {
+  margin-top: 0;
+}
+
+.input-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.input-line + .input-line {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.input-line img {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.input-line span {
+  flex: 1;
+  min-width: 0;
+}
+
+.input-line input[type="number"] {
+  flex: none;
+}
+
+/* ---- header parsing priority ---- */
+
+.list-group + .list-group {
+  margin-top: 18px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 6px;
+}
+
+.list-label {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+button {
+  font: inherit;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--inset);
+}
+
+button:active {
+  background: var(--border-subtle);
+}
+
+.sortable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  min-height: 40px;
+  background: var(--inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.sortable-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 26px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: grab;
+  user-select: none;
+  -moz-user-select: none;
+}
+
+/* grip dots */
+.sortable-item::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  width: 8px;
+  height: 13px;
+  transform: translateY(-50%);
+  background-image: radial-gradient(circle, var(--grip) 1.2px, transparent 1.4px);
+  background-size: 4px 4.5px;
+}
+
+.sortable-item:hover {
+  border-color: var(--grip);
+}
+
+.sortable-item:active {
+  cursor: grabbing;
+}
+
+.sortable-item.dragging {
+  opacity: 0.65;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-drag);
+  cursor: grabbing;
 }

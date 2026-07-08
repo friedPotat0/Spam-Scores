@@ -46,6 +46,36 @@
   "optionsResetToDefault": {
     "message": "Reset to default order"
   },
+  "optionsIconRangesHint": {
+    "message": "Thresholds for the coloured icon in the spam score column (SpamAssassin scale)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Filters detected in your mail appear here automatically."
+  },
+  "popupTotalScore": {
+    "message": "Total score"
+  },
+  "popupRulesRaised": {
+    "message": "Raised the score"
+  },
+  "popupRulesLowered": {
+    "message": "Lowered the score"
+  },
+  "popupRulesNeutral": {
+    "message": "No effect"
+  },
+  "popupNoDetails": {
+    "message": "No score details found in this message."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutral"
+  },
+  "popupVerdictHam": {
+    "message": "No spam"
+  },
   "helloPopupTitle": {
     "message": "Spam Scores - Thank you!"
   },

@@ -1,32 +1,66 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>popup.html</title>
-    <script type="module" src="popup.js" defer="true"></script>
-    <link rel="stylesheet" href="popup.css" />
-  </head>
-  <body>
-    <table id="score-details">
-      <tr>
-        <th>Score</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-      <!-- Template rows will be inserted here -->
-    </table>
-    <h5 id="no-details">No details available</h5>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Spam Scores</title>
+  <script type="module" src="popup.js" defer="true"></script>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
 
-    <!-- TEMPLATES -->
-    <template id="score-detail-row">
-      <tr class="score-detail-row">
-        <td><span class="score"></span></td>
-        <td class="name"></td>
-        <td>
-          <div class="description"></div>
-          <div class="info"></div>
-        </td>
-      </tr>
-    </template>
-  </body>
+  <!-- Summary header. popup.js shows it and adds one verdict class
+       (positive | neutral | negative), plus "no-scale" for flag filters. -->
+  <header id="score-summary" style="display: none">
+    <div class="summary-row">
+      <div class="total">
+        <span class="total-label" data-i18n="popupTotalScore"></span>
+        <span id="total-score"></span>
+      </div>
+      <span id="verdict-badge"><span id="verdict-label"></span></span>
+    </div>
+    <div id="score-gauge" role="presentation">
+      <span class="gauge-tick" id="gauge-tick-lower"><span class="gauge-tick-label" id="gauge-lower"></span></span>
+      <span class="gauge-tick" id="gauge-tick-upper"><span class="gauge-tick-label" id="gauge-upper"></span></span>
+      <span id="score-gauge-marker"></span>
+    </div>
+  </header>
+
+  <!-- Rule groups. popup.js appends rows to a group's .rule-list and shows it. -->
+  <section id="rules-positive" class="rule-group positive" style="display: none">
+    <h2 class="rule-group-title" data-i18n="popupRulesRaised"></h2>
+    <div class="rule-list"></div>
+  </section>
+
+  <section id="rules-negative" class="rule-group negative" style="display: none">
+    <h2 class="rule-group-title" data-i18n="popupRulesLowered"></h2>
+    <div class="rule-list"></div>
+  </section>
+
+  <section id="rules-neutral" class="rule-group neutral" style="display: none">
+    <h2 class="rule-group-title" data-i18n="popupRulesNeutral"></h2>
+    <div class="rule-list"></div>
+  </section>
+
+  <!-- Empty state: shown when a message has no rule breakdown. -->
+  <div id="no-details">
+    <img src="/images/score_no.svg" alt="" width="24" height="24">
+    <p data-i18n="popupNoDetails"></p>
+  </div>
+
+  <!-- Per-rule row cloned by popup.js. -->
+  <template id="score-detail-row">
+    <div class="score-detail-row">
+      <span class="score-cell">
+        <span class="score"></span>
+        <span class="weight"><span class="weight-fill"></span></span>
+      </span>
+      <span class="rule-main">
+        <span class="name"></span>
+        <span class="description"></span>
+      </span>
+      <span class="info"></span>
+    </div>
+  </template>
+
+</body>
 </html>

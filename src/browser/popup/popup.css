@@ -1,93 +1,464 @@
-body {
-  padding: 0px;
-}
-h4 {
-  margin: 0 4px 10px 4px;
-}
-h5#no-details {
-  margin: 0;
-  display: none;
-}
-table#score-details {
-  border-collapse: collapse;
-  margin: 0;
-  padding: 0;
-  padding-bottom: 5px;
-  width: 100%;
-  font-size: 14px;
-  display: none;
-}
-table#score-details tr th {
-  text-align: left;
-  padding: 5px;
-}
-table#score-details tr td {
-  vertical-align: top;
-  padding: 5px;
-}
-table#score-details tr:last-child td {
-  border-bottom: none;
-}
-table#score-details tr th:nth-child(1) {
-  padding: 0 20px;
-}
-table#score-details tr td:nth-child(1) {
-  text-align: center;
-  padding: 5px 20px;
-}
-table#score-details tr td:nth-child(2),
-table#score-details tr td:nth-child(3) {
-  padding: 7px 5px;
-}
-table#score-details tr td:nth-child(3) {
-  max-width: 400px;
-}
-table#score-details tr.score-detail-row td div.info {
-  word-break: break-all;
-}
-table#score-details tr.score-detail-row .score {
-  display: inline-block;
-  padding: 2px 4px;
-  border-radius: 3px;
-  color: white;
-  width: 100%;
-}
-table#score-details tr.score-detail-row.negative .score {
-  background-color: #28b62c;
-}
-table#score-details tr.score-detail-row.positive .score {
-  background-color: #fe330a;
-}
-table#score-details tr.score-detail-row.neutral .score {
-  background-color: #a1a1a1;
-}
+/* ============================================================
+   Spam Scores — message details popup (v2)
+   "Why is this spam" panel: summary header with total score,
+   verdict badge + gauge, then rules grouped by effect.
+   Complete, self-contained styling. Theme-aware via
+   prefers-color-scheme; force with <html data-theme="light|dark">.
+   The body max-height is set by JS at runtime.
+   ============================================================ */
 
-/* COLOR SETTINGS FOR DARK/LIGHT THEME */
-@media (prefers-color-scheme: light) {
-  body {
-    color: black;
-    background: white;
-  }
-  table#score-details tr.score-detail-row td div.info {
-    color: #7a7a7a;
-  }
-  table#score-details tr td {
-    border-bottom: 1px solid #eee;
-  }
+:root {
+  color-scheme: light dark;
+
+  /* ---- light theme tokens ---- */
+  --surface: #ffffff;
+  --inset: #f2f4f6;
+  --text: #15181c;
+  --text-muted: #59616c;
+  --border-subtle: #e3e7eb;
+  --accent: #0060df;
+
+  --score-spam: #bc3220;
+  --spam-vivid: #e0432d;
+  --score-neutral: #b26205;
+  --neutral-strong: #cf7d02;
+  --neutral-vivid: #f0980a;
+  --score-ham: #217a3c;
+  --ham-vivid: #2fa14e;
+
+  --spam-tint: rgba(224, 67, 45, 0.11);
+  --neutral-tint: rgba(240, 152, 10, 0.15);
+  --ham-tint: rgba(47, 161, 78, 0.12);
+
+  /* muted gauge band colours */
+  --spam-soft: #efb5ad;
+  --neutral-soft: #f7d9a4;
+  --ham-soft: #b5dfc3;
+
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
-    color: white;
-    background: #2b2a33;
+  :root:not([data-theme="light"]) {
+    --surface: #26292e;
+    --inset: #2c3036;
+    --text: #e7eaee;
+    --text-muted: #9aa3ad;
+    --border-subtle: #3a4047;
+    --accent: #4cb1ff;
+
+    --score-spam: #f6897b;
+    --spam-vivid: #ec6553;
+    --score-neutral: #f2b04b;
+    --neutral-strong: #f2b04b;
+    --neutral-vivid: #f2a222;
+    --score-ham: #6dcb8b;
+    --ham-vivid: #46b264;
+
+    --spam-tint: rgba(236, 101, 83, 0.18);
+    --neutral-tint: rgba(242, 162, 34, 0.18);
+    --ham-tint: rgba(70, 178, 100, 0.18);
+
+    --spam-soft: #714038;
+    --neutral-soft: #6f5524;
+    --ham-soft: #3a6247;
   }
-  table#score-details tr.score-detail-row td div.info {
-    color: #a0a0a0;
-  }
-  table#score-details tr td {
-    border-bottom: 1px solid #464646;
-  }
-  table#score-details tr.score-detail-row.neutral .score {
-    background-color: #6d6d6d;
-  }
+}
+
+:root[data-theme="dark"] {
+  --surface: #26292e;
+  --inset: #2c3036;
+  --text: #e7eaee;
+  --text-muted: #9aa3ad;
+  --border-subtle: #3a4047;
+  --accent: #4cb1ff;
+
+  --score-spam: #f6897b;
+    --spam-vivid: #ec6553;
+  --score-neutral: #f2b04b;
+    --neutral-strong: #f2b04b;
+    --neutral-vivid: #f2a222;
+  --score-ham: #6dcb8b;
+    --ham-vivid: #46b264;
+
+  --spam-tint: rgba(236, 101, 83, 0.18);
+  --neutral-tint: rgba(242, 162, 34, 0.18);
+  --ham-tint: rgba(70, 178, 100, 0.18);
+
+  --spam-soft: #714038;
+  --neutral-soft: #6f5524;
+  --ham-soft: #3a6247;
+}
+
+/* ---- base ---- */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 340px;
+  max-width: 520px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  line-height: 1.4;
+  /* JS sets max-height at runtime; keep vertical scrolling free */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+a {
+  color: var(--accent);
+}
+a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* ============================================================
+   Summary header
+   #score-summary carries positive | neutral | negative (verdict)
+   ============================================================ */
+
+#score-summary {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 13px 16px 12px;
+  background: var(--inset);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* flag-style filters (e.g. GMX) have no numeric scale — hide the gauge */
+#score-summary.no-scale #score-gauge {
+  display: none;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  min-width: 0;
+}
+
+.total-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+#total-score {
+  font-size: 26px;
+  font-weight: 650;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+#score-summary.positive #total-score { color: var(--score-spam); }
+#score-summary.neutral  #total-score { color: var(--neutral-strong); }
+#score-summary.negative #total-score { color: var(--score-ham); }
+
+/* verdict badge — icon drawn from the real score icons via CSS mask,
+   so it recolours with the theme */
+#verdict-badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+#verdict-badge::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  flex: none;
+  background: currentColor;
+  mask: url("/images/score_neutral.svg") center / contain no-repeat;
+}
+
+#score-summary.positive #verdict-badge,
+#verdict-badge.positive {
+  color: var(--score-spam);
+  background: var(--spam-tint);
+}
+#score-summary.positive #verdict-badge::before,
+#verdict-badge.positive::before {
+  mask-image: url("/images/score_positive.svg");
+  background: var(--spam-vivid);
+}
+
+#score-summary.neutral #verdict-badge,
+#verdict-badge.neutral {
+  color: var(--score-neutral);
+  background: var(--neutral-tint);
+}
+#score-summary.neutral #verdict-badge::before,
+#verdict-badge.neutral::before {
+  mask-image: url("/images/score_neutral.svg");
+  background: var(--neutral-vivid);
+}
+
+#score-summary.negative #verdict-badge,
+#verdict-badge.negative {
+  color: var(--score-ham);
+  background: var(--ham-tint);
+}
+#score-summary.negative #verdict-badge::before,
+#verdict-badge.negative::before {
+  mask-image: url("/images/score_negative.svg");
+  background: var(--ham-vivid);
+}
+
+/* slim gauge. Band geometry is FIXED: ham 0–30%, neutral 30–70%, spam 70–100%.
+   JS maps the active filter's thresholds/score onto it: fill the threshold
+   labels (#gauge-lower / #gauge-upper) and set the clamped marker position
+   (#score-gauge-marker style.left, 0–100%). */
+#score-gauge {
+  position: relative;
+  margin: 12px 0 14px;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--ham-soft) 0%,
+    var(--ham-soft) 28%,
+    var(--neutral-soft) 32%,
+    var(--neutral-soft) 68%,
+    var(--spam-soft) 72%,
+    var(--spam-soft) 100%
+  );
+}
+
+/* threshold ticks at the fixed band boundaries */
+.gauge-tick {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--inset);
+}
+
+#gauge-tick-lower { left: 30%; }
+#gauge-tick-upper { left: 70%; }
+
+.gauge-tick-label {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  line-height: 1;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.gauge-tick-label:empty {
+  display: none;
+}
+
+#score-gauge-marker {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--text-muted);
+}
+
+#score-summary.positive #score-gauge-marker { border-color: var(--spam-vivid); }
+#score-summary.neutral  #score-gauge-marker { border-color: var(--neutral-vivid); }
+#score-summary.negative #score-gauge-marker { border-color: var(--ham-vivid); }
+
+/* ============================================================
+   Rule groups
+   ============================================================ */
+
+.rule-group {
+  padding: 6px 0 8px;
+}
+
+.rule-group + .rule-group {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.rule-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 16px 3px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.rule-group-title::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.rule-group.positive .rule-group-title::before { background: var(--spam-vivid); }
+.rule-group.neutral  .rule-group-title::before { background: var(--text-muted); }
+.rule-group.negative .rule-group-title::before { background: var(--ham-vivid); }
+
+/* ---- rule rows ---- */
+
+.score-detail-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 3px 10px;
+  align-items: start;
+  padding: 5px 16px;
+}
+
+.score-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* signed score chip */
+.score-detail-row .score {
+  display: block;
+  text-align: center;
+  padding: 2px 0;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.rule-group.positive .score,
+.score-detail-row.positive .score {
+  color: var(--score-spam);
+  background: var(--spam-tint);
+}
+
+.rule-group.negative .score,
+.score-detail-row.negative .score {
+  color: var(--score-ham);
+  background: var(--ham-tint);
+}
+
+.rule-group.neutral .score,
+.score-detail-row.neutral .score {
+  color: var(--text-muted);
+  background: var(--inset);
+}
+
+/* magnitude bar under the chip; JS sets .weight-fill width (0–100%) */
+.weight {
+  display: block;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--border-subtle);
+  overflow: hidden;
+}
+
+.weight-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.rule-group.positive .weight-fill,
+.score-detail-row.positive .weight-fill { background: var(--spam-vivid); }
+
+.rule-group.negative .weight-fill,
+.score-detail-row.negative .weight-fill { background: var(--ham-vivid); }
+
+.rule-group.neutral .weight-fill,
+.score-detail-row.neutral .weight-fill { background: var(--text-muted); }
+
+/* name + description */
+.rule-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.score-detail-row .name {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+
+.score-detail-row .description {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* optional matched value */
+.score-detail-row .info {
+  justify-self: end;
+  padding-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   Empty state
+   ============================================================ */
+
+#no-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 30px 16px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+#no-details img {
+  width: 24px;
+  height: 24px;
+}
+
+#no-details p {
+  margin: 0;
 }

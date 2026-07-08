@@ -1,78 +1,86 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>options.html</title>
-    <script type="module" src="options.js" defer="true"></script>
-    <link rel="stylesheet" href="options.css" />
-  </head>
-  <body>
-    <h2 style="margin-bottom: 0" data-i18n="optionsIconRanges"></h2>
-    <div class="input-line">
-      <img width="20px" src="/images/score_positive.svg" />
-      <span data-i18n="optionsScoreGreater"></span>
-      <input
-        id="score-bounds-upper"
-        type="number"
-        max="10000"
-        value="2.00"
-        step="0.10"
-        placeholder="2.00"
-        style="margin-left: 5px; width: 80px"
-      />
-    </div>
-    <div class="checkbox-wrapper">
-      <input id="hide-icon-score-positive" type="checkbox" />
-      <label data-i18n="optionsHideIconAndScore"></label>
-    </div>
-    <div class="input-line">
-      <img width="20px" src="/images/score_neutral.svg" />
-      <span id="score-bounds-between" data-i18n="optionsScoreBetween"></span>
-    </div>
-    <div class="checkbox-wrapper">
-      <input id="hide-icon-score-neutral" type="checkbox" />
-      <label data-i18n="optionsHideIconAndScore"></label>
-    </div>
-    <div class="input-line">
-      <img width="20px" src="/images/score_negative.svg" />
-      <span data-i18n="optionsScoreLess"></span>
-      <input
-        id="score-bounds-lower"
-        type="number"
-        min="-10000"
-        value="-2.00"
-        step="0.10"
-        placeholder="-2.00"
-        style="margin-left: 5px; width: 80px"
-      />
-    </div>
-    <div class="checkbox-wrapper">
-      <input id="hide-icon-score-negative" type="checkbox" />
-      <label data-i18n="optionsHideIconAndScore"></label>
-    </div>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Spam Scores – Options</title>
+  <script type="module" src="options.js" defer="true"></script>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="options">
 
-    <h2 style="margin-top: 30px; margin-bottom: 0" data-i18n="optionsMoreFilters"></h2>
-    <div id="family-bounds"></div>
+    <!-- Section 1: default / SpamAssassin icon score ranges -->
+    <section class="section" aria-labelledby="title-icon-ranges">
+      <h2 class="section-title" id="title-icon-ranges" data-i18n="optionsIconRanges"></h2>
+      <p class="section-hint" data-i18n="optionsIconRangesHint"></p>
 
-    <h2 style="margin-top: 30px; margin-bottom: 0" data-i18n="optionsHeaderPriority"></h2>
-    <p data-i18n="optionsHeaderPriorityDescription" style="margin-bottom: 10px; font-size: 0.9em; color: #666"></p>
+      <div class="range-table">
+        <div class="range-row">
+          <img class="range-icon" src="/images/score_positive.svg" alt="" width="18" height="18">
+          <div class="range-main">
+            <label class="range-label" for="score-bounds-upper" data-i18n="optionsScoreGreater"></label>
+            <input type="number" id="score-bounds-upper" step="0.1">
+          </div>
+          <label class="check">
+            <input type="checkbox" id="hide-icon-score-positive">
+            <span data-i18n="optionsHideIconAndScore"></span>
+          </label>
+        </div>
 
-    <h3 style="margin-bottom: 5px; font-size: 1em" data-i18n="optionsScoreHeaders"></h3>
-    <div id="score-headers-list" class="sortable-list"></div>
-    <button
-      id="reset-score-headers"
-      class="reset-button"
-      data-i18n="optionsResetToDefault"
-      style="margin-top: 5px; margin-bottom: 15px"
-    ></button>
+        <div class="range-row">
+          <img class="range-icon" src="/images/score_neutral.svg" alt="" width="18" height="18">
+          <div class="range-main">
+            <span class="range-label" id="score-bounds-between"></span>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="hide-icon-score-neutral">
+            <span data-i18n="optionsHideIconAndScore"></span>
+          </label>
+        </div>
 
-    <h3 style="margin-bottom: 5px; font-size: 1em" data-i18n="optionsScoreDetailsHeaders"></h3>
-    <div id="score-details-headers-list" class="sortable-list"></div>
-    <button
-      id="reset-score-details-headers"
-      class="reset-button"
-      data-i18n="optionsResetToDefault"
-      style="margin-top: 5px"
-    ></button>
-  </body>
+        <div class="range-row">
+          <img class="range-icon" src="/images/score_negative.svg" alt="" width="18" height="18">
+          <div class="range-main">
+            <label class="range-label" for="score-bounds-lower" data-i18n="optionsScoreLess"></label>
+            <input type="number" id="score-bounds-lower" step="0.1">
+          </div>
+          <label class="check">
+            <input type="checkbox" id="hide-icon-score-negative">
+            <span data-i18n="optionsHideIconAndScore"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: ranges for other filters (filled by JS at runtime) -->
+    <section class="section" aria-labelledby="title-family-ranges">
+      <h2 class="section-title" id="title-family-ranges" data-i18n="optionsMoreFilters"></h2>
+      <p class="section-hint" data-i18n="optionsMoreFiltersHint"></p>
+      <div id="family-bounds"></div>
+    </section>
+
+    <!-- Section 3: header parsing priority -->
+    <section class="section" aria-labelledby="title-header-priority">
+      <h2 class="section-title" id="title-header-priority" data-i18n="optionsHeaderPriority"></h2>
+      <p class="section-hint" data-i18n="optionsHeaderPriorityDescription"></p>
+
+      <div class="list-group">
+        <div class="list-header">
+          <h3 class="list-label" id="label-score-headers" data-i18n="optionsScoreHeaders"></h3>
+          <button id="reset-score-headers" type="button" data-i18n="optionsResetToDefault"></button>
+        </div>
+        <div id="score-headers-list" class="sortable-list" role="list" aria-labelledby="label-score-headers"></div>
+      </div>
+
+      <div class="list-group">
+        <div class="list-header">
+          <h3 class="list-label" id="label-score-details-headers" data-i18n="optionsScoreDetailsHeaders"></h3>
+          <button id="reset-score-details-headers" type="button" data-i18n="optionsResetToDefault"></button>
+        </div>
+        <div id="score-details-headers-list" class="sortable-list" role="list" aria-labelledby="label-score-details-headers"></div>
+      </div>
+    </section>
+
+  </main>
+</body>
 </html>

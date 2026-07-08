@@ -24,25 +24,10 @@ const resetScoreHeadersBtn = document.getElementById('reset-score-headers')
 const resetScoreDetailsHeadersBtn = document.getElementById('reset-score-details-headers')
 
 // Translations
-for (const i18nKey of [
-  'optionsIconRanges',
-  'optionsScoreGreater',
-  'optionsScoreLess',
-  'optionsHeaderPriority',
-  'optionsHeaderPriorityDescription',
-  'optionsScoreHeaders',
-  'optionsScoreDetailsHeaders',
-  'optionsMoreFilters'
-]) {
-  const element = document.querySelector('*[data-i18n="' + i18nKey + '"]')
-  if (element) element.textContent = i18n.getMessage(i18nKey)
+for (const element of document.querySelectorAll('[data-i18n]')) {
+  const message = i18n.getMessage(element.dataset.i18n)
+  if (message) element.textContent = message
 }
-document
-  .querySelectorAll('*[data-i18n="optionsHideIconAndScore"]')
-  .forEach(el => (el.textContent = i18n.getMessage('optionsHideIconAndScore')))
-document
-  .querySelectorAll('*[data-i18n="optionsResetToDefault"]')
-  .forEach(el => (el.textContent = i18n.getMessage('optionsResetToDefault')))
 
 // DOM events
 inputScoreBoundsLower.addEventListener('change', saveScoreLower)

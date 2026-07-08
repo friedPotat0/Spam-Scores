@@ -37,6 +37,45 @@
   "optionsResetToDefault": {
     "message": "Auf Standardreihenfolge zurücksetzen"
   },
+  "optionsMoreFilters": {
+    "message": "Symbolbereiche für andere Spam-Filter"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (Wahrscheinlichkeit %)"
+  },
+  "optionsIconRangesHint": {
+    "message": "Schwellen für das farbige Symbol in der Spam-Score-Spalte (SpamAssassin-Skala)."
+  },
+  "optionsMoreFiltersHint": {
+    "message": "Erkannte Filter erscheinen hier automatisch."
+  },
+  "popupTotalScore": {
+    "message": "Gesamtpunktzahl"
+  },
+  "popupRulesRaised": {
+    "message": "Punktzahl erhöht"
+  },
+  "popupRulesLowered": {
+    "message": "Punktzahl gesenkt"
+  },
+  "popupRulesNeutral": {
+    "message": "Keine Auswirkung"
+  },
+  "popupNoDetails": {
+    "message": "Keine Score-Details in dieser Nachricht gefunden."
+  },
+  "popupVerdictSpam": {
+    "message": "Spam"
+  },
+  "popupVerdictNeutral": {
+    "message": "Neutral"
+  },
+  "popupVerdictHam": {
+    "message": "Kein Spam"
+  },
   "helloPopupTitle": {
     "message": "Spam Scores - Danke!"
   },
