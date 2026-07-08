@@ -19,6 +19,15 @@
   "optionsScoreLess": {
     "message": "Score less than"
   },
+  "optionsMoreFilters": {
+    "message": "Icon ranges for other spam filters"
+  },
+  "optionsFamilyVade": {
+    "message": "OVH (Vade Secure)"
+  },
+  "optionsFamilyPmx": {
+    "message": "Sophos PureMessage (probability %)"
+  },
   "optionsHideIconAndScore": {
     "message": "Hide icon and score in column"
   },

@@ -2,9 +2,10 @@ import {
   DEFAULT_SCORE_LOWER_BOUNDS,
   DEFAULT_SCORE_UPPER_BOUNDS,
   DEFAULT_SCORE_HEADER_ORDER,
-  DEFAULT_SCORE_DETAILS_ORDER
+  DEFAULT_SCORE_DETAILS_ORDER,
+  SCORE_FAMILIES
 } from '../constants.js'
-import { getBounds } from '../functions.js'
+import { getBounds, getFamilyBounds } from '../functions.js'
 
 // Variables
 const localStorage = messenger.storage.local
@@ -30,7 +31,8 @@ for (const i18nKey of [
   'optionsHeaderPriority',
   'optionsHeaderPriorityDescription',
   'optionsScoreHeaders',
-  'optionsScoreDetailsHeaders'
+  'optionsScoreDetailsHeaders',
+  'optionsMoreFilters'
 ]) {
   const element = document.querySelector('*[data-i18n="' + i18nKey + '"]')
   if (element) element.textContent = i18n.getMessage(i18nKey)
@@ -56,6 +58,10 @@ async function init() {
   const storage = await localStorage.get([
     'scoreIconLowerBounds',
     'scoreIconUpperBounds',
+    'scoreIconLowerBounds_vade',
+    'scoreIconUpperBounds_vade',
+    'scoreIconLowerBounds_pmx',
+    'scoreIconUpperBounds_pmx',
     'hideIconScorePositive',
     'hideIconScoreNeutral',
     'hideIconScoreNegative',
@@ -75,6 +81,8 @@ async function init() {
   checkboxIconScoreNeutral.checked = storage.hideIconScoreNeutral || false
   checkboxIconScoreNegative.checked = storage.hideIconScoreNegative || false
 
+  renderFamilyBounds(storage)
+
   // Initialize header order lists
   const scoreHeaderOrder = storage.scoreHeaderOrder || DEFAULT_SCORE_HEADER_ORDER
   const scoreDetailsHeaderOrder = storage.scoreDetailsHeaderOrder || DEFAULT_SCORE_DETAILS_ORDER
@@ -83,6 +91,69 @@ async function init() {
   renderSortableList(scoreDetailsHeadersList, scoreDetailsHeaderOrder, 'scoreDetailsHeaderOrder')
 }
 init()
+
+const FAMILY_LABELS = { vade: 'optionsFamilyVade', pmx: 'optionsFamilyPmx' }
+
+function renderFamilyBounds(storage) {
+  const container = document.getElementById('family-bounds')
+  container.innerHTML = ''
+  for (const familyKey of Object.keys(SCORE_FAMILIES)) {
+    if (SCORE_FAMILIES[familyKey].mode !== 'threshold' || familyKey === 'spamassassin') continue
+    const [lower, upper] = getFamilyBounds(storage, familyKey)
+    messenger.SpamScores.setFamilyBounds(familyKey, lower, upper)
+
+    const block = document.createElement('div')
+    const title = document.createElement('h3')
+    title.style.cssText = 'margin-bottom: 5px; font-size: 1em'
+    title.textContent = i18n.getMessage(FAMILY_LABELS[familyKey]) || familyKey
+    block.appendChild(title)
+    block.appendChild(familyBoundLine('/images/score_positive.svg', 'optionsScoreGreater', familyKey, 'upper', upper))
+    block.appendChild(familyBoundLine('/images/score_negative.svg', 'optionsScoreLess', familyKey, 'lower', lower))
+    container.appendChild(block)
+  }
+}
+
+function familyBoundLine(icon, labelKey, familyKey, bound, value) {
+  const line = document.createElement('div')
+  line.className = 'input-line'
+  const img = document.createElement('img')
+  img.width = 20
+  img.src = icon
+  const span = document.createElement('span')
+  span.textContent = i18n.getMessage(labelKey)
+  const input = document.createElement('input')
+  input.type = 'number'
+  input.step = '1'
+  input.value = value
+  input.style.cssText = 'margin-left: 5px; width: 80px'
+  input.dataset.family = familyKey
+  input.dataset.bound = bound
+  input.addEventListener('change', () => saveFamilyBounds(familyKey))
+  line.append(img, span, input)
+  return line
+}
+
+async function saveFamilyBounds(familyKey) {
+  const container = document.getElementById('family-bounds')
+  const lowerInput = container.querySelector('input[data-family="' + familyKey + '"][data-bound="lower"]')
+  const upperInput = container.querySelector('input[data-family="' + familyKey + '"][data-bound="upper"]')
+  let lower = parseFloat(lowerInput.value)
+  let upper = parseFloat(upperInput.value)
+  const [defaultLower, defaultUpper] = getFamilyBounds({}, familyKey)
+  if (isNaN(lower)) lower = defaultLower
+  if (isNaN(upper)) upper = defaultUpper
+  if (lower > upper) {
+    const stored = await localStorage.get(['scoreIconLowerBounds_' + familyKey, 'scoreIconUpperBounds_' + familyKey])
+    ;[lower, upper] = getFamilyBounds(stored, familyKey)
+  }
+  lowerInput.value = lower
+  upperInput.value = upper
+  await localStorage.set({
+    ['scoreIconLowerBounds_' + familyKey]: lower,
+    ['scoreIconUpperBounds_' + familyKey]: upper
+  })
+  messenger.SpamScores.setFamilyBounds(familyKey, lower, upper)
+}
 
 function saveIconPositive() {
   const hideIconScorePositive = checkboxIconScorePositive.checked
