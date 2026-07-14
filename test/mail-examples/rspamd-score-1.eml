@@ -1,0 +1,6 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [X-Rspamd-Score] Spam Scores test mail (rspamd-score-1.eml)
+X-Rspamd-Score: -5.49 / 15.00 / 15.00
+
+This is a message to test the Spam Scores Thunderbird add-on.

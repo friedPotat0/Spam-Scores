@@ -50,7 +50,7 @@ export const SCORE_REGEX = {
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
-  'x-rspamd-score': /([-+]?[0-9]+\.?[0-9]*)/,
+  'x-rspamd-score': /^\s*([-+]?[0-9]+\.?[0-9]*)/,
   'x-vr-spamscore': /([0-9]+)/,
   'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-pmx-spam': /Probability=([0-9]+)%/,

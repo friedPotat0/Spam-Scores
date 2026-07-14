@@ -5,12 +5,14 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseEml } from './lib/eml.js'
 import { getScores } from '../src/functions.js'
+import { SCORE_REGEX } from '../src/constants.js'
 
 const examples = join(dirname(fileURLToPath(import.meta.url)), 'mail-examples')
 
 const expected = {
   'mailscanner-spamscore-1.eml': '-42.42',
   'rspamd-report-1.eml': '-42.42',
+  'rspamd-score-1.eml': '-5.49',
   'spam-report-1.eml': '-42.42',
   'spam-status-1.eml': '-42.42',
   'spam-status-2.eml': '-42.42',
@@ -51,4 +53,11 @@ test('a custom header order changes which header wins', () => {
 test('the highest score wins when a header appears more than once', () => {
   const headers = parseEml(join(examples, 'vr-spamscore-2.eml'))
   assert.equal(getScores(headers)[0].score, '607')
+})
+
+test('x-rspamd-score reads the score, not the soft/hard limits', () => {
+  const value = '-5.49 / 15.00 / 15.00'
+  const matches = [...value.matchAll(new RegExp(SCORE_REGEX['x-rspamd-score'], 'g'))]
+  assert.equal(matches.length, 1)
+  assert.equal(matches[0][1], '-5.49')
 })
