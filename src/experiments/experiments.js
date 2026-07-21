@@ -93,11 +93,10 @@ let scoreHdrViewParams = {
 }
 
 function getScore(hdr) {
-  // Use custom order if available, otherwise use default
   const headerOrder = scoreHdrViewParams.scoreHeaderOrder || DEFAULT_SCORE_HEADER_ORDER
 
   for (const regExName of headerOrder) {
-    if (!SCORE_REGEX[regExName]) continue // Skip if regex not defined
+    if (!SCORE_REGEX[regExName]) continue
     const headerValue = hdr.getStringProperty(regExName)
     if (headerValue === '') continue
     // Thunderbird stores duplicate headers as one string - keep the highest score it contains
@@ -115,7 +114,7 @@ function getScore(hdr) {
         if (headerName.endsWith(regExName)) {
           const headerValue = hdr.getStringProperty(headerName)
           const scoreField = headerValue.match(CUSTOM_SCORE_REGEX[regExName])
-          if (!scoreField) continue // If no match iterate
+          if (!scoreField) continue
           const score = parseFloat(scoreField[1])
           if (!isNaN(score)) return { score, header: headerName }
         }
@@ -129,7 +128,6 @@ function getSortScore(hdr) {
   const result = getScore(hdr)
   if (result === null) return null
   // Multiply by 100000 for decimal precision, then add offset of 1 billion to handle negative numbers
-  // This ensures both negative and positive scores sort correctly
   return Math.round(result.score * 100000) + 1000000000
 }
 
@@ -321,7 +319,6 @@ function updatePrefs(dynamicHeaders = []) {
   // customDBHeaders: String in the form of "header1 header2 header3"
   // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
   const existingCustomDBHeaders = Services.prefs.getCharPref('mailnews.customDBHeaders').trim()
-  // Split existing headers and filter out new ones that already exist
   const existingDBHeadersArray = existingCustomDBHeaders ? existingCustomDBHeaders.split(/\s+/) : []
   let newCustomDBHeaders = headers.filter(el => !existingDBHeadersArray.includes(el))
   if (newCustomDBHeaders.length > 0) {
@@ -333,7 +330,6 @@ function updatePrefs(dynamicHeaders = []) {
   // customHeaders: String in the form of "header1: header2: header3:"
   // Note: Do not overwrite headers of other add-ons or user-defined ones. Always append new headers!
   const existingCustomHeaders = Services.prefs.getCharPref('mailnews.customHeaders').trim()
-  // Split existing headers by ": " and filter out new ones that already exist
   const existingHeadersArray = existingCustomHeaders
     ? existingCustomHeaders
         .split(/:\s*/)
@@ -342,9 +338,7 @@ function updatePrefs(dynamicHeaders = []) {
     : []
   let newCustomHeaders = headers.filter(el => !existingHeadersArray.includes(el))
   if (newCustomHeaders.length > 0) {
-    // Ensure proper format: existing headers should end with ":" and new headers should be separated by ": "
-    // If existing headers exist and don't end with ":", add ": " before new headers
-    // If existing headers end with ":", add " " before new headers
+    // Existing prefs may end with ":", ": " or neither, normalise before appending
     let prefix = existingCustomHeaders
     if (existingCustomHeaders) {
       if (existingCustomHeaders.endsWith(':')) {

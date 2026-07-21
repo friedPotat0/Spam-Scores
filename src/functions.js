@@ -39,7 +39,6 @@ export function getScores(headers, headerOrder = null) {
   const auxHeadersNoMozilla = auxHeaders.filter(([key, value]) => !key.startsWith('x-mozilla'))
   const customHeaders = Object.fromEntries(auxHeadersNoMozilla)
 
-  // Use custom order if provided, otherwise use default order
   const scoreHeaders = headerOrder || DEFAULT_SCORE_HEADER_ORDER
 
   for (const headerName of scoreHeaders) {
@@ -52,7 +51,7 @@ export function getScores(headers, headerOrder = null) {
           if (!scoreField) continue
           if (score === null || parseFloat(scoreField[1]) > parseFloat(score)) score = scoreField[1]
         }
-        if (score === null) continue // If no match iterate
+        if (score === null) continue
         scores.push({ score, header: headerName })
       }
     }
@@ -64,7 +63,7 @@ export function getScores(headers, headerOrder = null) {
       for (const regExName in CUSTOM_SCORE_REGEX) {
         if (headerName.endsWith(regExName)) {
           const scoreField = customHeaders[headerName][0].match(CUSTOM_SCORE_REGEX[regExName])
-          if (!scoreField) continue // If no match iterate
+          if (!scoreField) continue
           scores.push({ score: scoreField[1], header: headerName })
         }
       }
@@ -169,14 +168,12 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
   /** @type {parsedDetailScores[]} */
   let parsedDetailScores = []
 
-  // Use custom order for score details headers
   const headersToCheck = [...scoreDetailsOrder, ...customHeaders.filter(h => !scoreDetailsOrder.includes(h))]
 
   for (const headerName of headersToCheck) {
     if (headers[headerName]) {
-      // Special handling for x-hmailserver-reason-score
+      // hMailServer spreads the breakdown over numbered x-hmailserver-reason-<n> headers
       if (headerName === 'x-hmailserver-reason-score') {
-        // Parse hMailServer reason headers
         for (const hdrName in headers) {
           if (HMAILSERVER_REASON_REGEX.test(hdrName)) {
             const headerValue = headers[hdrName][0]
@@ -185,7 +182,6 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
             if (match) {
               const description = match[1].trim()
               const score = parseFloat(match[2])
-              // Create a simplified name from the description
               const name = hdrName.toUpperCase().replace('X-HMAILSERVER-REASON-', 'REASON_')
               parsedDetailScores.push({
                 name: name,
@@ -197,7 +193,7 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
           }
         }
         if (parsedDetailScores.length > 0) {
-          break // Found details, stop looking
+          break
         }
         continue
       }
@@ -227,7 +223,6 @@ export function parseDetailScores(headers, scoreDetailsOrder, customHeaders = []
         continue
       }
 
-      // Regular header parsing
       let headerValue = headers[headerName][0] // For some reason thunderbird always saves it as an array
       if (headerName === 'x-spam-report' || headerName === 'x-ham-report') {
         const reportSplitted = headerValue.split('Content analysis details:')

@@ -1,15 +1,11 @@
-/* ============================================================
-   Spam Scores — Options page
-   Complete, self-contained styling.
-   Requires "browser_style": false in options_ui.
-   Theme-aware via prefers-color-scheme; can be forced with
-   <html data-theme="light"> or <html data-theme="dark">.
-   ============================================================ */
+/* Options page. Requires "browser_style": false in options_ui.
+   Theme-aware via prefers-color-scheme, can be forced with
+   <html data-theme="light"> or <html data-theme="dark">. */
 
 :root {
   color-scheme: light dark;
 
-  /* ---- light theme tokens ---- */
+  /* light theme tokens */
   --bg: #f8f9fa;
   --surface: #ffffff;
   --inset: #eef0f3;
@@ -26,7 +22,7 @@
   --score-neutral: #b26205;
   --score-ham: #217a3c;
 
-  /* ---- shared metrics ---- */
+  /* shared metrics */
   --radius: 6px;
   --radius-lg: 8px;
   --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
@@ -72,7 +68,7 @@
   --score-ham: #6dcb8b;
 }
 
-/* ---- base ---- */
+/* base */
 
 * {
   box-sizing: border-box;
@@ -105,7 +101,7 @@ a:hover {
   padding: 6px 16px 24px;
 }
 
-/* ---- sections ---- */
+/* sections */
 
 .section {
   padding: 16px 0;
@@ -131,7 +127,7 @@ a:hover {
   margin-bottom: 8px;
 }
 
-/* ---- icon range rows (default / SpamAssassin) ---- */
+/* icon range rows (default / SpamAssassin) */
 
 .range-row {
   display: grid;
@@ -173,7 +169,7 @@ a:hover {
   }
 }
 
-/* ---- inputs ---- */
+/* inputs */
 
 input[type="number"] {
   font: inherit;
@@ -217,7 +213,7 @@ input[type="checkbox"] {
   flex: none;
 }
 
-/* ---- ranges for other filters (#family-bounds is filled by JS) ---- */
+/* ranges for other filters (#family-bounds is filled by JS) */
 
 #family-bounds {
   display: block;
@@ -263,7 +259,7 @@ input[type="checkbox"] {
   flex: none;
 }
 
-/* ---- header parsing priority ---- */
+/* header parsing priority */
 
 .list-group + .list-group {
   margin-top: 18px;

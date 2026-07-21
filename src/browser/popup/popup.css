@@ -1,16 +1,12 @@
-/* ============================================================
-   Spam Scores — message details popup (v2)
-   "Why is this spam" panel: summary header with total score,
-   verdict badge + gauge, then rules grouped by effect.
-   Complete, self-contained styling. Theme-aware via
-   prefers-color-scheme; force with <html data-theme="light|dark">.
-   The body max-height is set by JS at runtime.
-   ============================================================ */
+/* Message details popup: summary header with total score, verdict badge and
+   gauge, then rules grouped by effect. Theme-aware via prefers-color-scheme,
+   can be forced with <html data-theme="light|dark">.
+   The body max-height is set by JS at runtime. */
 
 :root {
   color-scheme: light dark;
 
-  /* ---- light theme tokens ---- */
+  /* light theme tokens */
   --surface: #ffffff;
   --inset: #f2f4f6;
   --text: #15181c;
@@ -91,7 +87,7 @@
   --ham-soft: #3a6247;
 }
 
-/* ---- base ---- */
+/* base */
 
 * {
   box-sizing: border-box;
@@ -127,10 +123,7 @@ a:hover {
   outline-offset: -2px;
 }
 
-/* ============================================================
-   Summary header
-   #score-summary carries positive | neutral | negative (verdict)
-   ============================================================ */
+/* Summary header, #score-summary carries positive | neutral | negative (verdict) */
 
 #score-summary {
   position: sticky;
@@ -141,7 +134,7 @@ a:hover {
   border-bottom: 1px solid var(--border-subtle);
 }
 
-/* flag-style filters (e.g. GMX) have no numeric scale — hide the gauge */
+/* flag-style filters (e.g. GMX) have no numeric scale, hide the gauge */
 #score-summary.no-scale #score-gauge {
   display: none;
 }
@@ -180,7 +173,7 @@ a:hover {
 #score-summary.neutral  #total-score { color: var(--neutral-strong); }
 #score-summary.negative #total-score { color: var(--score-ham); }
 
-/* verdict badge — icon drawn from the real score icons via CSS mask,
+/* verdict badge, icon drawn from the real score icons via CSS mask
    so it recolours with the theme */
 #verdict-badge {
   flex: none;
@@ -302,9 +295,7 @@ a:hover {
 #score-summary.neutral  #score-gauge-marker { border-color: var(--neutral-vivid); }
 #score-summary.negative #score-gauge-marker { border-color: var(--ham-vivid); }
 
-/* ============================================================
-   Rule groups
-   ============================================================ */
+/* Rule groups */
 
 .rule-group {
   padding: 6px 0 8px;
@@ -338,7 +329,7 @@ a:hover {
 .rule-group.neutral  .rule-group-title::before { background: var(--text-muted); }
 .rule-group.negative .rule-group-title::before { background: var(--ham-vivid); }
 
-/* ---- rule rows ---- */
+/* rule rows */
 
 .score-detail-row {
   display: grid;
@@ -429,7 +420,7 @@ a:hover {
   font-size: 12px;
 }
 
-/* optional matched value — full width under the description, wraps instead of truncating */
+/* optional matched value, full width under the description, wraps instead of truncating */
 .score-detail-row .info {
   margin-top: 1px;
   font-family: var(--font-mono);
@@ -442,9 +433,7 @@ a:hover {
   display: none;
 }
 
-/* ============================================================
-   Empty state
-   ============================================================ */
+/* Empty state */
 
 #no-details {
   display: flex;

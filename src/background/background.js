@@ -50,7 +50,7 @@ async function onMessageDisplayed(tab, message) {
   const headerOrder = storage.scoreHeaderOrder || DEFAULT_SCORE_HEADER_ORDER
 
   // Get Score
-  const scores = getScores(fullMessage.headers, headerOrder) // Get Scores
+  const scores = getScores(fullMessage.headers, headerOrder)
   const topScore = scores[0]
   const score = topScore && !isNaN(topScore.score) ? topScore.score : null
   const header = topScore ? topScore.header : null

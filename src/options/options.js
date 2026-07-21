@@ -68,7 +68,6 @@ async function init() {
 
   renderFamilyBounds(storage)
 
-  // Initialize header order lists
   const scoreHeaderOrder = storage.scoreHeaderOrder || DEFAULT_SCORE_HEADER_ORDER
   const scoreDetailsHeaderOrder = storage.scoreDetailsHeaderOrder || DEFAULT_SCORE_DETAILS_ORDER
 
@@ -212,12 +211,6 @@ function saveScores(lower, upper) {
   messenger.SpamScores.setScoreBounds(lower, upper)
 }
 
-/**
- * Render a sortable list of headers
- * @param {HTMLElement} container - The container element for the list
- * @param {string[]} headers - Array of header names
- * @param {string} storageKey - Key for localStorage
- */
 function renderSortableList(container, headers, storageKey) {
   container.innerHTML = ''
 
@@ -259,19 +252,16 @@ function handleDrop(e, container, storageKey) {
   }
 
   if (draggedElement !== e.target && e.target.classList.contains('sortable-item')) {
-    // Get all items
     const items = Array.from(container.querySelectorAll('.sortable-item'))
     const draggedIndex = items.indexOf(draggedElement)
     const targetIndex = items.indexOf(e.target)
 
-    // Reorder in DOM
     if (draggedIndex < targetIndex) {
       e.target.parentNode.insertBefore(draggedElement, e.target.nextSibling)
     } else {
       e.target.parentNode.insertBefore(draggedElement, e.target)
     }
 
-    // Save new order
     saveHeaderOrder(container, storageKey)
   }
 
@@ -282,18 +272,12 @@ function handleDragEnd(e) {
   e.target.classList.remove('dragging')
 }
 
-/**
- * Save the current order of headers to localStorage
- * @param {HTMLElement} container - The container element
- * @param {string} storageKey - Key for localStorage
- */
 async function saveHeaderOrder(container, storageKey) {
   const items = Array.from(container.querySelectorAll('.sortable-item'))
   const order = items.map(item => item.textContent)
 
   await localStorage.set({ [storageKey]: order })
 
-  // Update experiments.js
   if (storageKey === 'scoreHeaderOrder') {
     messenger.SpamScores.setScoreHeaderOrder(order)
   } else if (storageKey === 'scoreDetailsHeaderOrder') {
@@ -301,18 +285,12 @@ async function saveHeaderOrder(container, storageKey) {
   }
 }
 
-/**
- * Reset score headers to default order
- */
 async function resetScoreHeadersOrder() {
   await localStorage.set({ scoreHeaderOrder: DEFAULT_SCORE_HEADER_ORDER })
   renderSortableList(scoreHeadersList, DEFAULT_SCORE_HEADER_ORDER, 'scoreHeaderOrder')
   messenger.SpamScores.setScoreHeaderOrder(DEFAULT_SCORE_HEADER_ORDER)
 }
 
-/**
- * Reset score details headers to default order
- */
 async function resetScoreDetailsHeadersOrder() {
   await localStorage.set({ scoreDetailsHeaderOrder: DEFAULT_SCORE_DETAILS_ORDER })
   renderSortableList(scoreDetailsHeadersList, DEFAULT_SCORE_DETAILS_ORDER, 'scoreDetailsHeaderOrder')
