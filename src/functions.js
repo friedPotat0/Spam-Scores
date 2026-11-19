@@ -33,11 +33,8 @@ export function getBounds(storage) {
  */
 export function getScores(headers, headerOrder = null) {
   const scores = []
-  // Get Custom Mail Headers
-  const auxHeaders = Object.entries(headers).filter(([key, value]) => key.startsWith('x-'))
-  // Remove Mozilla Headers
-  const auxHeadersNoMozilla = auxHeaders.filter(([key, value]) => !key.startsWith('x-mozilla'))
-  const customHeaders = Object.fromEntries(auxHeadersNoMozilla)
+  // Not every filter uses an x- prefix (e.g. SpamTally), so only drop Mozilla's own headers
+  const customHeaders = Object.fromEntries(Object.entries(headers).filter(([key]) => !key.startsWith('x-mozilla')))
 
   const scoreHeaders = headerOrder || DEFAULT_SCORE_HEADER_ORDER
 

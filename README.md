@@ -33,6 +33,7 @@ Because Spam Scores only reads existing headers, it works whenever one of these 
 | OVH (Vade Secure) | `X-VR-SPAMSCORE` | `X-VR-SPAMCAUSE` |
 | Sophos PureMessage | `X-PMX-Spam` | `X-PMX-Spam` report |
 | Kerio Connect | `X-Spam-Status` | `X-Spam-Status` |
+| DirectAdmin Easy Spam Fighter | `SpamTally` | - |
 | GMX | `X-GMX-Antispam` | - |
 
 If a message carries none of these headers, there is nothing to show. Most large webmail providers strip them or never add them; providers that run open-source filters underneath, such as Fastmail, do keep them.
@@ -62,6 +63,7 @@ Different filters use very different scales: SpamAssassin and rspamd count in sm
 | SpamAssassin, rspamd, MailScanner, hMailServer, Stalwart, Fastmail | -2 to 2 |
 | OVH (Vade Secure) | 100 to 300 |
 | Sophos PureMessage (probability) | 20% to 50% |
+| DirectAdmin Easy Spam Fighter (SpamTally) | 0 to 50 |
 
 GMX is a special case: its number is a reason code, not a score, so a message counts as spam whenever the code is not zero.
 

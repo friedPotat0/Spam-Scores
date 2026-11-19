@@ -1,0 +1,7 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [SpamTally] Spam Scores test mail (spamtally-2.eml)
+SpamTally: Final spam score: unset because ESF not run (SpamAssassin unset, whitelist, or skipped)
+Message-ID: spamtally-2
+
+This is a message to test the Spam Scores Thunderbird add-on.

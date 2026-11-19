@@ -18,7 +18,8 @@ const SCORE_REGEX = {
   'x-vr-spamscore': /([0-9]+)/,
   'x-hmailserver-reason-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-pmx-spam': /Probability=([0-9]+)%/,
-  'x-gmx-antispam': /^([0-9]+)/
+  'x-gmx-antispam': /^([0-9]+)/,
+  spamtally: /Final spam score: ([-+]?[0-9]+)/
 }
 
 // Default order for parsing score headers
@@ -33,7 +34,8 @@ const DEFAULT_SCORE_HEADER_ORDER = [
   'x-vr-spamscore',
   'x-hmailserver-reason-score',
   'x-pmx-spam',
-  'x-gmx-antispam'
+  'x-gmx-antispam',
+  'spamtally'
 ]
 
 function importThreadPaneColumnsModule() {
@@ -56,12 +58,14 @@ const SCORE_FAMILIES = {
   spamassassin: { mode: 'threshold', defaultLowerBounds: DEFAULT_SCORE_LOWER_BOUNDS, defaultUpperBounds: DEFAULT_SCORE_UPPER_BOUNDS },
   vade: { mode: 'threshold', defaultLowerBounds: 100, defaultUpperBounds: 300 },
   pmx: { mode: 'threshold', defaultLowerBounds: 20, defaultUpperBounds: 50, unit: '%' },
+  esf: { mode: 'threshold', defaultLowerBounds: 0, defaultUpperBounds: 50 },
   gmx: { mode: 'flag' }
 }
 const SCORE_HEADER_FAMILY = {
   'x-vr-spamscore': 'vade',
   'x-pmx-spam': 'pmx',
-  'x-gmx-antispam': 'gmx'
+  'x-gmx-antispam': 'gmx',
+  spamtally: 'esf'
 }
 
 function familyDefault(familyKey) {
@@ -87,7 +91,8 @@ let scoreHdrViewParams = {
   familyBounds: {
     spamassassin: familyDefault('spamassassin'),
     vade: familyDefault('vade'),
-    pmx: familyDefault('pmx')
+    pmx: familyDefault('pmx'),
+    esf: familyDefault('esf')
   },
   scoreHeaderOrder: DEFAULT_SCORE_HEADER_ORDER
 }
@@ -312,7 +317,8 @@ function updatePrefs(dynamicHeaders = []) {
     'x-ham-report',
     'x-hmailserver-reason-score',
     'x-pmx-spam',
-    'x-gmx-antispam'
+    'x-gmx-antispam',
+    'spamtally'
   ]
   const headers = [...staticHeaders, ...dynamicHeaders]
 

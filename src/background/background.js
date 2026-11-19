@@ -26,7 +26,9 @@ async function getImageSrc(score, header) {
     'scoreIconLowerBounds_vade',
     'scoreIconUpperBounds_vade',
     'scoreIconLowerBounds_pmx',
-    'scoreIconUpperBounds_pmx'
+    'scoreIconUpperBounds_pmx',
+    'scoreIconLowerBounds_esf',
+    'scoreIconUpperBounds_esf'
   ])
   const classification = classifyScore(score, header, storage)
   if (classification === 'positive') return '/images/score_positive.svg'
@@ -111,6 +113,8 @@ const init = async () => {
     'scoreIconUpperBounds_vade',
     'scoreIconLowerBounds_pmx',
     'scoreIconUpperBounds_pmx',
+    'scoreIconLowerBounds_esf',
+    'scoreIconUpperBounds_esf',
     'customMailscannerHeaders',
     'hideIconScorePositive',
     'hideIconScoreNeutral',

@@ -46,6 +46,9 @@
   "optionsFamilyPmx": {
     "message": "Sophos PureMessage (Wahrscheinlichkeit in %)"
   },
+  "optionsFamilyEsf": {
+    "message": "DirectAdmin Easy Spam Fighter (SpamTally)"
+  },
   "optionsIconRangesHint": {
     "message": "Schwellenwerte für das farbige Symbol in der Spam-Punktzahl-Spalte (SpamAssassin-Skala)."
   },

@@ -31,8 +31,11 @@ const expected = {
   'x-vr-spamcause-1.eml': '800',
   'x-vr-spamcause-2.eml': '800',
   'x-spam-hits-1.eml': '0.0',
-  'kerio-1.eml': '0.0'
+  'kerio-1.eml': '0.0',
+  'spamtally-1.eml': '23'
 }
+
+const noScore = ['spamtally-2.eml']
 
 test('each mail example resolves to its expected score', () => {
   for (const [file, score] of Object.entries(expected)) {
@@ -42,8 +45,14 @@ test('each mail example resolves to its expected score', () => {
 })
 
 test('every mail example is covered by an expectation', () => {
-  const files = readdirSync(examples).filter(f => f.endsWith('.eml'))
+  const files = readdirSync(examples).filter(f => f.endsWith('.eml') && !noScore.includes(f))
   assert.deepEqual(files.sort(), Object.keys(expected).sort())
+})
+
+test('an unset SpamTally score is not read as a score', () => {
+  for (const file of noScore) {
+    assert.deepEqual(getScores(parseEml(join(examples, file))), [], file)
+  }
 })
 
 test('a custom header order changes which header wins', () => {

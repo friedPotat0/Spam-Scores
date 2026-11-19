@@ -20,6 +20,12 @@ test('pmx classifies a probability', () => {
   assert.equal(classifyScore('30', 'x-pmx-spam'), 'neutral')
 })
 
+test('esf classifies the SpamTally total on its own scale', () => {
+  assert.equal(classifyScore('70', 'spamtally'), 'positive')
+  assert.equal(classifyScore('-20', 'spamtally'), 'negative')
+  assert.equal(classifyScore('23', 'spamtally'), 'neutral')
+})
+
 test('gmx treats a non-zero reason code as spam', () => {
   assert.equal(classifyScore('0', 'x-gmx-antispam'), 'negative')
   assert.equal(classifyScore('6', 'x-gmx-antispam'), 'positive')

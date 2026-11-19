@@ -1,0 +1,8 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [SpamTally] Spam Scores test mail (spamtally-1.eml)
+DKIMCheck: Server passes DKIM test, -20 Spam score
+SpamTally: Final spam score: 23
+Message-ID: spamtally-1
+
+This is a message to test the Spam Scores Thunderbird add-on.

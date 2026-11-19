@@ -39,6 +39,8 @@ messenger.tabs.query({ active: true, currentWindow: true }).then(async tabs => {
     'scoreIconUpperBounds_vade',
     'scoreIconLowerBounds_pmx',
     'scoreIconUpperBounds_pmx',
+    'scoreIconLowerBounds_esf',
+    'scoreIconUpperBounds_esf',
     'scoreHeaderOrder',
     'scoreDetailsHeaderOrder',
     'customMailscannerHeaders'

@@ -47,6 +47,8 @@ async function init() {
     'scoreIconUpperBounds_vade',
     'scoreIconLowerBounds_pmx',
     'scoreIconUpperBounds_pmx',
+    'scoreIconLowerBounds_esf',
+    'scoreIconUpperBounds_esf',
     'hideIconScorePositive',
     'hideIconScoreNeutral',
     'hideIconScoreNegative',
@@ -76,7 +78,7 @@ async function init() {
 }
 init()
 
-const FAMILY_LABELS = { vade: 'optionsFamilyVade', pmx: 'optionsFamilyPmx' }
+const FAMILY_LABELS = { vade: 'optionsFamilyVade', pmx: 'optionsFamilyPmx', esf: 'optionsFamilyEsf' }
 
 function renderFamilyBounds(storage) {
   const container = document.getElementById('family-bounds')
