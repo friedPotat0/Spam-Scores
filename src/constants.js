@@ -45,8 +45,8 @@ export const SCORE_HEADER_FAMILY = {
  */
 export const SCORE_REGEX = {
   'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
-  'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
-  'x-rspam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-spam-status': /(?:Yes|No)(?:, score=|, hits=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-rspam-status': /(?:Yes|No)(?:, score=|, hits=|\/)([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
@@ -112,11 +112,11 @@ export const DEFAULT_SCORE_DETAILS_ORDER = [
  * Fastmail's X-Spam-hits) without being an actual score. Kept out of the breakdown.
  * @constant {String[]}
  */
-export const IGNORED_DETAIL_RULES = ['SA_VERSION', 'LANGUAGES', 'BAYES_USED']
+export const IGNORED_DETAIL_RULES = ['SA_VERSION', 'LANGUAGES', 'BAYES_USED', 'TOTAL_SCORE']
 
 /** @constant {Object<RegExp>} */
 export const SYMBOL_REGEX = {
   prefix: /\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) .*?(?=\*? +-?[\d.]+[ \)=]+(?:[A-Z][A-Z0-9_]+|--) |$)/gs,
   prefixSingle: /(?:\* +)?(-?[\d.]+)[ \)=]+(?:([A-Z][A-Z0-9_]+)|--) ([\s\S]*?)(?:\[(.*)\])?$/,
-  suffix: /([A-Z][A-Z0-9_]+)(?:(?:[ \(=]+(-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
+  suffix: /([A-Z][A-Z0-9_]+)(?:(?:[ \(=:]+(-?[\d.]+)\)?(?:\[(.*?)\])?)|, *| |\r?\n|$)/g
 }

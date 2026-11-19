@@ -80,3 +80,14 @@ test('x-spam-hits-1.eml breaks down Fastmail rules without the informational tok
     UNPARSEABLE_RELAY: 0.001
   })
 })
+
+test('kerio-1.eml reads the NAME: score list without the total', async () => {
+  assert.deepEqual(await detailsByName('kerio-1.eml'), {
+    KERIO_ANTI_SPAM: 0,
+    AWL: -0.009,
+    BAYES_00: -1.665,
+    HTML_MESSAGE: 0.001,
+    URIBL_BLOCKED: 0.001,
+    URIBL_SBL_A: 0.1
+  })
+})

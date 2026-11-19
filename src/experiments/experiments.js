@@ -9,8 +9,8 @@ const CUSTOM_SCORE_REGEX = {
 // Copy of constants.js until Experiments API supports ES6 modules
 const SCORE_REGEX = {
   'x-spamd-result': /\[([-+]?[0-9]+\.?[0-9]*) \/ [-+]?[0-9]+\.?[0-9]*\];/,
-  'x-spam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
-  'x-rspam-status': /(?:Yes|No)(?:, score=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-spam-status': /(?:Yes|No)(?:, score=|, hits=|\/)([-+]?[0-9]+\.?[0-9]*)/,
+  'x-rspam-status': /(?:Yes|No)(?:, score=|, hits=|\/)([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-score': /([-+]?[0-9]+\.?[0-9]*)/,
   'x-spam-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,
   'x-ham-report': /([-+]?[0-9]+\.?[0-9]*) hits,/,

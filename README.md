@@ -32,6 +32,7 @@ Because Spam Scores only reads existing headers, it works whenever one of these 
 | Fastmail | `X-Spam-score` | `X-Spam-hits` |
 | OVH (Vade Secure) | `X-VR-SPAMSCORE` | `X-VR-SPAMCAUSE` |
 | Sophos PureMessage | `X-PMX-Spam` | `X-PMX-Spam` report |
+| Kerio Connect | `X-Spam-Status` | `X-Spam-Status` |
 | GMX | `X-GMX-Antispam` | - |
 
 If a message carries none of these headers, there is nothing to show. Most large webmail providers strip them or never add them; providers that run open-source filters underneath, such as Fastmail, do keep them.

@@ -1,0 +1,12 @@
+To: receiver@spamscores
+From: sender@spamscores
+Subject: [Kerio Connect] Spam Scores test mail (kerio-1.eml)
+X-Kerio-Anti-Spam:  Build: [Engines: 2.22.3.1648, Stamp: 3], Multi: [Enabled, t: (0.000007,0.020831)], total: 0(700)
+X-Spam-Status: No, hits=0.0 required=5.1
+	tests=KERIO_ANTI_SPAM: -0.000, AWL: -0.009, BAYES_00: -1.665,
+	HTML_MESSAGE: 0.001, URIBL_BLOCKED: 0.001, URIBL_SBL_A: 0.1,
+	TOTAL_SCORE: -1.572,autolearn=no
+X-Spam-Level: 
+Message-ID: kerio-1
+
+This is a message to test the Spam Scores Thunderbird add-on.
